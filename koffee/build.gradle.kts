@@ -45,6 +45,22 @@ dependencies {
 }
 
 afterEvaluate {
+    if (
+        project.hasProperty("signing.keyId") &&
+        project.hasProperty("signing.password") &&
+        project.hasProperty("signing.secretKeyRingFile")
+    ) {
+        signing {
+            useInMemoryPgpKeys(
+                project.findProperty("signing.keyId")!!.toString(),
+                project.findProperty("signing.password")!!.toString(),
+                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
+            )
+            sign(publishing.publications["release"])
+        }
+    } else {
+        println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
+    }
     println("Signing Info:")
     println("keyId: " + project.findProperty("signing.keyId"))
     println("password: " + if (project.hasProperty("signing.password")) "✅" else "❌")
@@ -56,7 +72,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.donald-okara"
                 artifactId = "koffee"
-                version = "0.1.6"
+                version = "0.1.7"
 
                 pom {
                     name.set("Koffee")
@@ -96,12 +112,5 @@ afterEvaluate {
         }
     }
 
-    signing {
-        publishing.publications
-            .withType<MavenPublication>()
-            .matching { it.name == "release" }
-            .all {
-                sign(this)
-            }
-    }
+
 }

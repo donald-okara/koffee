@@ -45,13 +45,18 @@ dependencies {
 }
 
 afterEvaluate {
+    println("Signing Info:")
+    println("keyId: " + project.findProperty("signing.keyId"))
+    println("password: " + if (project.hasProperty("signing.password")) "✅" else "❌")
+    println("secretKeyRingFile: " + project.findProperty("signing.secretKeyRingFile"))
+
     publishing {
         publications {
             val release by creating(MavenPublication::class) {
                 from(components["release"])
                 groupId = "com.github.donald-okara"
                 artifactId = "koffee"
-                version = "0.1.5"
+                version = "0.1.6"
 
                 pom {
                     name.set("Koffee")
@@ -84,8 +89,8 @@ afterEvaluate {
                 name = "OSSRH"
                 url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
-                    username = project.findProperty("ossrhUsername") as String
-                    password = project.findProperty("ossrhPassword") as String
+                    username = project.findProperty("ossrhUsername")?.toString() ?: ""
+                    password = project.findProperty("ossrhPassword")?.toString() ?: ""
                 }
             }
         }

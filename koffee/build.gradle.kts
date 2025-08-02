@@ -45,22 +45,7 @@ dependencies {
 }
 
 afterEvaluate {
-    if (
-        project.hasProperty("signing.keyId") &&
-        project.hasProperty("signing.password") &&
-        project.hasProperty("signing.secretKeyRingFile")
-    ) {
-        signing {
-            useInMemoryPgpKeys(
-                project.findProperty("signing.keyId")!!.toString(),
-                project.findProperty("signing.password")!!.toString(),
-                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
-            )
-            sign(publishing.publications["release"])
-        }
-    } else {
-        println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
-    }
+
     println("Signing Info:")
     println("keyId: " + project.findProperty("signing.keyId"))
     println("password: " + if (project.hasProperty("signing.password")) "✅" else "❌")
@@ -112,5 +97,21 @@ afterEvaluate {
         }
     }
 
+    if (
+        project.hasProperty("signing.keyId") &&
+        project.hasProperty("signing.password") &&
+        project.hasProperty("signing.secretKeyRingFile")
+    ) {
+        signing {
+            useInMemoryPgpKeys(
+                project.findProperty("signing.keyId")!!.toString(),
+                project.findProperty("signing.password")!!.toString(),
+                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
+            )
+            sign(publishing.publications["release"])
+        }
+    } else {
+        println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
+    }
 
 }

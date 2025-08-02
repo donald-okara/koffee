@@ -49,9 +49,9 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
 
-                groupId = "com.github/donald-okara"
+                groupId = "com.github.donald-okara" // ✅ FIXED
                 artifactId = "koffee"
-                version = "0.1.1"
+                version = "0.1.3"
 
                 pom {
                     name.set("Koffee")
@@ -62,3 +62,4 @@ afterEvaluate {
         }
     }
 }
+

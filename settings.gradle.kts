@@ -14,8 +14,10 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal() // 👈 Must be listed *before* JitPack or MavenCentral
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io") // 👈 Add this
     }
 }
 

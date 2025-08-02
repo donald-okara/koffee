@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("maven-publish")
+    id("signing")
 }
 
 android {
@@ -46,20 +47,56 @@ dependencies {
 afterEvaluate {
     publishing {
         publications {
-            create<MavenPublication>("release") {
+            val release by creating(MavenPublication::class) {
                 from(components["release"])
-
-                groupId = "com.github.donald-okara" // ✅ FIXED
+                groupId = "com.github.donald-okara"
                 artifactId = "koffee"
-                version = "0.1.3"
+                version = "0.1.4"
 
                 pom {
                     name.set("Koffee")
                     description.set("Composable toast manager for Jetpack Compose")
                     url.set("https://github.com/donald-okara/Koffee")
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("donald-okara")
+                            name.set("Donald Okara")
+                            email.set("donaldokara123@gmail.com")
+                        }
+                    }
+                    scm {
+                        connection.set("scm:git:git://github.com/donald-okara/Koffee.git")
+                        developerConnection.set("scm:git:ssh://github.com/donald-okara/Koffee.git")
+                        url.set("https://github.com/donald-okara/Koffee")
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "OSSRH"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = project.findProperty("ossrhUsername") as String
+                    password = project.findProperty("ossrhPassword") as String
                 }
             }
         }
     }
-}
 
+    signing {
+        publishing.publications
+            .withType<MavenPublication>()
+            .matching { it.name == "release" }
+            .all {
+                sign(this)
+            }
+    }
+}

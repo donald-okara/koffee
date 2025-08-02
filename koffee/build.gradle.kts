@@ -49,9 +49,9 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
 
-                groupId = "github.com/donald-okara"
+                groupId = "com.github/donald-okara"
                 artifactId = "koffee"
-                version = "0.1.0"
+                version = "0.1.1"
 
                 pom {
                     name.set("Koffee")

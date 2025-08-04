@@ -1,8 +1,22 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ke.don.koffee.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +33,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
@@ -38,7 +51,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastType
@@ -60,16 +72,16 @@ fun DefaultToast(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(color = background, shape = RoundedCornerShape(12.dp))
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Icon(
                     imageVector = icon,
@@ -77,27 +89,26 @@ fun DefaultToast(
                     tint = tint,
                     modifier = Modifier
                         .size(32.dp)
-                        .padding(end = 12.dp)
+                        .padding(end = 12.dp),
                 )
 
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = data.title,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.Black
-                        )
+                            color = Color.Black,
+                        ),
                     )
                     Text(
                         text = data.description,
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.DarkGray
-                        )
+                            color = Color.DarkGray,
+                        ),
                     )
                 }
-
             }
 
             if (data.primaryAction != null || data.secondaryAction != null) {
@@ -106,11 +117,10 @@ fun DefaultToast(
                 ToastActionRow(
                     secondaryAction = data.secondaryAction,
                     primaryAction = data.primaryAction,
-                    tint = tint
+                    tint = tint,
                 )
             }
         }
-
     }
 }
 
@@ -118,7 +128,7 @@ fun DefaultToast(
 fun ToastActionRow(
     secondaryAction: ToastAction?,
     primaryAction: ToastAction?,
-    tint: Color
+    tint: Color,
 ) {
     if (secondaryAction == null && primaryAction == null) return
 
@@ -128,26 +138,26 @@ fun ToastActionRow(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.wrapContentWidth()
+        modifier = Modifier.wrapContentWidth(),
     ) {
         secondaryAction?.let { action ->
             OutlinedButton(
                 onClick = action.onClick,
                 border = BorderStroke(1.dp, tint.copy(alpha = 0.4f)),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = tint
+                    contentColor = tint,
                 ),
                 shape = shape,
                 modifier = Modifier
                     .defaultMinSize(minHeight = buttonHeight)
                     .wrapContentWidth(),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
             ) {
                 Text(
                     text = action.label,
                     style = buttonTextStyle,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -157,27 +167,24 @@ fun ToastActionRow(
                 onClick = action.onClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = tint.copy(alpha = 0.15f),
-                    contentColor = tint
+                    contentColor = tint,
                 ),
                 shape = shape,
                 modifier = Modifier
                     .defaultMinSize(minHeight = buttonHeight)
                     .wrapContentWidth(),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
             ) {
                 Text(
                     text = action.label,
                     style = buttonTextStyle,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
     }
 }
-
-
-
 
 @Preview
 @Composable
@@ -188,7 +195,7 @@ fun DefaultToastPreview() {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         DefaultToast(
             ToastData(
@@ -196,8 +203,8 @@ fun DefaultToastPreview() {
                 description = "This is an info toast",
                 type = ToastType.Info,
                 primaryAction = ToastAction("Details") { println("Info > Details") },
-                secondaryAction = ToastAction("Dismiss") { println("Info > Dismiss") }
-            )
+                secondaryAction = ToastAction("Dismiss") { println("Info > Dismiss") },
+            ),
         )
 
         DefaultToast(
@@ -206,8 +213,8 @@ fun DefaultToastPreview() {
                 description = "This is a neutral toast",
                 type = ToastType.Neutral,
                 primaryAction = ToastAction("Open") { println("Neutral > Open") },
-                secondaryAction = ToastAction("Dismiss") { println("Neutral > Dismiss") }
-            )
+                secondaryAction = ToastAction("Dismiss") { println("Neutral > Dismiss") },
+            ),
         )
 
         DefaultToast(
@@ -216,8 +223,8 @@ fun DefaultToastPreview() {
                 description = "This is a success toast",
                 type = ToastType.Success,
                 primaryAction = ToastAction("Celebrate") { println("Success > Celebrate") },
-                secondaryAction = ToastAction("Dismiss") { println("Success > Dismiss") }
-            )
+                secondaryAction = ToastAction("Dismiss") { println("Success > Dismiss") },
+            ),
         )
 
         DefaultToast(
@@ -226,8 +233,8 @@ fun DefaultToastPreview() {
                 description = "This is a warning toast",
                 type = ToastType.Warning,
                 primaryAction = ToastAction("Fix") { println("Warning > Fix") },
-                secondaryAction = ToastAction("Ignore") { println("Warning > Ignore") }
-            )
+                secondaryAction = ToastAction("Ignore") { println("Warning > Ignore") },
+            ),
         )
 
         DefaultToast(
@@ -236,9 +243,8 @@ fun DefaultToastPreview() {
                 description = "This is an error toast",
                 type = ToastType.Error,
                 primaryAction = ToastAction("Retry") { println("Error > Retry") },
-                secondaryAction = ToastAction("Report") { println("Error > Report") }
-            )
+                secondaryAction = ToastAction("Report") { println("Error > Report") },
+            ),
         )
     }
-
 }

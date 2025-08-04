@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -120,12 +120,11 @@ afterEvaluate {
             useInMemoryPgpKeys(
                 project.findProperty("signing.keyId")!!.toString(),
                 project.findProperty("signing.password")!!.toString(),
-                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
+                file(project.findProperty("signing.secretKeyRingFile")!!).readText(),
             )
             sign(publishing.publications["release"])
         }
     } else {
         println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
     }
-
 }

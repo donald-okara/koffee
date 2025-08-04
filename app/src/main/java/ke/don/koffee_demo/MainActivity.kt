@@ -31,7 +31,9 @@ class MainActivity : ComponentActivity() {
                         TestToasts()
 
                         // 2. Render Koffee
-                        Koffee.Setup(maxVisibleToasts = 2)
+                        Koffee.Setup(
+                            maxVisibleToasts = 2,
+                        )
 
                     }
                 }

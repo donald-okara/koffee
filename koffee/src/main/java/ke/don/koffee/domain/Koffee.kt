@@ -1,6 +1,8 @@
 package ke.don.koffee.domain
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import ke.don.koffee.model.KoffeeConfig
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
@@ -21,14 +23,18 @@ object Koffee {
 
     @Composable
     fun Setup(
+        modifier: Modifier = Modifier,
         maxVisibleToasts: Int = 1,
         hostState: ToastHostState = rememberToastHostState(maxVisibleToasts, config),
+        alignment: Alignment = Alignment.BottomCenter
     ) {
         toastHostState = hostState
         ToastHost(
+            modifier = modifier,
             hostState = hostState,
             toast = config.layout,
-            dismissible = config.dismissible
+            dismissible = config.dismissible,
+            alignment = alignment
         )
     }
 

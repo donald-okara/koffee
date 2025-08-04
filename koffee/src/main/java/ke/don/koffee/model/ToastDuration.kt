@@ -2,11 +2,6 @@ package ke.don.koffee.model
 
 enum class ToastDuration{ Short, Long, Indefinite }
 
-fun ToastDuration.toMillis(): Long? = when (this) {
-    ToastDuration.Short -> 2000L
-    ToastDuration.Long -> 3500L
-    ToastDuration.Indefinite -> null
-}
 
 fun defaultDurationResolver(duration: ToastDuration): Long? = when (duration) {
     ToastDuration.Short -> 2000L

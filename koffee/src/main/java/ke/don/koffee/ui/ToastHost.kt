@@ -36,20 +36,35 @@ fun ToastHost(
     hostState: ToastHostState,
     toast: @Composable (ToastData) -> Unit,
     modifier: Modifier = Modifier,
-    dismissible: Boolean = true
+    dismissible: Boolean = true,
+    alignment: Alignment = Alignment.BottomCenter
 ) {
+    val fromBottom = when (alignment) {
+        Alignment.BottomStart,
+        Alignment.BottomCenter,
+        Alignment.BottomEnd -> true
+
+        else -> false
+    }
+
+    val toasts = if (fromBottom) {
+        hostState.toasts
+    } else {
+        hostState.toasts.asReversed()
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(bottom = 64.dp),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = alignment
     ) {
         LookaheadScope {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                hostState.toasts.forEach { data ->
+                toasts.forEach { data ->
                     key(data.id) {
                         var visible by remember(data.id) { mutableStateOf(false) }
 

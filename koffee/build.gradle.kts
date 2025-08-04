@@ -113,10 +113,10 @@ afterEvaluate {
 
     val shouldSign =
         project.hasProperty("koffee.signingEnabled") &&
-                project.hasProperty("signing.keyId") &&
-                project.hasProperty("signing.password") &&
-                project.hasProperty("signing.secretKeyRingFile") &&
-                project.findProperty("koffee.signingEnabled") == "true"
+            project.hasProperty("signing.keyId") &&
+            project.hasProperty("signing.password") &&
+            project.hasProperty("signing.secretKeyRingFile") &&
+            project.findProperty("koffee.signingEnabled") == "true"
 
     if (shouldSign) {
         signing {

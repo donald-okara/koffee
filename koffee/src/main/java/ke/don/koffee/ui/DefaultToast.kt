@@ -101,54 +101,64 @@ fun DefaultToast(
             if (data.primaryAction != null || data.secondaryAction != null) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    val buttonHeight = 36.dp
-                    val buttonTextStyle = MaterialTheme.typography.labelSmall
-
-                    data.secondaryAction?.let { action ->
-                        OutlinedButton(
-                            onClick = action.onClick,
-                            border = BorderStroke(1.dp, tint.copy(alpha = 0.5f)), // outline color
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = tint            // text/icon color
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .height(buttonHeight),
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Text(action.label, style = buttonTextStyle)
-                        }
-                    }
-
-                    data.primaryAction?.let { action ->
-                        Button(
-                            onClick = action.onClick,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = tint.copy(alpha = 0.3f),
-                                contentColor = tint
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .height(buttonHeight),
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Text(action.label, style = buttonTextStyle)
-                        }
-                    }
-                }
+                ToastActionRow(
+                    secondaryAction = data.secondaryAction,
+                    primaryAction = data.primaryAction,
+                    tint = tint
+                )
             }
-
-
         }
 
     }
 }
 
+@Composable
+fun ToastActionRow(
+    secondaryAction: ToastAction?,
+    primaryAction: ToastAction?,
+    tint: Color
+){
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        val buttonHeight = 36.dp
+        val buttonTextStyle = MaterialTheme.typography.labelSmall
+
+        secondaryAction?.let { action ->
+            OutlinedButton(
+                onClick = action.onClick,
+                border = BorderStroke(1.dp, tint.copy(alpha = 0.5f)), // outline color
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = tint            // text/icon color
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(buttonHeight),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(action.label, style = buttonTextStyle)
+            }
+        }
+
+        primaryAction?.let { action ->
+            Button(
+                onClick = action.onClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = tint.copy(alpha = 0.3f),
+                    contentColor = tint
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(buttonHeight),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(action.label, style = buttonTextStyle)
+            }
+        }
+    }
+}
 
 
 @Preview

@@ -16,7 +16,6 @@ import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
-import ke.don.koffee.model.toMillis
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

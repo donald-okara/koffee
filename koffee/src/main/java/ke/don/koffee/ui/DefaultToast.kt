@@ -97,6 +97,8 @@ fun DefaultToast(
                 ) {
                     Text(
                         text = data.title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -104,6 +106,8 @@ fun DefaultToast(
                     )
                     Text(
                         text = data.description,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = Color.DarkGray,
                         ),

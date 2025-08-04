@@ -106,20 +106,3 @@ fun rememberToastHostState(
     }
 }
 
-@Composable
-fun rememberIsAppVisible(): Boolean {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    var isVisible by remember { mutableStateOf(true) }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            isVisible = event == Lifecycle.Event.ON_START || event == Lifecycle.Event.ON_RESUME
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    return isVisible
-}

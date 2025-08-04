@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -46,6 +46,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
@@ -110,21 +111,23 @@ afterEvaluate {
         }
     }
 
-    if (
-        project.hasProperty("signing.keyId") &&
-        project.hasProperty("signing.password") &&
-        project.hasProperty("signing.secretKeyRingFile")
-    ) {
+    val shouldSign =
+        project.hasProperty("koffee.signingEnabled") &&
+            project.hasProperty("signing.keyId") &&
+            project.hasProperty("signing.password") &&
+            project.hasProperty("signing.secretKeyRingFile") &&
+            project.findProperty("koffee.signingEnabled") == "true"
+
+    if (shouldSign) {
         signing {
             useInMemoryPgpKeys(
                 project.findProperty("signing.keyId")!!.toString(),
                 project.findProperty("signing.password")!!.toString(),
-                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
+                file(project.findProperty("signing.secretKeyRingFile")!!).readText(),
             )
             sign(publishing.publications["release"])
         }
     } else {
         println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
     }
-
 }

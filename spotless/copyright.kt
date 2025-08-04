@@ -13,12 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ke.don.koffee.model
-
-import androidx.compose.runtime.Composable
-
-data class KoffeeConfig(
-    val layout: @Composable (ToastData) -> Unit,
-    val dismissible: Boolean,
-    val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) },
-)

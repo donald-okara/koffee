@@ -15,10 +15,7 @@
  */
 package ke.don.koffee.model
 
-import androidx.compose.runtime.Composable
-
-data class KoffeeConfig(
-    val layout: @Composable (ToastData) -> Unit,
-    val dismissible: Boolean,
-    val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) },
+data class ToastAction(
+    val label: String,
+    val onClick: () -> Unit,
 )

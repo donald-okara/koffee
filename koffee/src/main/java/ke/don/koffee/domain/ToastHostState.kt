@@ -1,60 +1,37 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ke.don.koffee.domain
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
-import ke.don.koffee.model.toMillis
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import ke.don.koffee.model.ToastType
 
-class ToastHostState internal constructor(
-    private val scope: CoroutineScope,
-    private val maxVisibleToasts: Int = 1
-) {
-    private val _toasts = mutableStateListOf<ToastData>()
-    val toasts: List<ToastData> get() = _toasts
+interface ToastHostState {
+    val toasts: List<ToastData>
 
-    private val jobs = mutableMapOf<String, Job>()
+    fun show(
+        title: String,
+        description: String,
+        duration: ToastDuration = ToastDuration.Short,
+        type: ToastType,
+        primaryAction: ToastAction? = null,
+        secondaryAction: ToastAction? = null,
+    )
 
-    fun show(title: String, description: String, duration: ToastDuration = ToastDuration.Short) {
-        val toast = ToastData(title, description, duration)
-
-        if (_toasts.size >= maxVisibleToasts) {
-            val toDismiss = _toasts.firstOrNull()
-            if (toDismiss != null) dismiss(toDismiss.id)
-        }
-
-        _toasts.add(toast)
-
-        jobs[toast.id] = scope.launch {
-            delay(duration.toMillis())
-            dismiss(toast.id)
-        }
-    }
-
-    fun dismiss(id: String) {
-        jobs.remove(id)?.cancel()
-        _toasts.removeAll { it.id == id }
-    }
-
-    fun dismissAll() {
-        jobs.values.forEach { it.cancel() }
-        jobs.clear()
-        _toasts.clear()
-    }
-}
-
-@Composable
-fun rememberToastHostState(
-    maxVisibleToasts: Int = 3
-): ToastHostState {
-    val scope = rememberCoroutineScope()
-    return remember(scope, maxVisibleToasts) {
-        ToastHostState(scope, maxVisibleToasts)
-    }
+    fun dismiss(id: String)
+    fun dismissAll()
 }

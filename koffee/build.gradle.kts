@@ -111,11 +111,14 @@ afterEvaluate {
         }
     }
 
-    if (
-        project.hasProperty("signing.keyId") &&
-        project.hasProperty("signing.password") &&
-        project.hasProperty("signing.secretKeyRingFile")
-    ) {
+    val shouldSign =
+        project.hasProperty("koffee.signingEnabled") &&
+                project.hasProperty("signing.keyId") &&
+                project.hasProperty("signing.password") &&
+                project.hasProperty("signing.secretKeyRingFile") &&
+                project.findProperty("koffee.signingEnabled") == "true"
+
+    if (shouldSign) {
         signing {
             useInMemoryPgpKeys(
                 project.findProperty("signing.keyId")!!.toString(),

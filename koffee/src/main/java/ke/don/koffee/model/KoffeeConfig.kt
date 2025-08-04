@@ -4,5 +4,6 @@ import androidx.compose.runtime.Composable
 
 data class KoffeeConfig(
     val layout: @Composable (ToastData) -> Unit,
-    val dismissible: Boolean
+    val dismissible: Boolean,
+    val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) }
 )

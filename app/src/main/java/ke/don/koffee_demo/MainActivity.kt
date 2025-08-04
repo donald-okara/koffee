@@ -27,11 +27,12 @@ class MainActivity : ComponentActivity() {
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        // 1. Render Koffee
+                        // 1. Your app UI
+                        TestToasts()
+
+                        // 2. Render Koffee
                         Koffee.Setup(maxVisibleToasts = 2)
 
-                        // 2. Your app UI
-                        TestToasts()
                     }
                 }
             }

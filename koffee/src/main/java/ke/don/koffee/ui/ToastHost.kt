@@ -109,12 +109,9 @@ fun ToastHost(
                                 enableDismissFromStartToEnd = dismissible,
                                 enableDismissFromEndToStart = dismissible,
                                 backgroundContent = {},
+                                modifier = Modifier.animateBounds(this@LookaheadScope), // ✅ apply here
                                 content = {
-                                    Box(
-                                        modifier = Modifier.animateBounds(this@LookaheadScope),
-                                    ) {
-                                        toast(data)
-                                    }
+                                    toast(data)
                                 },
                             )
                         }

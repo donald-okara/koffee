@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import ke.don.koffee.model.KoffeeConfig
 import ke.don.koffee.model.ToastAction
@@ -106,10 +107,10 @@ class DefaultToastHostState internal constructor(
 @Composable
 fun rememberToastHostState(
     maxVisibleToasts: Int = 3,
-    config: KoffeeConfig,
 ): ToastHostState {
     val scope = rememberCoroutineScope()
+
     return remember(scope, maxVisibleToasts) {
-        DefaultToastHostState(scope, config, maxVisibleToasts)
+        DefaultToastHostState(scope, Koffee.config, maxVisibleToasts)
     }
 }

@@ -71,7 +71,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.donald-okara"
                 artifactId = "koffee"
-                version = "v0.1.11"
+                version = "v0.1.12"
 
                 pom {
                     name.set("Koffee")

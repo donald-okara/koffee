@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("maven-publish")
     id("signing")
 }
@@ -21,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -32,16 +33,29 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 afterEvaluate {
@@ -57,7 +71,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.donald-okara"
                 artifactId = "koffee"
-                version = "0.1.7"
+                version = "0.1.10"
 
                 pom {
                     name.set("Koffee")
@@ -97,21 +111,23 @@ afterEvaluate {
         }
     }
 
-    if (
-        project.hasProperty("signing.keyId") &&
-        project.hasProperty("signing.password") &&
-        project.hasProperty("signing.secretKeyRingFile")
-    ) {
+    val shouldSign =
+        project.hasProperty("koffee.signingEnabled") &&
+            project.hasProperty("signing.keyId") &&
+            project.hasProperty("signing.password") &&
+            project.hasProperty("signing.secretKeyRingFile") &&
+            project.findProperty("koffee.signingEnabled") == "true"
+
+    if (shouldSign) {
         signing {
             useInMemoryPgpKeys(
                 project.findProperty("signing.keyId")!!.toString(),
                 project.findProperty("signing.password")!!.toString(),
-                file(project.findProperty("signing.secretKeyRingFile")!!).readText()
+                file(project.findProperty("signing.secretKeyRingFile")!!).readText(),
             )
             sign(publishing.publications["release"])
         }
     } else {
         println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
     }
-
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -117,27 +119,36 @@ fun ToastActionRow(
     secondaryAction: ToastAction?,
     primaryAction: ToastAction?,
     tint: Color
-){
+) {
+    if (secondaryAction == null && primaryAction == null) return
+
+    val buttonHeight = 32.dp
+    val shape = RoundedCornerShape(6.dp)
+    val buttonTextStyle = MaterialTheme.typography.labelSmall
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.wrapContentWidth()
     ) {
-        val buttonHeight = 36.dp
-        val buttonTextStyle = MaterialTheme.typography.labelSmall
-
         secondaryAction?.let { action ->
             OutlinedButton(
                 onClick = action.onClick,
-                border = BorderStroke(1.dp, tint.copy(alpha = 0.5f)), // outline color
+                border = BorderStroke(1.dp, tint.copy(alpha = 0.4f)),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = tint            // text/icon color
+                    contentColor = tint
                 ),
-                shape = RoundedCornerShape(8.dp),
+                shape = shape,
                 modifier = Modifier
-                    .wrapContentWidth()
-                    .height(buttonHeight),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    .defaultMinSize(minHeight = buttonHeight)
+                    .wrapContentWidth(),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
             ) {
-                Text(action.label, style = buttonTextStyle)
+                Text(
+                    text = action.label,
+                    style = buttonTextStyle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
 
@@ -145,20 +156,27 @@ fun ToastActionRow(
             Button(
                 onClick = action.onClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = tint.copy(alpha = 0.3f),
+                    containerColor = tint.copy(alpha = 0.15f),
                     contentColor = tint
                 ),
-                shape = RoundedCornerShape(8.dp),
+                shape = shape,
                 modifier = Modifier
-                    .wrapContentWidth()
-                    .height(buttonHeight),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    .defaultMinSize(minHeight = buttonHeight)
+                    .wrapContentWidth(),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
             ) {
-                Text(action.label, style = buttonTextStyle)
+                Text(
+                    text = action.label,
+                    style = buttonTextStyle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }
 }
+
+
 
 
 @Preview

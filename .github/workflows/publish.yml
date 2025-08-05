@@ -1,0 +1,49 @@
+name: 📦 Publish to Maven Central
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on tags like v0.1.0, v1.0.5, etc.
+
+jobs:
+  publish:
+    name: 🚀 Publish via GitHub Central Portal
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Write GPG signing properties
+        run: |
+          mkdir -p ~/.gradle
+          echo "signing.keyId=${{ secrets.SIGNING_KEY_ID }}" >> ~/.gradle/gradle.properties
+          echo "signing.password=${{ secrets.SIGNING_PASSWORD }}" >> ~/.gradle/gradle.properties
+          echo "signing.secretKeyRingFile=${{ github.workspace }}/secring.gpg" >> ~/.gradle/gradle.properties
+
+      - name: Decode GPG key to file
+        run: |
+          echo "${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}" | base64 --decode > secring.gpg
+
+      - name: Publish to Maven Central
+        env:
+          RELEASE_VERSION: ${{ github.ref_name }}
+        run: ./gradlew publish --no-daemon
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          body: |
+            ✅ `${{ github.ref_name }}` has been published to Maven Central!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

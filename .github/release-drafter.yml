@@ -1,0 +1,37 @@
+# .github/release-drafter.yml
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+version-resolver:
+  major:
+    labels: ['major']
+  minor:
+    labels: ['feature', 'enhancement']
+  patch:
+    labels: ['fix', 'bug', 'chore', 'refactor']
+  default: patch
+
+categories:
+  - title: '✨ Features'
+    labels: ['feature', 'enhancement']
+  - title: '🐛 Fixes'
+    labels: ['fix', 'bug']
+  - title: '🧹 Chores'
+    labels: ['chore', 'cleanup']
+  - title: '🧪 Tests'
+    labels: ['test']
+  - title: '📖 Documentation'
+    labels: ['docs']
+  - title: '🛠 Refactors'
+    labels: ['refactor']
+
+change-template: '- $TITLE (#$NUMBER) by @$AUTHOR'
+no-changes-template: 'No notable changes in this release.'
+
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  ## 🧑‍💻 Contributors
+  $CONTRIBUTORS

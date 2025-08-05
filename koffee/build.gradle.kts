@@ -125,7 +125,12 @@ afterEvaluate {
     }
 
     signing {
-        useGpgCmd() // use system-installed gpg command
+        useInMemoryPgpKeys(
+            findProperty("signing.keyId") as String?,
+            findProperty("signing.secretKey") as String?,
+            findProperty("signing.password") as String?
+        )
         sign(publishing.publications["release"])
     }
+
 }

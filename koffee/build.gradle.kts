@@ -60,3 +60,60 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+
+afterEvaluate {
+    extensions.configure<PublishingExtension>("publishing") {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "io.github.donald-okara"
+                artifactId = "koffee"
+                version = project.version.toString()
+
+                pom {
+                    name.set("Koffee")
+                    description.set("A beautiful toast/snackbar system for Jetpack Compose")
+                    url.set("https://github.com/donald-okara/Koffee")
+
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("donald-okara")
+                            name.set("Donald Okara")
+                            email.set("donaldokara123@gmail.com")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:git://github.com/donald-okara/Koffee.git")
+                        developerConnection.set("scm:git:ssh://github.com:donald-okara/Koffee.git")
+                        url.set("https://github.com/donald-okara/Koffee")
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "OSSRH"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = findProperty("ossrhUsername") as String?
+                    password = findProperty("ossrhPassword") as String?
+                }
+            }
+        }
+    }
+
+    extensions.configure<SigningExtension>("signing") {
+        sign(extensions.getByType(PublishingExtension::class).publications)
+    }
+}

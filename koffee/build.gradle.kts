@@ -125,11 +125,12 @@ afterEvaluate {
     }
 
     signing {
-        useInMemoryPgpKeys(
-            findProperty("signing.keyId") as String?,
-            findProperty("signing.secretKey") as String?,
-            findProperty("signing.password") as String?
-        )
-        sign(publishing.publications["release"])
+        val signingKey: String? = findProperty("signing.secretKey") as String?
+        val signingPassword: String? = findProperty("signing.password") as String?
+        if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+            sign(publishing.publications["release"])
+        }
     }
+
 }

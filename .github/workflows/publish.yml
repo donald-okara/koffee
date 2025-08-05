@@ -28,16 +28,17 @@ jobs:
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > $HOME/key.asc
           gpg --batch --import $HOME/key.asc
+          # export to legacy format required by Gradle
+          gpg --export-secret-keys --no-tty --batch --yes --pinentry-mode loopback ${{ secrets.GPG_KEY_ID }} > ./secring.gpg
 
       - name: Trust GPG key
-        run: |
-          echo "${{ secrets.GPG_KEY_ID }}:6:" | gpg --import-ownertrust
+        run: echo "${{ secrets.GPG_KEY_ID }}:6:" | gpg --import-ownertrust
 
       - name: Publish to OSSRH
-        run: ./gradlew publishReleasePublicationToOSSRHRepository \
-          -Psigning.keyId=${{ secrets.GPG_KEY_ID }} \
-          -Psigning.password=${{ secrets.GPG_PASSWORD }}
-        env:
-          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        run: |
+          ./gradlew publishReleasePublicationToOSSRHRepository \
+            -Psigning.keyId=${{ secrets.GPG_KEY_ID }} \
+            -Psigning.password=${{ secrets.GPG_PASSWORD }} \
+            -Psigning.secretKeyRingFile=./secring.gpg \
+            -PossrhUsername=${{ secrets.OSSRH_USERNAME }} \
+            -PossrhPassword=${{ secrets.OSSRH_PASSWORD }}

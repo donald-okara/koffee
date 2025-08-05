@@ -61,7 +61,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-
 afterEvaluate {
     extensions.configure<PublishingExtension>("publishing") {
         publications {

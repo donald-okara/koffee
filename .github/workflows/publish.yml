@@ -31,14 +31,11 @@ jobs:
           echo "SIGNING_SECRET_KEY=$(gpg --armor --export-secret-keys)" >> $GITHUB_ENV
 
       - name: Publish to OSSRH
-        run: ./gradlew publishReleasePublicationToOSSRHRepository \
-          -Psigning.keyId=${{ secrets.GPG_KEY_ID }} \
-          -Psigning.secretKey="$SIGNING_SECRET_KEY" \
-          -Psigning.password=${{ secrets.GPG_PASSWORD }} \
-          -PossrhUsername=${{ secrets.OSSRH_USERNAME }} \
-          -PossrhPassword=${{ secrets.OSSRH_PASSWORD }}
         env:
-          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-          SIGNING_SECRET_KEY: ${{ env.SIGNING_SECRET_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          SIGNING_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSWORD }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+        run: ./gradlew publishReleasePublicationToOSSRHRepository -Psigning.keyId=$SIGNING_KEY_ID -Psigning.secretKey="$SIGNING_SECRET_KEY" -Psigning.password=$SIGNING_PASSWORD -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD

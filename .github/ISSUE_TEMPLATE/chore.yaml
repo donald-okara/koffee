@@ -5,6 +5,41 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: What is being cleaned up or improved?
+      label: 🧹 What is being cleaned up or improved?
+      description: Describe what you're refactoring, removing, or reorganizing.
     validations:
       required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 💡 Why is this needed?
+      description: Explain the reason for this cleanup or the problem it solves.
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: 🔍 Impact
+      description: Are there any risks, side effects, or things reviewers should watch out for?
+    validations:
+      required: false
+
+  - type: textarea
+    id: related
+    attributes:
+      label: 🔗 Related Issues or PRs
+      description: Link to any related issues, discussions, or PRs.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Checklist
+      options:
+        - label: This does not affect user-visible features
+        - label: This improves code readability or consistency
+        - label: No breaking changes are introduced
+        - label: CI passes with this change

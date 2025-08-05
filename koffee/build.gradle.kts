@@ -115,11 +115,16 @@ afterEvaluate {
     }
 
     extensions.configure<SigningExtension>("signing") {
+        println("signing.keyId: ${findProperty("signing.keyId")}")
+        println("SIGNING_PRIVATE_KEY (starts with): ${System.getenv("SIGNING_PRIVATE_KEY")?.take(20)}")
+        println("signing.password: ${findProperty("signing.password")}")
+
         useInMemoryPgpKeys(
             findProperty("signing.keyId") as String?,
-            System.getenv("SIGNING_SECRET_KEY_RING_FILE")?.let { String(Base64.getDecoder().decode(it)) },
-            findProperty("signing.password") as String?,
+            System.getenv("SIGNING_PRIVATE_KEY")?.let { String(Base64.getDecoder().decode(it)) },
+            findProperty("signing.password") as String?
         )
-        sign(publishing.publications)
+
+        sign(extensions.getByType<PublishingExtension>().publications)
     }
 }

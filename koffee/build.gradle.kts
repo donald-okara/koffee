@@ -6,6 +6,9 @@ plugins {
     id("signing")
 }
 
+group = "io.github.donald-okara"
+version = System.getenv("RELEASE_VERSION") ?: "unspecified"
+
 android {
     namespace = "ke.don.koffee"
     compileSdk = 36
@@ -56,78 +59,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-afterEvaluate {
-
-    println("Signing Info:")
-    println("keyId: " + project.findProperty("signing.keyId"))
-    println("password: " + if (project.hasProperty("signing.password")) "✅" else "❌")
-    println("secretKeyRingFile: " + project.findProperty("signing.secretKeyRingFile"))
-
-    publishing {
-        publications {
-            val release by creating(MavenPublication::class) {
-                from(components["release"])
-                groupId = "com.github.donald-okara"
-                artifactId = "koffee"
-                version = "v0.1.12"
-
-                pom {
-                    name.set("Koffee")
-                    description.set("Composable toast manager for Jetpack Compose")
-                    url.set("https://github.com/donald-okara/Koffee")
-                    licenses {
-                        license {
-                            name.set("MIT License")
-                            url.set("https://opensource.org/licenses/MIT")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("donald-okara")
-                            name.set("Donald Okara")
-                            email.set("donaldokara123@gmail.com")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:git://github.com/donald-okara/Koffee.git")
-                        developerConnection.set("scm:git:ssh://github.com/donald-okara/Koffee.git")
-                        url.set("https://github.com/donald-okara/Koffee")
-                    }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                name = "OSSRH"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = project.findProperty("ossrhUsername")?.toString() ?: ""
-                    password = project.findProperty("ossrhPassword")?.toString() ?: ""
-                }
-            }
-        }
-    }
-
-    val shouldSign =
-        project.hasProperty("koffee.signingEnabled") &&
-            project.hasProperty("signing.keyId") &&
-            project.hasProperty("signing.password") &&
-            project.hasProperty("signing.secretKeyRingFile") &&
-            project.findProperty("koffee.signingEnabled") == "true"
-
-    if (shouldSign) {
-        signing {
-            useInMemoryPgpKeys(
-                project.findProperty("signing.keyId")!!.toString(),
-                project.findProperty("signing.password")!!.toString(),
-                file(project.findProperty("signing.secretKeyRingFile")!!).readText(),
-            )
-            sign(publishing.publications["release"])
-        }
-    } else {
-        println("⚠️ Skipping signing — missing signing config (likely JitPack build).")
-    }
 }

@@ -1,0 +1,10 @@
+name: 🧹 Chore / Cleanup
+description: Internal improvements with no user-facing changes
+labels: [chore]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What is being cleaned up or improved?
+    validations:
+      required: true

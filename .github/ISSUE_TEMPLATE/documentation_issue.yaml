@@ -1,0 +1,18 @@
+name: 📚 Documentation Issue
+description: Report errors or improvements needed in the documentation
+labels: [documentation]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What part of the docs is wrong or unclear?
+      placeholder: e.g., The setup instructions don't mention enabling compose...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggest a fix (optional)
+    validations:
+      required: false

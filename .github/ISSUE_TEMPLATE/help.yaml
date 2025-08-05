@@ -1,0 +1,17 @@
+name: ❓ Question / Help
+description: Ask a question about using the library
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: What do you want to know?
+      placeholder: I'm trying to use toast without an Activity context...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Library version
+      placeholder: e.g., 1.0.0-beta03

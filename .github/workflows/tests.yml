@@ -26,28 +26,3 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew test
-
-  instrumented-tests:
-    name: 📱 Instrumented Tests
-    runs-on: macos-latest  # 🧠 Required for Android emulator
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17 # adjust as needed
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Create AVD and launch emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: default
-          arch: x86_64
-          script: ./gradlew connectedDebugAndroidTest

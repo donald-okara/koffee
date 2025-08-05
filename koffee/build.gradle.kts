@@ -118,10 +118,14 @@ afterEvaluate {
         println("signing.keyId: ${findProperty("signing.keyId")}")
         println("SIGNING_PRIVATE_KEY (starts with): ${System.getenv("SIGNING_PRIVATE_KEY")?.take(20)}")
         println("signing.password: ${findProperty("signing.password")}")
+        val decoded = System.getenv("SIGNING_PRIVATE_KEY")?.let {
+            String(Base64.getDecoder().decode(it))
+        }
+        println(decoded?.take(100)) // Should print start of private key block
 
         useInMemoryPgpKeys(
             findProperty("signing.keyId") as String?,
-            System.getenv("SIGNING_PRIVATE_KEY")?.let { String(Base64.getDecoder().decode(it)) },
+            decoded,
             findProperty("signing.password") as String?
         )
 

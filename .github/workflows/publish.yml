@@ -1,57 +1,43 @@
-name: 📦 Publish to Maven Central
-
-permissions:
-  contents: write
+name: Publish to Maven Central
 
 on:
   push:
     tags:
-      - 'v*' # Triggers on tags like v0.1.0, v1.0.5, etc.
+      - "v*.*.*"
 
 jobs:
   publish:
-    name: 🚀 Publish to Maven Central
+    name: Publish tagged release
     runs-on: ubuntu-latest
 
-    env:
-      SIGNING_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
-
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
 
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+      - name: Set RELEASE_VERSION from tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
-      - name: Set version from tag
-        run: echo "RELEASE_VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
-
-      - name: Set signing and OSSRH properties
+      - name: Import GPG key
         run: |
-          mkdir -p ~/.gradle
-          echo "signing.keyId=${{ secrets.SIGNING_KEY_ID }}" >> ~/.gradle/gradle.properties
-          echo "signing.password=${{ secrets.SIGNING_PASSWORD }}" >> ~/.gradle/gradle.properties
-          echo "ossrhUsername=${{ secrets.OSSRH_USERNAME }}" >> ~/.gradle/gradle.properties
-          echo "ossrhPassword=${{ secrets.OSSRH_PASSWORD }}" >> ~/.gradle/gradle.properties
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > $HOME/key.asc
+          gpg --batch --import $HOME/key.asc
 
-      - name: Confirm build version
-        run: | 
-          echo "Publishing version: $RELEASE_VERSION"
+      - name: Trust GPG key
+        run: |
+          echo -e "5\ny\n" | gpg --command-fd 0 --edit-key ${{ secrets.GPG_KEY_ID }} trust
 
-      - name: Publish to Maven Central
-        run: ./gradlew publish --no-daemon --rerun-tasks
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          body: |
-            ✅ `${{ github.ref_name }}` has been published to Maven Central!
+      - name: Publish to OSSRH
+        run: ./gradlew publishReleasePublicationToOSSRHRepository \
+          -Psigning.keyId=${{ secrets.GPG_KEY_ID }} \
+          -Psigning.password=${{ secrets.GPG_PASSWORD }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}

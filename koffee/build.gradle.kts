@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.dokka") version "1.9.20"
     id("maven-publish")
     id("signing")
 }
@@ -18,6 +19,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar() // generates empty jar
+        }
     }
 
     buildTypes {
@@ -62,35 +70,32 @@ dependencies {
 }
 
 afterEvaluate {
-    extensions.configure<PublishingExtension>("publishing") {
+    publishing {
         publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-
+            register<MavenPublication>("release") {
                 groupId = "io.github.donald-okara"
                 artifactId = "koffee"
-                version = project.version.toString()
+                version = System.getenv("RELEASE_VERSION") ?: "unspecified"
+
+                from(components["release"])
 
                 pom {
                     name.set("Koffee")
-                    description.set("A beautiful toast/snackbar system for Jetpack Compose")
+                    description.set("A composable toast/snackbar framework for Android")
                     url.set("https://github.com/donald-okara/Koffee")
-
                     licenses {
                         license {
-                            name.set("MIT License")
-                            url.set("https://opensource.org/licenses/MIT")
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                         }
                     }
-
                     developers {
                         developer {
                             id.set("donald-okara")
                             name.set("Donald Okara")
-                            email.set("donaldokara123@gmail.com")
+                            email.set("donaldokara123@.com")
                         }
                     }
-
                     scm {
                         connection.set("scm:git:git://github.com/donald-okara/Koffee.git")
                         developerConnection.set("scm:git:ssh://github.com:donald-okara/Koffee.git")
@@ -109,24 +114,18 @@ afterEvaluate {
                     password = findProperty("ossrhPassword") as String?
                 }
             }
+
+            maven {
+                name = "localTest"
+                url = uri(layout.buildDirectory.dir("local-repo"))
+            }
+
+
         }
     }
 
-    extensions.configure<SigningExtension>("signing") {
-        val keyId = findProperty("signing.keyId") as String?
-        val password = findProperty("signing.password") as String?
-        val key = System.getenv("SIGNING_PRIVATE_KEY")
-
-        println("signing.keyId: ${keyId ?: "null"}")
-        println("signing.password: ${password ?: "null"}")
-        println("SIGNING_PRIVATE_KEY (starts with): ${key?.take(20) ?: "null"}")
-
-        useInMemoryPgpKeys(
-            keyId,
-            key,
-            password
-        )
-
-        sign(extensions.getByType<PublishingExtension>().publications)
+    signing {
+        useGpgCmd() // use system-installed gpg command
+        sign(publishing.publications["release"])
     }
 }

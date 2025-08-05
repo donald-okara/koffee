@@ -14,11 +14,13 @@ jobs:
   retry-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run release-drafter
+        uses: release-drafter/release-drafter@v5
         with:
-          tag_name: ${{ github.event.inputs.tag }}
-          body: |
-            ✅ `${{ github.event.inputs.tag }}` has been published to Maven Central!
+          config-name: release-drafter.yml
+          publish: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

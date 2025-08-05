@@ -24,10 +24,13 @@ import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.ToastHost
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object Koffee {
     private lateinit var toastHostState: ToastHostState
-    private var config: KoffeeConfig = KoffeeConfig(
+    internal var config: KoffeeConfig = KoffeeConfig(
         layout = { DefaultToast(it) },
         dismissible = true,
     )
@@ -40,7 +43,7 @@ object Koffee {
     fun Setup(
         modifier: Modifier = Modifier,
         maxVisibleToasts: Int = 1,
-        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts, config),
+        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts),
         alignment: Alignment = Alignment.BottomCenter,
     ) {
         toastHostState = hostState
@@ -61,10 +64,13 @@ object Koffee {
         primaryAction: ToastAction? = null,
         secondaryAction: ToastAction? = null,
         isAppVisible: Boolean = true,
+        coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
     ) {
         if (!isAppVisible) return
 
-        toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
+        coroutineScope.launch {
+            toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
+        }
     }
 
     fun dismiss(id: String) {

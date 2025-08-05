@@ -64,7 +64,7 @@ object Koffee {
         primaryAction: ToastAction? = null,
         secondaryAction: ToastAction? = null,
         isAppVisible: Boolean = true,
-        coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+        coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate),
     ) {
         if (!isAppVisible) return
 

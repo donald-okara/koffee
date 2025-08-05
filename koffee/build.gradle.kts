@@ -115,18 +115,27 @@ afterEvaluate {
     }
 
     extensions.configure<SigningExtension>("signing") {
-        println("signing.keyId: ${findProperty("signing.keyId")}")
-        println("SIGNING_PRIVATE_KEY (starts with): ${System.getenv("SIGNING_PRIVATE_KEY")?.take(20)}")
-        println("signing.password: ${findProperty("signing.password")}")
-        val decoded = System.getenv("SIGNING_PRIVATE_KEY")?.let {
-            String(Base64.getDecoder().decode(it))
+        val keyId = findProperty("signing.keyId") as String?
+        val password = findProperty("signing.password") as String?
+        val encodedKey = System.getenv("SIGNING_PRIVATE_KEY")
+        val decodedKey = encodedKey?.let {
+            try {
+                String(Base64.getDecoder().decode(it))
+            } catch (e: IllegalArgumentException) {
+                println("⚠️ Failed to decode SIGNING_PRIVATE_KEY: ${e.message}")
+                null
+            }
         }
-        println(decoded?.take(100)) // Should print start of private key block
+
+        println("signing.keyId: ${keyId ?: "null"}")
+        println("signing.password: ${password ?: "null"}")
+        println("SIGNING_PRIVATE_KEY (starts with): ${encodedKey?.take(20) ?: "null"}")
+        println("Decoded key (starts with): ${decodedKey?.take(100) ?: "null"}")
 
         useInMemoryPgpKeys(
-            findProperty("signing.keyId") as String?,
-            decoded,
-            findProperty("signing.password") as String?
+            keyId,
+            decodedKey,
+            password
         )
 
         sign(extensions.getByType<PublishingExtension>().publications)

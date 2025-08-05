@@ -1,0 +1,24 @@
+name: 🔁 Retry GitHub Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag name to create a release for'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  retry-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          body: |
+            ✅ `${{ github.event.inputs.tag }}` has been published to Maven Central!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -46,7 +46,7 @@ jobs:
           echo "Publishing version: $RELEASE_VERSION"
 
       - name: Publish to Maven Central
-        run: ./gradlew publish --no-daemon
+        run: ./gradlew publish --no-daemon --rerun-tasks
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1

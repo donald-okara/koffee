@@ -1,0 +1,66 @@
+name: Append PR Template
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  append-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Append PR template if not present
+        uses: actions/github-script@v7
+        with:
+          script: |
+                        const template = `
+            ## 📌 What does this PR do?
+              
+              <!-- Describe the purpose of this PR -->
+              
+              ## 🧪 How was it tested?
+              
+              <!-- Mention any manual/automated testing -->
+              
+              ## 🔨 Issue fixed
+              
+              <!-- Mention The issue it fixes. Prefix with '#' -->
+              
+              ## 🧩 Related Issues
+              
+              <!-- Link to related issues or discussions -->
+            
+            ## 📝 Checklist
+            
+            - [ ] I have tested this change locally
+            - [ ] I have updated the documentation (if needed)
+            - [ ] I have added necessary unit tests (if needed)
+            - [ ] I have followed the project’s coding style
+            - [ ] I have run spotless checks and it passed
+            
+            ## 💬 Additional context
+              
+              <!-- Add any other context or screenshots if relevant -->
+              `.trim();
+            
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+              
+              const alreadyPresent = pr.body && pr.body.includes("## 📌 What does this PR do?");
+              if (alreadyPresent) {
+              console.log("PR template already present. Skipping append.");
+              return;
+            }
+              
+              const updatedBody = `${pr.body || ''}\n\n---\n\n${template}`;
+              
+              await github.rest.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            body: updatedBody
+            });
+              
+              console.log("PR template appended.");

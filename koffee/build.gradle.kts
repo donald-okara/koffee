@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -113,6 +115,11 @@ afterEvaluate {
     }
 
     extensions.configure<SigningExtension>("signing") {
-        sign(extensions.getByType(PublishingExtension::class).publications)
+        useInMemoryPgpKeys(
+            findProperty("signing.keyId") as String?,
+            System.getenv("SIGNING_PRIVATE_KEY")?.let { String(Base64.getDecoder().decode(it)) },
+            findProperty("signing.password") as String?,
+        )
+        sign(publishing.publications)
     }
 }

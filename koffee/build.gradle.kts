@@ -1,5 +1,3 @@
-import java.util.Base64
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -117,24 +115,15 @@ afterEvaluate {
     extensions.configure<SigningExtension>("signing") {
         val keyId = findProperty("signing.keyId") as String?
         val password = findProperty("signing.password") as String?
-        val encodedKey = System.getenv("SIGNING_PRIVATE_KEY")
-        val decodedKey = encodedKey?.let {
-            try {
-                String(Base64.getDecoder().decode(it))
-            } catch (e: IllegalArgumentException) {
-                println("⚠️ Failed to decode SIGNING_PRIVATE_KEY: ${e.message}")
-                null
-            }
-        }
+        val key = System.getenv("SIGNING_PRIVATE_KEY")
 
         println("signing.keyId: ${keyId ?: "null"}")
         println("signing.password: ${password ?: "null"}")
-        println("SIGNING_PRIVATE_KEY (starts with): ${encodedKey?.take(20) ?: "null"}")
-        println("Decoded key (starts with): ${decodedKey?.take(100) ?: "null"}")
+        println("SIGNING_PRIVATE_KEY (starts with): ${key?.take(20) ?: "null"}")
 
         useInMemoryPgpKeys(
             keyId,
-            decodedKey,
+            key,
             password
         )
 

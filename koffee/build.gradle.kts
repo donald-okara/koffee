@@ -117,7 +117,7 @@ afterEvaluate {
     extensions.configure<SigningExtension>("signing") {
         useInMemoryPgpKeys(
             findProperty("signing.keyId") as String?,
-            System.getenv("SIGNING_PRIVATE_KEY")?.let { String(Base64.getDecoder().decode(it)) },
+            System.getenv("SIGNING_SECRET_KEY_RING_FILE")?.let { String(Base64.getDecoder().decode(it)) },
             findProperty("signing.password") as String?,
         )
         sign(publishing.publications)

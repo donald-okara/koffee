@@ -24,15 +24,22 @@ jobs:
       - name: Set RELEASE_VERSION from tag
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
-      - name: Decode GPG private key
-        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > secring.gpg
+      - name: Decode GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > /tmp/key.asc
+          echo "SIGNING_SECRET_KEY=$(gpg --batch --armor --export-secret-keys < /tmp/key.asc)" >> $GITHUB_ENV
 
       - name: Trust GPG key
         run: |
           echo "${{ secrets.GPG_KEY_ID }}:6:" | gpg --import-ownertrust
 
       - name: Publish to OSSRH
-        run: ./gradlew publishReleasePublicationToOSSRHRepository -Psigning.keyId=${{ secrets.GPG_KEY_ID }} -Psigning.password=${{ secrets.GPG_PASSWORD }} -Psigning.secretKeyRingFile=./secring.gpg -PossrhUsername=${{ secrets.OSSRH_USERNAME }} -PossrhPassword=${{ secrets.OSSRH_PASSWORD }}
+        run: ./gradlew publishReleasePublicationToOSSRHRepository \
+          -Psigning.keyId=${{ secrets.GPG_KEY_ID }} \
+          -Psigning.secretKey="${{ secrets.GPG_SECRET_KEY }}" \
+          -Psigning.password=${{ secrets.GPG_PASSWORD }} \
+          -PossrhUsername=${{ secrets.OSSRH_USERNAME }} \
+          -PossrhPassword=${{ secrets.OSSRH_PASSWORD }}
 
         env:
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}

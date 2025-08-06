@@ -24,13 +24,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar() // generates empty jar
-        }
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false

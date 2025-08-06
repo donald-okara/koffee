@@ -1,14 +1,17 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.dokka") version "1.9.20"
+    id("com.vanniktech.maven.publish") version "0.30.0"
     id("maven-publish")
     id("signing")
 }
 
 group = "io.github.donald-okara"
-version = System.getenv("RELEASE_VERSION") ?: "unspecified"
+version = System.getenv("GITHUB_REF_NAME")?.removePrefix("v") ?: "unspecified"
 
 android {
     namespace = "ke.don.koffee"
@@ -69,68 +72,37 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            register<MavenPublication>("release") {
-                groupId = "io.github.donald-okara"
-                artifactId = "koffee"
-                version = System.getenv("RELEASE_VERSION") ?: "unspecified"
 
-                from(components["release"])
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-                pom {
-                    name.set("Koffee")
-                    description.set("A composable toast/snackbar framework for Android")
-                    url.set("https://github.com/donald-okara/Koffee")
-                    licenses {
-                        license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("donald-okara")
-                            name.set("Donald Okara")
-                            email.set("donaldokara123@.com")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:git://github.com/donald-okara/Koffee.git")
-                        developerConnection.set("scm:git:ssh://github.com:donald-okara/Koffee.git")
-                        url.set("https://github.com/donald-okara/Koffee")
-                    }
-                }
+    signAllPublications()
+
+    coordinates("io.github.donald-okara", "koffee", version.toString())
+
+    pom {
+        name = "Koffee"
+        description = "A composable toast/snackbar framework for Android"
+        inceptionYear = "2025"
+        url = "https://github.com/donald-okara/Koffee"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
-
-        repositories {
-            maven {
-                name = "OSSRH"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
-                    password = findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
-                }
+        developers {
+            developer {
+                id = "donald-okara"
+                name = "Donald Okara"
+                url = "https://github.com/donald-okara"
             }
-
-            maven {
-                name = "localTest"
-                url = uri(layout.buildDirectory.dir("local-repo"))
-            }
-
-
+        }
+        scm {
+            url = "https://github.com/donald-okara/Koffee"
+            connection = "scm:git:git://github.com/donald-okara/Koffee.git"
+            developerConnection = "scm:git:ssh://git@github.com:donald-okara/Koffee.git"
         }
     }
-
-    signing {
-        val signingKey: String? = findProperty("signing.secretKey") as String?
-        val signingPassword: String? = findProperty("signing.password") as String?
-        if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
-            useInMemoryPgpKeys(signingKey, signingPassword)
-            sign(publishing.publications["release"])
-        }
-    }
-
 }

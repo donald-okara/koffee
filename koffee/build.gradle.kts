@@ -60,7 +60,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-
 // ─── Dynamically infer tag version ─────────────────────────────────────────────
 
 fun gitTagVersion(): String {

@@ -6,10 +6,15 @@ on:
       - master
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: google-github-actions/release-please-action@v4
+        id: release
         with:
           release-type: java
-          package-name: koffee
+        continue-on-error: true
+
+      - name: Check if release was created
+        if: steps.release.outputs.release_created == 'true'
+        run: echo "A new release was created!"

@@ -5,6 +5,8 @@ plugins {
     id("org.jetbrains.dokka") version "1.9.20"
 }
 
+group = "io.github.donald-okara"
+version = gitTagVersion()
 
 android {
     namespace = "ke.don.koffee"
@@ -59,3 +61,23 @@ dependencies {
 }
 
 
+// ─── Dynamically infer tag version ─────────────────────────────────────────────
+
+fun gitTagVersion(): String {
+    return try {
+        val tag = "git describe --tags --abbrev=0".runCommand().trim()
+        tag.removePrefix("v") // strip 'v' from v1.0.0 → 1.0.0
+    } catch (e: Exception) {
+        println("Warning: Git tag not found. Using fallback version.")
+        "unspecified"
+    }
+}
+
+fun String.runCommand(): String =
+    ProcessBuilder(*split(" ").toTypedArray())
+        .directory(rootDir)
+        .redirectErrorStream(true)
+        .start()
+        .inputStream
+        .bufferedReader()
+        .readText()

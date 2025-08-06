@@ -1,33 +1,37 @@
-name: Append PR Template
+name: Append PR Template and Label
 
 on:
   pull_request:
     types: [opened]
 
 jobs:
-  append-template:
+  append-and-label:
     runs-on: ubuntu-latest
     steps:
-      - name: Append PR template if not present
+      - name: Append PR template and apply labels
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const prNumber = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
             const template = `
             ## 📌 What does this PR do?
             
               <!-- Describe the purpose of this PR -->
-              
+            
               ## 🧪 How was it tested?
-              
+            
               <!-- Mention any manual/automated testing -->
-              
+            
               ## 🔨 Issue fixed
-              
+            
               <!-- Mention The issue it fixes. Prefix with '#' -->
-              
+            
               ## 🧩 Related Issues
-              
+            
               <!-- Link to related issues or discussions -->
             
             ## 📝 Checklist
@@ -39,29 +43,39 @@ jobs:
             - [ ] I have run spotless checks and it passed
             
             ## 💬 Additional context
-              
+            
               <!-- Add any other context or screenshots if relevant -->
-              `.trim();
-            
+            `.trim();
+
+            // Fetch the current PR body
             const { data: pr } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
+              owner,
+              repo,
+              pull_number: prNumber,
             });
-              
-              const alreadyPresent = pr.body && pr.body.toLowerCase().includes("## 📌 what does this pr do?");
-              if (alreadyPresent) {
-              console.log("PR template already present. Skipping append.");
-              return;
-            }
-            
+
+            // Check if template already exists
+            const alreadyPresent = pr.body && pr.body.toLowerCase().includes("## 📌 what does this pr do?");
+            if (!alreadyPresent) {
               const updatedBody = `${pr.body || ''}\n\n---\n\n${template}`;
-              
               await github.rest.pulls.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: context.payload.pull_request.number,
-            body: updatedBody,
-            });
-              
+                owner,
+                repo,
+                pull_number: prNumber,
+                body: updatedBody,
+              });
               console.log("✅ PR template appended.");
+            } else {
+              console.log("PR template already present. Skipping append.");
+            }
+
+            // Add default labels
+            const labelsToAdd = ["DNM", "Work in progress"];
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: prNumber,
+              labels: labelsToAdd,
+            });
+
+            console.log("🏷️ Labels added: " + labelsToAdd.join(", "));

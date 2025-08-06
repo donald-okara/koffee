@@ -23,7 +23,7 @@ jobs:
 
       - name: Write GPG key file
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" > gpg-secret.asc
+          echo "${{ secrets.JRELEASER_GPG_SECRET_KEY}}" > gpg-secret.asc
 
 
       - name: Publish and release to Maven Central
@@ -31,6 +31,6 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.JRELEASER_MAVENCENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.JRELEASER_MAVENCENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingKeyFile: "${{ github.workspace }}/gpg-secret.asc"
+          ORG_GRADLE_PROJECT_signingKeyFile: gpg-secret.asc
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_KEY_ID }}
           ORG_GRADLE_PROJECT_signingKeyPassword: ${{ secrets.GPG_PASSWORD }}

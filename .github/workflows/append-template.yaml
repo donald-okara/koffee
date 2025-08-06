@@ -1,4 +1,4 @@
-name: Append PR Template and Label
+name: Append PR Template
 
 on:
   pull_request:
@@ -68,14 +68,3 @@ jobs:
             } else {
               console.log("PR template already present. Skipping append.");
             }
-
-            // Add default labels
-            const labelsToAdd = ["DNM", "Work in progress"];
-            await github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: prNumber,
-              labels: labelsToAdd,
-            });
-
-            console.log("🏷️ Labels added: " + labelsToAdd.join(", "));

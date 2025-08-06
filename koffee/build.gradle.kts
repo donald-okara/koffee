@@ -14,7 +14,7 @@ group = "io.github.donald-okara"
 version = System.getenv("GITHUB_REF_NAME")?.removePrefix("v") ?: "unspecified"
 
 android {
-    namespace = "ke.don.koffee"
+    namespace = "io.github.donald-okara"
     compileSdk = 36
 
     defaultConfig {

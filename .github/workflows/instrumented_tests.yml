@@ -24,7 +24,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build app and test APKs
-        run: ./gradlew assembleDebug assembleAndroidTest
+        run: ./gradlew clean assembleDebug assembleDebugAndroidTest
 
       - name: Run tests on emulator.wtf
         uses: emulator-wtf/run-tests@v0

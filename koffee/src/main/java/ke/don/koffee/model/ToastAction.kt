@@ -18,5 +18,5 @@ package ke.don.koffee.model
 data class ToastAction(
     val label: String,
     val onClick: () -> Unit,
-    val dismissAfter: Boolean = false
+    val dismissAfter: Boolean = false,
 )

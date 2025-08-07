@@ -12,7 +12,6 @@ android {
     namespace = "ke.don.koffee"
     compileSdk = 36
 
-
     defaultConfig {
         minSdk = 26
         testOptions.targetSdk = 36

@@ -21,7 +21,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import ke.don.koffee.model.KoffeeConfig
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
@@ -66,7 +65,6 @@ class DefaultToastHostState internal constructor(
             })
         }
 
-
         val toast = ToastData(
             title = title,
             description = description,
@@ -107,7 +105,7 @@ class DefaultToastHostState internal constructor(
 @Composable
 fun rememberToastHostState(
     maxVisibleToasts: Int = 3,
-    durationResolver: (ToastDuration) -> Long?
+    durationResolver: (ToastDuration) -> Long?,
 ): ToastHostState {
     val scope = rememberCoroutineScope()
 

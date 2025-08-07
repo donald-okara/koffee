@@ -53,18 +53,19 @@ class DefaultToastHostState internal constructor(
         val toastId = UUID.randomUUID().toString()
 
         val wrappedPrimary = primaryAction?.let {
-            ToastAction(it.label) {
+            ToastAction(it.label, {
                 it.onClick()
-                dismiss(toastId)
-            }
+                if (it.dismissAfter) dismiss(toastId)
+            })
         }
 
         val wrappedSecondary = secondaryAction?.let {
-            ToastAction(it.label) {
+            ToastAction(it.label, {
                 it.onClick()
-                dismiss(toastId)
-            }
+                if (it.dismissAfter) dismiss(toastId)
+            })
         }
+
 
         val toast = ToastData(
             title = title,

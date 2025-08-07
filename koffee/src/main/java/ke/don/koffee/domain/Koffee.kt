@@ -72,12 +72,4 @@ object Koffee {
             toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
         }
     }
-
-    fun dismiss(id: String) {
-        toastHostState.dismiss(id)
-    }
-
-    fun dismissAll() {
-        toastHostState.dismissAll()
-    }
 }

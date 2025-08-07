@@ -34,8 +34,3 @@ jobs:
           test: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           outputs-dir: build/test-results
 
-      - name: Publish test report
-        uses: mikepenz/action-junit-report@v2
-        if: always()
-        with:
-          report_paths: build/test-results/**/*.xml

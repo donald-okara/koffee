@@ -3,7 +3,7 @@ name: Run Instrumented Tests on Emulator.wtf
 on:
   pull_request:
     branches: [master, dev]
-  workflow_dispatch:         # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   instrumented-tests:
@@ -26,12 +26,16 @@ jobs:
       - name: Build app and test APKs
         run: ./gradlew assembleDebug assembleAndroidTest
 
-      - name: Upload to emulator.wtf
-        run: |
-          curl https://app.emulator.wtf/api/v1/test \
-            -u "${{ secrets.EMULATOR_WTF_API_KEY }}:" \
-            -F "test[application]=@app/build/outputs/apk/debug/app-debug.apk" \
-            -F "test[test]=@app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" \
-            -F "test[device]=model=Pixel4,version=33,locale=en,orientation=portrait" \
-            -F "test[timeout]=900" \
-            -F "test[async]=0"
+      - name: Run tests on emulator.wtf
+        uses: emulator-wtf/run-tests@v0
+        with:
+          api-token: ${{ secrets.EMULATOR_WTF_API_KEY }}
+          app: app/build/outputs/apk/debug/app-debug.apk
+          test: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          outputs-dir: build/test-results
+
+      - name: Publish test report
+        uses: mikepenz/action-junit-report@v2
+        if: always()
+        with:
+          report_paths: build/test-results/**/*.xml

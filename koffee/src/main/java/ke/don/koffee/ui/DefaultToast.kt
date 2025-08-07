@@ -206,8 +206,8 @@ fun DefaultToastPreview() {
                 title = "Info",
                 description = "This is an info toast",
                 type = ToastType.Info,
-                primaryAction = ToastAction("Details") { println("Info > Details") },
-                secondaryAction = ToastAction("Dismiss") { println("Info > Dismiss") },
+                primaryAction = ToastAction("Details", { println("Info > Details") }),
+                secondaryAction = ToastAction("Dismiss",{ println("Info > Dismiss") }) ,
             ),
         )
 
@@ -216,8 +216,8 @@ fun DefaultToastPreview() {
                 title = "Neutral",
                 description = "This is a neutral toast",
                 type = ToastType.Neutral,
-                primaryAction = ToastAction("Open") { println("Neutral > Open") },
-                secondaryAction = ToastAction("Dismiss") { println("Neutral > Dismiss") },
+                primaryAction = ToastAction("Open", { println("Neutral > Open") },),
+                secondaryAction = ToastAction("Dismiss",  { println("Neutral > Dismiss") }),
             ),
         )
 
@@ -226,8 +226,8 @@ fun DefaultToastPreview() {
                 title = "Success",
                 description = "This is a success toast",
                 type = ToastType.Success,
-                primaryAction = ToastAction("Celebrate") { println("Success > Celebrate") },
-                secondaryAction = ToastAction("Dismiss") { println("Success > Dismiss") },
+                primaryAction = ToastAction("Celebrate",  { println("Success > Celebrate") }),
+                secondaryAction = ToastAction("Dismiss", { println("Success > Dismiss") }),
             ),
         )
 
@@ -236,8 +236,8 @@ fun DefaultToastPreview() {
                 title = "Warning",
                 description = "This is a warning toast",
                 type = ToastType.Warning,
-                primaryAction = ToastAction("Fix") { println("Warning > Fix") },
-                secondaryAction = ToastAction("Ignore") { println("Warning > Ignore") },
+                primaryAction = ToastAction("Fix",  { println("Warning > Fix") }),
+                secondaryAction = ToastAction("Ignore",  { println("Warning > Ignore") }),
             ),
         )
 
@@ -246,8 +246,8 @@ fun DefaultToastPreview() {
                 title = "Error",
                 description = "This is an error toast",
                 type = ToastType.Error,
-                primaryAction = ToastAction("Retry") { println("Error > Retry") },
-                secondaryAction = ToastAction("Report") { println("Error > Report") },
+                primaryAction = ToastAction("Retry",  { println("Error > Retry") }),
+                secondaryAction = ToastAction("Report", { println("Error > Report") }) ,
             ),
         )
     }

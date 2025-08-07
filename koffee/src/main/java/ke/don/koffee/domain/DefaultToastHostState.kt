@@ -34,7 +34,7 @@ import java.util.UUID
 
 class DefaultToastHostState internal constructor(
     private val scope: CoroutineScope,
-    private val config: KoffeeConfig,
+    private val durationResolver: (ToastDuration) -> Long?,
     private val maxVisibleToasts: Int = 1,
 ) : ToastHostState {
     private val _toasts = mutableStateListOf<ToastData>()
@@ -83,7 +83,7 @@ class DefaultToastHostState internal constructor(
 
         _toasts.add(toast)
 
-        val millis = config.durationResolver(duration)
+        val millis = durationResolver(duration)
         if (millis != null) {
             jobs[toast.id] = scope.launch {
                 delay(millis)
@@ -107,10 +107,11 @@ class DefaultToastHostState internal constructor(
 @Composable
 fun rememberToastHostState(
     maxVisibleToasts: Int = 3,
+    durationResolver: (ToastDuration) -> Long?
 ): ToastHostState {
     val scope = rememberCoroutineScope()
 
     return remember(scope, maxVisibleToasts) {
-        DefaultToastHostState(scope, Koffee.config, maxVisibleToasts)
+        DefaultToastHostState(scope, durationResolver, maxVisibleToasts)
     }
 }

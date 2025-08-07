@@ -22,20 +22,18 @@ import org.junit.Test
 class DefaultToastHostStateTest {
 
     /**
-     * A test config with a fake layout and fixed 50ms toast duration.
+     * A test fixed duration 50ms.
      */
-    val testConfig = KoffeeConfig(
-        layout = { DefaultToast(it) }, // can be fake
-        dismissible = true,
-        durationResolver = { 50L }
-    )
+
+    val durationResolver = { duration: ToastDuration -> 50L }
+
 
     /**
      * Verifies that a toast is added to the visible list after calling [ke.don.koffee.domain.ToastHostState.show].
      */
     @Test
     fun toastIsAddedToList() = runTest {
-        val state = DefaultToastHostState(this, config = testConfig)
+        val state = DefaultToastHostState(this, durationResolver)
         state.show("Title", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
         assertEquals(1, state.toasts.size)
@@ -47,7 +45,7 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun toastAutoDismissesAfterDuration() = runTest {
-        val state = DefaultToastHostState(this, config = testConfig)
+        val state = DefaultToastHostState(this, durationResolver)
         state.show("AutoDismiss", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
         assertEquals(1, state.toasts.size)
@@ -61,7 +59,7 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun oldestToastIsRemovedWhenMaxExceeded() = runTest {
-        val state = DefaultToastHostState(this, config = testConfig, maxVisibleToasts = 1)
+        val state = DefaultToastHostState(this, durationResolver, maxVisibleToasts = 1)
         state.show("Toast1", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
         state.show("Toast2", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
@@ -79,7 +77,7 @@ class DefaultToastHostStateTest {
 
         val action = ToastAction("Click", { clicked = true }, dismissAfter = true)
 
-        val state = DefaultToastHostState(this, config = testConfig)
+        val state = DefaultToastHostState(this, durationResolver)
         state.show("ActionToast", "Desc", ToastDuration.Short, ToastType.Neutral, primaryAction = action, secondaryAction = null)
 
         val toast = state.toasts.first()
@@ -99,7 +97,7 @@ class DefaultToastHostStateTest {
 
         val action = ToastAction("Click", { clicked = true }, dismissAfter = false)
 
-        val state = DefaultToastHostState(this, config = testConfig)
+        val state = DefaultToastHostState(this, durationResolver)
         state.show("ActionToast", "Desc", ToastDuration.Short, ToastType.Neutral, primaryAction = action, secondaryAction = null)
 
         val toast = state.toasts.first()
@@ -114,7 +112,7 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun dismissAllClearsEverything() = runTest {
-        val state = DefaultToastHostState(this, config = testConfig)
+        val state = DefaultToastHostState(this, durationResolver)
         state.show("One", "Toast", ToastDuration.Short, ToastType.Neutral, null, null)
         state.show("Two", "Toast", ToastDuration.Short, ToastType.Neutral, null, null)
 

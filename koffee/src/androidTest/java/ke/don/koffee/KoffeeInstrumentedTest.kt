@@ -30,7 +30,7 @@ class KoffeeInstrumentedTest {
             Koffee.init {
                 layout { DefaultToast(it) }
                 dismissible(true)
-                durationResolver { 50L }
+                durationResolver { 400L }
             }
 
             Koffee.Setup()
@@ -99,13 +99,17 @@ class KoffeeInstrumentedTest {
             Koffee.init {
                 layout { DefaultToast(it) } // or custom
                 dismissible(true)
-                durationResolver { 50L }
+                durationResolver { null }
             }
 
             Koffee.Setup()
 
             Button(onClick = {
-                Koffee.show("Dismiss Me", "This should go away")
+                Koffee.show(
+                    "Dismiss Me",
+                    "This should go away",
+                    primaryAction = ToastAction("Dismiss", {}, dismissAfter = true)
+                )
             }) {
                 Text("Launch")
             }
@@ -116,7 +120,7 @@ class KoffeeInstrumentedTest {
 
         // Simulate swipe or dismiss button
         // Assuming DefaultToast uses a dismiss X button
-        composeTestRule.onNodeWithContentDescription("Dismiss").performClick()
+        composeTestRule.onNodeWithText("Dismiss").performClick()
 
         composeTestRule.waitUntil(timeoutMillis = 300) {
             composeTestRule.onAllNodesWithText("Dismiss Me").fetchSemanticsNodes().isEmpty()

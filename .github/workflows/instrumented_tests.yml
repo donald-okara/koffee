@@ -23,14 +23,13 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build app and test APKs
-        run: ./gradlew clean assembleDebug assembleDebugAndroidTest
+      - name: Build Koffee app and test APKs
+        run: ./gradlew clean :koffee:assembleDebug :koffee:assembleDebugAndroidTest
 
       - name: Run tests on emulator.wtf
         uses: emulator-wtf/run-tests@v0
         with:
           api-token: ${{ secrets.EMULATOR_WTF_API_KEY }}
-          app: app/build/outputs/apk/debug/app-debug.apk
-          test: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          app: koffee/build/outputs/apk/debug/koffee-debug.apk
+          test: koffee/build/outputs/apk/androidTest/debug/koffee-debug-androidTest.apk
           outputs-dir: build/test-results
-

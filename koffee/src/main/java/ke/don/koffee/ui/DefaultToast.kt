@@ -55,6 +55,25 @@ import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastType
 
+/**
+ * A composable function that displays a default toast message.
+ *
+ * This function takes a [ToastData] object as input and displays a toast message with an icon,
+ * title, description, and optional action buttons. The appearance of the toast (icon, tint,
+ * background color) is determined by the [ToastType] specified in the [ToastData].
+ *
+ * The layout consists of:
+ * - An icon on the left.
+ * - A column with the title and description to the right of the icon.
+ * - An optional row of action buttons (primary and secondary) below the text.
+ *
+ * The toast is styled with rounded corners and appropriate padding. Text overflow is handled
+ * by truncating with an ellipsis.
+ *
+ * @param data The [ToastData] object containing the information to display in the toast.
+ *             This includes the title, description, [ToastType], and optional
+ *             [ToastAction]s for primary and secondary buttons.
+ */
 @Composable
 fun DefaultToast(
     data: ToastData,
@@ -128,6 +147,15 @@ fun DefaultToast(
     }
 }
 
+/**
+ * Composable function that displays a row of actions for a toast message.
+ * It can display a primary and/or a secondary action button.
+ * If both actions are null, the composable returns early.
+ *
+ * @param secondaryAction The [ToastAction] for the secondary button. Can be null.
+ * @param primaryAction The [ToastAction] for the primary button. Can be null.
+ * @param tint The [Color] used to style the buttons.
+ */
 @Composable
 fun ToastActionRow(
     secondaryAction: ToastAction?,

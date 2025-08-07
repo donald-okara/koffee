@@ -13,12 +13,14 @@ tasks.dokkaHtml.configure {
 }
 
 
-tasks.register("dokkaPreview") {
-    dependsOn("dokkaHtml")
-    doLast {
-        val file = layout.buildDirectory.file("dokka/index.html").get().asFile
-        val uri = file.toURI()
-        println("Opening Dokka docs at: $uri")
+tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+    dokkaSourceSets.configureEach {
+        // 👇 include sample usage file(s)
+        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
+
+        // (Optional) Suppress deprecated or undocumented elements
+        suppress.set(false)
+        skipEmptyPackages.set(true)
     }
 }
 

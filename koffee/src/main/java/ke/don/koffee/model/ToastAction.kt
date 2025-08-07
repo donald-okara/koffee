@@ -15,6 +15,13 @@
  */
 package ke.don.koffee.model
 
+/**
+ * Represents an action that can be performed on a toast notification.
+ *
+ * @property label The text to display for the action button.
+ * @property onClick A lambda function to be executed when the action button is clicked.
+ * @property dismissAfter If `true`, the toast will be dismissed after the action is clicked. Defaults to `false`.
+ */
 data class ToastAction(
     val label: String,
     val onClick: () -> Unit,

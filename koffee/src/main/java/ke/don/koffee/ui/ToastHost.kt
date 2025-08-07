@@ -45,6 +45,21 @@ import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.ToastHostState
 import ke.don.koffee.model.ToastData
 
+/**
+ * Composable function that displays toasts managed by a [ToastHostState].
+ *
+ * Toasts are displayed in a [Column] within a [Box] that fills the maximum size.
+ * Each toast can be dismissed by swiping if [dismissible] is true.
+ * Toasts have enter and exit animations.
+ *
+ * @param hostState The [ToastHostState] that manages the toasts to be displayed.
+ * @param toast A composable lambda that defines how each [ToastData] should be rendered.
+ * @param modifier Optional [Modifier] to be applied to the toast host container.
+ * @param dismissible A boolean indicating whether toasts can be dismissed by swiping. Defaults to true.
+ * @param alignment The [Alignment] of the toasts within the host. Defaults to [Alignment.BottomCenter].
+ *                  Toasts will appear from the bottom if alignment is `BottomStart`, `BottomCenter`, or `BottomEnd`.
+ *                  Otherwise, they will appear from the top.
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ToastHost(

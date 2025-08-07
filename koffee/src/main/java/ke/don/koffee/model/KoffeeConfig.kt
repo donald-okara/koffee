@@ -17,6 +17,18 @@ package ke.don.koffee.model
 
 import androidx.compose.runtime.Composable
 
+/**
+ * Configuration for the Koffee toasts.
+ *
+ * @property layout The composable function to be used for the toast layout. It takes a [ToastData]
+ * object as a parameter, which contains the data to be displayed in the toast.
+ * @property dismissible A boolean value indicating whether the toast can be dismissed by the user.
+ * If true, the toast can be dismissed by swiping it away.
+ * @property durationResolver A function that resolves the duration of the toast. It takes a
+ * [ToastDuration] object as a parameter and returns the duration in milliseconds. If null is
+ * returned, the toast will be displayed indefinitely until dismissed by the user. The default
+ * duration resolver uses the [defaultDurationResolver] function.
+ */
 data class KoffeeConfig(
     val layout: @Composable (ToastData) -> Unit,
     val dismissible: Boolean,

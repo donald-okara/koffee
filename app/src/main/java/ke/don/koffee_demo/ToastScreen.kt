@@ -34,11 +34,20 @@ fun TestToasts(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        Button(
+            onClick = {
+                Koffee.dismissAll()
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text("Dismiss all")
+        }
+
         Button(
             onClick = {
                 Koffee.show(

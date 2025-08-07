@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 
 object Koffee {
     private lateinit var toastHostState: ToastHostState
-    internal var config: KoffeeConfig = KoffeeConfig(
+    private var config: KoffeeConfig = KoffeeConfig(
         layout = { DefaultToast(it) },
         dismissible = true,
     )
@@ -43,7 +43,7 @@ object Koffee {
     fun Setup(
         modifier: Modifier = Modifier,
         maxVisibleToasts: Int = 1,
-        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts),
+        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts, config.durationResolver),
         alignment: Alignment = Alignment.BottomCenter,
     ) {
         toastHostState = hostState
@@ -73,11 +73,5 @@ object Koffee {
         }
     }
 
-    fun dismiss(id: String) {
-        toastHostState.dismiss(id)
-    }
-
-    fun dismissAll() {
-        toastHostState.dismissAll()
-    }
+    fun dismissAll() = toastHostState.dismissAll()
 }

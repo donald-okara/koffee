@@ -58,9 +58,7 @@ fun TestToasts(
                     title = "Info toast",
                     description = "This is a secondary notification",
                     type = ToastType.Info,
-                    primaryAction = ToastAction("Details") {
-                        println("Viewing info details")
-                    },
+                    primaryAction = ToastAction("Details", { println("Viewing info details") }),
                 )
             },
             modifier = Modifier.fillMaxWidth(),
@@ -74,12 +72,8 @@ fun TestToasts(
                     title = "Success toast",
                     description = "This is a green notification",
                     type = ToastType.Success,
-                    primaryAction = ToastAction("Share") {
-                        println("Sharing success")
-                    },
-                    secondaryAction = ToastAction("Copy") {
-                        println("Copied!")
-                    },
+                    primaryAction = ToastAction("Share", { println("Viewing info details") }),
+                    secondaryAction = ToastAction("Copy", { println("Copied!") }),
                 )
             },
             modifier = Modifier.fillMaxWidth(),
@@ -93,9 +87,7 @@ fun TestToasts(
                     title = "Warning toast",
                     description = "This is an orange notification",
                     type = ToastType.Warning,
-                    secondaryAction = ToastAction("Ignore") {
-                        println("Warning ignored")
-                    },
+                    secondaryAction = ToastAction("Ignore", { println("Warning ignored") }),
                 )
             },
             modifier = Modifier.fillMaxWidth(),
@@ -110,12 +102,8 @@ fun TestToasts(
                     description = "This is a red notification",
                     type = ToastType.Error,
                     duration = ToastDuration.Indefinite,
-                    primaryAction = ToastAction("Retry") {
-                        println("Retrying operation...")
-                    },
-                    secondaryAction = ToastAction("Report") {
-                        println("Reported error")
-                    },
+                    primaryAction = ToastAction("Retry", { println("Retrying operation...") }),
+                    secondaryAction = ToastAction("Report", { println("Reported error") }),
                 )
             },
             modifier = Modifier.fillMaxWidth(),

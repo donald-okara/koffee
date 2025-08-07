@@ -21,7 +21,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import ke.don.koffee.model.KoffeeConfig
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
@@ -34,7 +33,7 @@ import java.util.UUID
 
 class DefaultToastHostState internal constructor(
     private val scope: CoroutineScope,
-    private val config: KoffeeConfig,
+    private val durationResolver: (ToastDuration) -> Long?,
     private val maxVisibleToasts: Int = 1,
 ) : ToastHostState {
     private val _toasts = mutableStateListOf<ToastData>()
@@ -53,17 +52,17 @@ class DefaultToastHostState internal constructor(
         val toastId = UUID.randomUUID().toString()
 
         val wrappedPrimary = primaryAction?.let {
-            ToastAction(it.label) {
+            ToastAction(it.label, {
                 it.onClick()
-                dismiss(toastId)
-            }
+                if (it.dismissAfter) dismiss(toastId)
+            })
         }
 
         val wrappedSecondary = secondaryAction?.let {
-            ToastAction(it.label) {
+            ToastAction(it.label, {
                 it.onClick()
-                dismiss(toastId)
-            }
+                if (it.dismissAfter) dismiss(toastId)
+            })
         }
 
         val toast = ToastData(
@@ -82,7 +81,7 @@ class DefaultToastHostState internal constructor(
 
         _toasts.add(toast)
 
-        val millis = config.durationResolver(duration)
+        val millis = durationResolver(duration)
         if (millis != null) {
             jobs[toast.id] = scope.launch {
                 delay(millis)
@@ -106,10 +105,11 @@ class DefaultToastHostState internal constructor(
 @Composable
 fun rememberToastHostState(
     maxVisibleToasts: Int = 3,
+    durationResolver: (ToastDuration) -> Long?,
 ): ToastHostState {
     val scope = rememberCoroutineScope()
 
     return remember(scope, maxVisibleToasts) {
-        DefaultToastHostState(scope, Koffee.config, maxVisibleToasts)
+        DefaultToastHostState(scope, durationResolver, maxVisibleToasts)
     }
 }

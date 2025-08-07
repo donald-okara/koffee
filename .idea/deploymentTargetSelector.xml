@@ -24,13 +24,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="toastPrimaryActionFires()">
+      <SelectionState runConfigName="toastSecondaryActionFires()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="dismissButtonDismissesToast()">
+      <SelectionState runConfigName="secondaryButtonDismissesToast()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="KoffeeInstrumentedTest">
+      <SelectionState runConfigName="primaryButtonDoesntDismissesToastWhenDismissAfterIsFalse()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="secondaryButtonDoesntDismissesToastWhenDismissAfterIsFalse()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

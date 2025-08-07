@@ -2,11 +2,26 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.dokka") version "1.9.20"
+    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 group = "io.github.donald-okara"
 version = gitTagVersion()
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(layout.buildDirectory.dir("dokka"))
+}
+
+
+tasks.register("dokkaPreview") {
+    dependsOn("dokkaHtml")
+    doLast {
+        val file = layout.buildDirectory.file("dokka/index.html").get().asFile
+        val uri = file.toURI()
+        println("Opening Dokka docs at: $uri")
+    }
+}
+
 
 android {
     namespace = "ke.don.koffee"

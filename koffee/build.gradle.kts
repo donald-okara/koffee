@@ -27,6 +27,21 @@ tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
     }
 }
 
+tasks.dokkaHtml.configure {
+    outputDirectory.set(layout.buildDirectory.dir("dokka"))
+}
+
+tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+    dokkaSourceSets.configureEach {
+        // 👇 include sample usage file(s)
+        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
+
+        // (Optional) Suppress deprecated or undocumented elements
+        suppress.set(false)
+        skipEmptyPackages.set(true)
+    }
+}
+
 android {
     namespace = "ke.don.koffee"
     compileSdk = 36

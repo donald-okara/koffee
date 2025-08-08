@@ -3,7 +3,8 @@
   <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
   
-  [![](https://jitpack.io/v/donald-okara/Koffee.svg)](https://jitpack.io/#donald-okara/Koffee)
+[![](https://jitpack.io/v/donald-okara/Koffee.svg)](https://jitpack.io/#donald-okara/Koffee)
+
 
 
 
@@ -175,4 +176,6 @@ Made by [@donald-okara](https://github.com/donald-okara)
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
 
+
 🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)
+

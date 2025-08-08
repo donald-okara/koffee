@@ -11,19 +11,24 @@ on:
         required: true
         default: '0.0.0'
 
+permissions:
+  contents: write
+
 jobs:
-  build-and-publish:
+  publish-dokka:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensures tags are available for version extraction
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: 17
 
       - name: Set version
         id: set-version
@@ -34,8 +39,14 @@ jobs:
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           fi
 
-      - name: Build Dokka HTML
-        run: ./gradlew dokkaHtml
+      - name: Grant execute permissions to Gradle wrapper
+        run: chmod +x ./gradlew
+
+      - name: Generate Dokka HTML docs
+        run: ./gradlew :koffee:dokkaHtml
+
+      - name: Add .nojekyll to bypass Jekyll on GitHub Pages
+        run: echo > ./build/dokka/html/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

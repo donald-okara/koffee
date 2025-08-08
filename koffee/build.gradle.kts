@@ -6,7 +6,26 @@ plugins {
 }
 
 group = "io.github.donald-okara"
-version = gitTagVersion()
+
+tasks.dokkaHtml.configure {
+    doFirst {
+        delete(rootProject.layout.projectDirectory.dir("docs"))
+    }
+    moduleName.set("Koffee - $gitTagVersion")
+
+    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
+}
+
+tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+    dokkaSourceSets.configureEach {
+        // 👇 include sample usage file(s)
+        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
+
+        // (Optional) Suppress deprecated or undocumented elements
+        suppress.set(false)
+        skipEmptyPackages.set(true)
+    }
+}
 
 tasks.dokkaHtml.configure {
     outputDirectory.set(layout.buildDirectory.dir("dokka"))
@@ -80,13 +99,11 @@ dependencies {
 
 // ─── Dynamically infer tag version ─────────────────────────────────────────────
 
-fun gitTagVersion(): String {
-    return try {
-        val tag = "git describe --tags --abbrev=0".runCommand().trim()
-        tag.removePrefix("v") // strip 'v' from v1.0.0 → 1.0.0
+val gitTagVersion: String by lazy {
+    try {
+        "git describe --tags --abbrev=0".runCommand() ?: "untagged"
     } catch (e: Exception) {
-        println("Warning: Git tag not found. Using fallback version.")
-        "unspecified"
+        "untagged"
     }
 }
 

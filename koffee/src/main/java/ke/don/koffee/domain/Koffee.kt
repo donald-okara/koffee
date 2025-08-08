@@ -18,9 +18,6 @@ import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.ToastHost
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * Central entry point for interacting with the Koffee toast notification system.
@@ -142,7 +139,6 @@ object Koffee {
      * @param primaryAction Optional primary button/action.
      * @param secondaryAction Optional secondary button/action.
      * @param isAppVisible Flag indicating whether the toast should be shown.
-     * @param coroutineScope The coroutine scope used to dispatch the toast show call.
      */
     fun show(
         title: String,
@@ -152,13 +148,10 @@ object Koffee {
         primaryAction: ToastAction? = null,
         secondaryAction: ToastAction? = null,
         isAppVisible: Boolean = true,
-        coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate),
     ) {
         if (!isAppVisible) return
 
-        coroutineScope.launch {
-            toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
-        }
+        toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
     }
 
     /**

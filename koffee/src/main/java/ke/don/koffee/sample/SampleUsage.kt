@@ -1,15 +1,21 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee.sample
 
-import androidx.compose.runtime.Composable
 import ke.don.koffee.domain.DefaultToastHostState
-import ke.don.koffee.domain.rememberToastHostState
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import ke.don.koffee.model.defaultDurationResolver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-
 
 /**
  * Sample usage of the Koffee toast library.
@@ -19,13 +25,13 @@ import kotlinx.coroutines.Dispatchers
  */
 object SampleUsage {
 
-        /**
+    /**
      * Demonstrates usage of [DefaultToastHostState.show]. with a dismiss action.
      */
     fun showToastFromHostState() {
         val hostState = DefaultToastHostState(
             scope = CoroutineScope(Dispatchers.Default),
-            durationResolver = { defaultDurationResolver(it) }
+            durationResolver = { defaultDurationResolver(it) },
         )
         hostState.show(
             title = "Success",
@@ -34,24 +40,24 @@ object SampleUsage {
             type = ToastType.Success,
             primaryAction = ToastAction(
                 label = "Undo",
-                onClick = { println("Hello friend")},
-                dismissAfter = false
+                onClick = { println("Hello friend") },
+                dismissAfter = false,
             ),
             secondaryAction = ToastAction(
                 label = "Got it",
-                onClick = { println("Dismissed")},
-                dismissAfter = false
-            )
+                onClick = { println("Dismissed") },
+                dismissAfter = false,
+            ),
         )
     }
 
     /**
      * Demonstrates usage of [DefaultToastHostState.dismiss].
      */
-    fun dismissToastFromHostState(){
+    fun dismissToastFromHostState() {
         val hostState = DefaultToastHostState(
             scope = CoroutineScope(Dispatchers.Default),
-            durationResolver = { defaultDurationResolver(it) }
+            durationResolver = { defaultDurationResolver(it) },
         )
         hostState.dismiss("15yhdhide-dsdfd-wdhwdxvsv") // Id should not be empty
     }
@@ -59,12 +65,11 @@ object SampleUsage {
     /**
      * Demonstrates usage of [DefaultToastHostState.dismissAll].
      */
-    fun dismissAllFromHostState(){
+    fun dismissAllFromHostState() {
         val hostState = DefaultToastHostState(
             scope = CoroutineScope(Dispatchers.Default),
-            durationResolver = { defaultDurationResolver(it) }
+            durationResolver = { defaultDurationResolver(it) },
         )
         hostState.dismissAll()
     }
-
 }

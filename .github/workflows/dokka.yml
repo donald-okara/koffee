@@ -2,8 +2,9 @@ name: 🚀 Publish Dokka
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "*" # Runs on all tag pushes
+  workflow_dispatch: # Allows manual trigger
 
 permissions:
   contents: write

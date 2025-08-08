@@ -1,4 +1,4 @@
-name: Spotless Check
+name: 🧹 Spotless Check
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   spotless:
-    name: Run Spotless Check
+    name: 🧹 Run Spotless Check
     runs-on: ubuntu-latest
 
     steps:

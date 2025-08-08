@@ -1,4 +1,4 @@
-name: Run Instrumented Tests on Emulator.wtf
+name: 🧪 Run Instrumented Tests on Emulator.wtf
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   instrumented-tests:
-    name: Run Instrumented Tests
+    name: 🧪 Run Instrumented Tests
     runs-on: ubuntu-latest
 
     steps:

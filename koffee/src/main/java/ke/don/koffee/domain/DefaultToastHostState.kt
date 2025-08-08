@@ -6,12 +6,6 @@
  * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package ke.don.koffee.domain
 
@@ -31,16 +25,49 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+/**
+ * A default implementation of [ToastHostState] that manages toast display logic,
+ * timing, visibility, and dismissal using Compose state and coroutines.
+ * This class is not intended for direct instantiation by clients; use [rememberToastHostState]
+ * to create and manage instances within a Composable scope.
+ *
+ * @property scope The [CoroutineScope] used to manage toast lifecycle jobs, especially for auto-dismiss.
+ * @property durationResolver A lambda that maps [ToastDuration] values to the actual time in milliseconds
+ *                            that a toast should remain visible. If `null` is returned, the toast will persist until dismissed manually.
+ * @property maxVisibleToasts The maximum number of visible toasts at any given time. If the limit is reached,
+ *                            the oldest toast will be removed to make room for the new one.
+ */
 class DefaultToastHostState internal constructor(
     private val scope: CoroutineScope,
     private val durationResolver: (ToastDuration) -> Long?,
     private val maxVisibleToasts: Int = 1,
 ) : ToastHostState {
+
     private val _toasts = mutableStateListOf<ToastData>()
+
+    /**
+     * The current list of active toasts being displayed.
+     * Automatically recomposes when toasts are added or removed.
+     */
     override val toasts: List<ToastData> get() = _toasts
 
     private val jobs = mutableMapOf<String, Job>()
 
+    /**
+     * Displays a new toast message with the given parameters.
+     *
+     * If the number of visible toasts exceeds [maxVisibleToasts], the oldest toast is dismissed.
+     * If [duration] resolves to a non-null millisecond value using [durationResolver], the toast
+     * will automatically dismiss after the specified time.
+     *
+     * @param title Title text of the toast.
+     * @param description Supporting description shown below the title.
+     * @param duration The [ToastDuration] enum indicating how long the toast should be visible.
+     * @param type The [ToastType] used for visual styling (e.g., Success, Error, Info).
+     * @param primaryAction Optional primary action button. Can be configured to dismiss the toast after invocation.
+     * @param secondaryAction Optional secondary action button. Behaves similarly to [primaryAction].
+     * @sample [ke.don.koffee.sample.SampleUsage.showToastFromHostState]
+     */
     override fun show(
         title: String,
         description: String,
@@ -75,12 +102,14 @@ class DefaultToastHostState internal constructor(
             id = toastId,
         )
 
+        // Ensure toast count does not exceed the max allowed
         if (_toasts.size >= maxVisibleToasts) {
             _toasts.firstOrNull()?.let { dismiss(it.id) }
         }
 
         _toasts.add(toast)
 
+        // Auto-dismiss if duration is specified
         val millis = durationResolver(duration)
         if (millis != null) {
             jobs[toast.id] = scope.launch {
@@ -90,11 +119,24 @@ class DefaultToastHostState internal constructor(
         }
     }
 
+    /**
+     * Dismisses the toast with the specified [id].
+     *
+     * Cancels any active timer job associated with the toast and removes it from the UI.
+     *
+     * @param id The unique identifier of the toast to dismiss.
+     * @sample [ke.don.koffee.sample.SampleUsage.dismissToastFromHostState]
+     */
     override fun dismiss(id: String) {
         jobs.remove(id)?.cancel()
         _toasts.removeAll { it.id == id }
     }
 
+    /**
+     * Dismisses all currently active toasts and cancels their timers.
+     * This is typically used for force-clearing the toast state.
+     * @sample [ke.don.koffee.sample.SampleUsage.dismissAllFromHostState]
+     */
     override fun dismissAll() {
         jobs.values.forEach { it.cancel() }
         jobs.clear()
@@ -102,6 +144,29 @@ class DefaultToastHostState internal constructor(
     }
 }
 
+/**
+ * Remembers and provides a [ToastHostState] instance, scoped to the current composition.
+ *
+ * This utility function simplifies the creation and management of a [ToastHostState]
+ * within a `@Composable` scope. The returned state is remembered across recompositions
+ * and can be used to control the display of toasts.
+ *
+ * It's typically used when setting up a custom toast host UI, allowing that component
+ * to interact with and display toasts managed by this state.
+ *
+ * @param maxVisibleToasts The maximum number of toasts that can be visible simultaneously.
+ *                         Defaults to `3`. If this limit is exceeded, the oldest toast
+ *                         will be automatically dismissed to make space for a new one.
+ * @param durationResolver A lambda function that takes a [ToastDuration] enum and
+ *                         returns the corresponding display time in milliseconds.
+ *                         If this function returns `null` for a given duration, the toast
+ *                         will remain visible until it is manually dismissed.
+ *
+ * @return A [ToastHostState] instance that can be used to show, dismiss, or query
+ *         the current toasts.
+ *
+ * @sample ke.don.koffee.sample.SampleUsage.rememberToastHostStateUsage
+ */
 @Composable
 fun rememberToastHostState(
     maxVisibleToasts: Int = 3,

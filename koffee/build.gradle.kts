@@ -9,7 +9,11 @@ group = "io.github.donald-okara"
 version = gitTagVersion()
 
 tasks.dokkaHtml.configure {
-    outputDirectory.set(layout.buildDirectory.dir("dokka"))
+    doFirst {
+        delete(rootProject.layout.projectDirectory.dir("docs"))
+    }
+
+    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
 }
 
 tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {

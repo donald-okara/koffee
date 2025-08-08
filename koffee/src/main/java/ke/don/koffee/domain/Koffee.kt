@@ -148,9 +148,9 @@ object Koffee {
     @Deprecated(
         message = "No longer requires CoroutineScope. Use the simplified show(...) instead.",
         replaceWith = ReplaceWith(
-            "show(title, description, type, duration, primaryAction, secondaryAction, isAppVisible)"
+            "show(title, description, type, duration, primaryAction, secondaryAction, isAppVisible)",
         ),
-        level = DeprecationLevel.WARNING
+        level = DeprecationLevel.WARNING,
     )
     fun show(
         title: String,
@@ -168,7 +168,6 @@ object Koffee {
             toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
         }
     }
-
 
     /**
      * Displays a toast using the current configuration.
@@ -198,7 +197,12 @@ object Koffee {
         if (!isAppVisible) return
 
         toastHostState.show(
-            title, description, duration, type, primaryAction, secondaryAction
+            title,
+            description,
+            duration,
+            type,
+            primaryAction,
+            secondaryAction,
         )
     }
 

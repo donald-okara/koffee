@@ -6,12 +6,6 @@
  * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package ke.don.koffee.ui
 
@@ -45,6 +39,21 @@ import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.ToastHostState
 import ke.don.koffee.model.ToastData
 
+/**
+ * Composable function that displays toasts managed by a [ToastHostState].
+ *
+ * Toasts are displayed in a [Column] within a [Box] that fills the maximum size.
+ * Each toast can be dismissed by swiping if [dismissible] is true.
+ * Toasts have enter and exit animations.
+ *
+ * @param hostState The [ToastHostState] that manages the toasts to be displayed.
+ * @param toast A composable lambda that defines how each [ToastData] should be rendered.
+ * @param modifier Optional [Modifier] to be applied to the toast host container.
+ * @param dismissible A boolean indicating whether toasts can be dismissed by swiping. Defaults to true.
+ * @param alignment The [Alignment] of the toasts within the host. Defaults to [Alignment.BottomCenter].
+ *                  Toasts will appear from the bottom if alignment is `BottomStart`, `BottomCenter`, or `BottomEnd`.
+ *                  Otherwise, they will appear from the top.
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ToastHost(

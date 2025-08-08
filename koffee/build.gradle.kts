@@ -2,11 +2,26 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.dokka") version "1.9.20"
+    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 group = "io.github.donald-okara"
 version = gitTagVersion()
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(layout.buildDirectory.dir("dokka"))
+}
+
+tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+    dokkaSourceSets.configureEach {
+        // 👇 include sample usage file(s)
+        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
+
+        // (Optional) Suppress deprecated or undocumented elements
+        suppress.set(false)
+        skipEmptyPackages.set(true)
+    }
+}
 
 android {
     namespace = "ke.don.koffee"
@@ -14,6 +29,7 @@ android {
 
     defaultConfig {
         minSdk = 26
+        testOptions.targetSdk = 36
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -52,6 +68,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -15,8 +15,8 @@ subprojects {
     configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            targetExclude("$buildDir/**/*.kt")
-            ktlint("0.50.0") // Pin ktlint version for consistency
+            targetExclude("${layout.buildDirectory.get().asFile}/**/*.kt")
+            ktlint("0.50.0")
                 .editorConfigOverride(
                     mapOf(
                         "ktlint_standard_package-name" to "disabled",
@@ -28,7 +28,7 @@ subprojects {
 
         kotlinGradle {
             target("*.gradle.kts")
-            ktlint("0.50.0") // Pin ktlint version
+            ktlint("0.50.0")
         }
     }
 }

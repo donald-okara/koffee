@@ -6,12 +6,6 @@
  * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package ke.don.koffee.domain
 
@@ -20,9 +14,25 @@ import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 
+/**
+ * Host state responsible for managing toast notifications in the UI.
+ */
 interface ToastHostState {
+    /**
+     * Currently visible toasts.
+     */
     val toasts: List<ToastData>
 
+    /**
+     * Shows a new toast with the given properties.
+     *
+     * @param title The main message of the toast.
+     * @param description Optional supporting text below the title.
+     * @param duration How long the toast should be shown. Defaults to [ToastDuration.Short].
+     * @param type The visual style/type of the toast (e.g. Success, Error).
+     * @param primaryAction Optional primary action shown in the toast.
+     * @param secondaryAction Optional secondary action shown in the toast.
+     */
     fun show(
         title: String,
         description: String,
@@ -32,6 +42,15 @@ interface ToastHostState {
         secondaryAction: ToastAction? = null,
     )
 
+    /**
+     * Dismisses a toast by its unique [id].
+     *
+     * @param id The identifier of the toast to dismiss.
+     */
     fun dismiss(id: String)
+
+    /**
+     * Dismisses all currently shown toasts.
+     */
     fun dismissAll()
 }

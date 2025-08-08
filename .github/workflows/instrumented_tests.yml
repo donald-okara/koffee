@@ -1,0 +1,36 @@
+name: 🧪 Run Instrumented Tests on Emulator.wtf
+
+on:
+  pull_request:
+    branches: [master, dev]
+  workflow_dispatch:
+
+jobs:
+  instrumented-tests:
+    name: 🧪 Run Instrumented Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build app and test APKs
+        run: ./gradlew assembleDebug assembleAndroidTest
+
+      - name: Run tests on emulator.wtf
+        uses: emulator-wtf/run-tests@v0
+        with:
+          api-token: ${{ secrets.EMULATOR_WTF_API_KEY }}
+          app: app/build/outputs/apk/debug/app-debug.apk
+          test: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          outputs-dir: build/test-results
+

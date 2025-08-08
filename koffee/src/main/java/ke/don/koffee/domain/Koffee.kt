@@ -18,6 +18,9 @@ import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.ToastHost
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Central entry point for interacting with the Koffee toast notification system.
@@ -139,6 +142,49 @@ object Koffee {
      * @param primaryAction Optional primary button/action.
      * @param secondaryAction Optional secondary button/action.
      * @param isAppVisible Flag indicating whether the toast should be shown.
+     * @param coroutineScope The coroutine scope used to dispatch the toast show call.
+     */
+
+    @Deprecated(
+        message = "No longer requires CoroutineScope. Use the simplified show(...) instead.",
+        replaceWith = ReplaceWith(
+            "show(title, description, type, duration, primaryAction, secondaryAction, isAppVisible)"
+        ),
+        level = DeprecationLevel.WARNING
+    )
+    fun show(
+        title: String,
+        description: String,
+        type: ToastType = ToastType.Neutral,
+        duration: ToastDuration = ToastDuration.Short,
+        primaryAction: ToastAction? = null,
+        secondaryAction: ToastAction? = null,
+        isAppVisible: Boolean = true,
+        coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate),
+    ) {
+        if (!isAppVisible) return
+
+        coroutineScope.launch {
+            toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
+        }
+    }
+
+
+    /**
+     * Displays a toast using the current configuration.
+     *
+     * This function is safe to call from anywhere (as long as `Koffee.Setup()` has been called),
+     * and it launches the toast inside a coroutine. If the app is not visible,
+     * the toast will be ignored.
+     *
+     * @param title The main text of the toast.
+     * @param description Supporting text or detail.
+     * @param type The visual type of toast (e.g. neutral, positive, warning).
+     * @param duration How long the toast should remain visible.
+     * @param primaryAction Optional primary button/action.
+     * @param secondaryAction Optional secondary button/action.
+     * @param isAppVisible Flag indicating whether the toast should be shown. Defaults to `true`.
+     *                     If `false`, the toast will not be displayed.
      */
     fun show(
         title: String,
@@ -151,7 +197,9 @@ object Koffee {
     ) {
         if (!isAppVisible) return
 
-        toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
+        toastHostState.show(
+            title, description, duration, type, primaryAction, secondaryAction
+        )
     }
 
     /**

@@ -2,11 +2,8 @@
 <p align="center">
   <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
-<p align="center">
-  <a href="https://jitpack.io/#donald-okara/koffee">
-    <img src="https://jitpack.io/v/donald-okara/koffee.svg" />
-  </a>
-</p>
+  
+  [![](https://jitpack.io/v/donald-okara/Koffee.svg)](https://jitpack.io/#donald-okara/Koffee)
 
 
 

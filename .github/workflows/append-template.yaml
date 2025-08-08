@@ -1,4 +1,4 @@
-name: Append PR Template
+name: 📝 Append PR Template
 
 on:
   pull_request:

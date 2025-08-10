@@ -2,10 +2,12 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.vanniktech.maven.publish") version "0.34.0"
     id("org.jetbrains.dokka") version "2.0.0"
 }
 
 group = "io.github.donald-okara"
+version = project.findProperty("version") ?: throw GradleException("Version property is required. Pass it with -Pversion=<version>")
 
 tasks.dokkaHtml.configure {
     doFirst {
@@ -80,6 +82,39 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+mavenPublishing {
+    publishToMavenCentral() // or publishToMavenCentral(automaticRelease = true)
+    signAllPublications()
+
+    coordinates(group as String, "koffee", version as String)
+
+    pom {
+        name.set("Koffee Library")
+        description.set("A toast library for jetpack compose.")
+        inceptionYear.set("2025")
+        url.set("https://github.com/donald-okara/koffee/")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("repo")
+            }
+        }
+        developers {
+            developer {
+                id.set("donald-okara")
+                name.set("Donald Okara")
+                url.set("https://github.com/donald-okara/")
+            }
+        }
+        scm {
+            url.set("https://github.com/donald-okara/deploy-exampl/")
+            connection.set("scm:git:git://github.com/donald-okara/koffe.git")
+            developerConnection.set("scm:git:ssh://git@github.com/donald-okara/koffee.git")
+        }
+    }
 }
 
 // ─── Dynamically infer tag version ─────────────────────────────────────────────

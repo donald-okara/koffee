@@ -2,10 +2,8 @@
 <p align="center">
   <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
-  
-  [![](https://jitpack.io/v/donald-okara/Koffee.svg)](https://jitpack.io/#donald-okara/Koffee)
 
-
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
 
 <h1 align="center">☕ Koffee</h1>  
 
@@ -41,7 +39,11 @@ This is a demo of how Koffee works. The toasts are swipeable.
 ---
 ## 🛠 Installation
 
-Add the dependency from jitpack.io
+**📦 Now available on Maven Central**
+
+> Koffee is now published to Maven Central. The last JitPack release will remain available but **will no longer be updated**.
+
+### Maven Central (Recommended)
 
 ```kotlin
 // settings.gradle.kts
@@ -49,22 +51,47 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral()
-        maven(url = "https://jitpack.io") // 👈 Add this
+        mavenCentral() // ✅ Primary distribution
     }
 }
-
-
 ```
 
 ```kotlin
-
 // module build.gradle.kts
 dependencies {  
-    implementation("com.github.donald-okara:koffee:<latest version>") // Replace with latest tag
+    implementation("io.github.donald-okara:koffee:<latest version>") // Replace with the latest version
 }  
-```  
-  
+```
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?colorA=6f4e37\&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
+
+---
+
+<details>
+<summary>JitPack (Legacy)</summary>
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        maven(url = "https://jitpack.io") // ⚠️ Legacy – no longer updated
+    }
+}
+```
+
+```kotlin
+// module build.gradle.kts
+dependencies {  
+    implementation("com.github.donald-okara:koffee:0.0.4") // Last JitPack version
+}  
+```
+
+[![JitPack](https://jitpack.io/v/donald-okara/koffee.svg)](https://jitpack.io/#donald-okara/koffee)
+
+</details>
+
 ---  
 ## 🧱 Architecture
 

@@ -13,7 +13,6 @@
 </p>  
 
 > 🙌 Want to contribute? Check out our [Contribution Guidelines](CONTRIBUTIONS.md).
----  
 
 ## ✨ Features
 
@@ -24,8 +23,6 @@
 - 🔧 Customizable positioning, dismissal, durations
 - 🪶 Lightweight with zero dependencies
 
----  
-
 ## 📱 Demo
 
 This is a demo of how Koffee works. The toasts are swipeable.
@@ -35,8 +32,6 @@ This is a demo of how Koffee works. The toasts are swipeable.
 </p>
 
 
-
----
 ## 🛠 Installation
 
 **📦 Now available on Maven Central**
@@ -102,7 +97,6 @@ Koffee has 3 layers:
 
 You can plug in your own toast layouts, define duration policies, and limit how many are shown at once.
 
----
 ## 🚀 Getting Started
 
 ### Step 1: Initialize Koffee
@@ -170,7 +164,6 @@ Button(
     Text("Show Success")  
 }
 ```
----  
 
 ## 🔧 Customization
 

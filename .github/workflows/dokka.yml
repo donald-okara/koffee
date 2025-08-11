@@ -3,41 +3,27 @@ name: 🚀 Publish Dokka
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version (e.g., 0.0.3)'
-        required: true
-        default: '0.0.0'
+      - "*" # Runs on all tag pushes
+  workflow_dispatch: # Allows manual trigger
 
 permissions:
   contents: write
 
 jobs:
-  publish-dokka:
+  dokka:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensures tags are available for version extraction
+          fetch-depth: 0  # Important: ensures tags are fetched
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-
-      - name: Set version
-        id: set-version
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-          else
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          fi
 
       - name: Grant execute permissions to Gradle wrapper
         run: chmod +x ./gradlew
@@ -46,12 +32,10 @@ jobs:
         run: ./gradlew :koffee:dokkaHtml
 
       - name: Add .nojekyll to bypass Jekyll on GitHub Pages
-        run: echo > ./build/dokka/html/.nojekyll
+        run: echo > docs/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/dokka/html
-          destination_dir: ${{ env.VERSION }}
-          commit_message: "Publish Dokka docs for ${{ env.VERSION }}"
+          publish_dir: ./docs

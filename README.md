@@ -2,8 +2,8 @@
 <p align="center">
   <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
-  
-  https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?colorA=f3e5ab&colorB=6f4e37)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
 
 <h1 align="center">☕ Koffee</h1>  
 

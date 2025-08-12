@@ -15,7 +15,7 @@ import ke.don.core_lint.rules.ExperimentalApiUsageDetector
 
 class CustomLintRegistry : IssueRegistry() {
     override val issues = listOf(
-        ExperimentalApiUsageDetector.ISSUE
+        ExperimentalApiUsageDetector.ISSUE,
     )
     override val api: Int = com.android.tools.lint.detector.api.CURRENT_API
 
@@ -23,6 +23,6 @@ class CustomLintRegistry : IssueRegistry() {
         vendorName = "Donald Isoe",
         identifier = "ke.don.core_lint",
         feedbackUrl = "mailto:isoedonald@gmail.com",
-        contact = "https://github.com/isoedonald"
+        contact = "https://github.com/isoedonald",
     )
 }

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     id("com.diffplug.spotless") version "6.25.0"
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }
 
 subprojects {

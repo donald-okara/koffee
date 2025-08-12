@@ -10,11 +10,9 @@
 package ke.don.koffee.domain
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
@@ -37,7 +35,8 @@ import java.util.UUID
  * @property maxVisibleToasts The maximum number of visible toasts at any given time. If the limit is reached,
  *                            the oldest toast will be removed to make room for the new one.
  */
-class DefaultToastHostState internal constructor(
+
+internal class DefaultToastHostState internal constructor(
     private val scope: CoroutineScope,
     private val durationResolver: (ToastDuration) -> Long?,
     private val maxVisibleToasts: Int = 1,
@@ -165,7 +164,6 @@ class DefaultToastHostState internal constructor(
  * @return A [ToastHostState] instance that can be used to show, dismiss, or query
  *         the current toasts.
  *
- * @sample ke.don.koffee.sample.SampleUsage.rememberToastHostStateUsage
  */
 @Composable
 fun rememberToastHostState(

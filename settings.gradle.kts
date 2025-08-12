@@ -23,3 +23,5 @@ dependencyResolutionManagement {
 rootProject.name = "Koffee"
 include(":app")
 include(":koffee")
+include(":core-lint")
+include(":experimental-annotations")

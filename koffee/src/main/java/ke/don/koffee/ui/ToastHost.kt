@@ -56,7 +56,7 @@ import ke.don.koffee.model.ToastData
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ToastHost(
+internal fun ToastHost(
     hostState: ToastHostState,
     toast: @Composable (ToastData) -> Unit,
     modifier: Modifier = Modifier,

@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee.providers
 
 import android.content.ContentProvider
@@ -16,8 +25,11 @@ class KoffeeInitProvider : ContentProvider() {
 
     // These overrides are required but not used
     override fun query(
-        uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?,
-        sortOrder: String?
+        uri: Uri,
+        projection: Array<out String>?,
+        selection: String?,
+        selectionArgs: Array<out String>?,
+        sortOrder: String?,
     ): Cursor? = null
 
     override fun getType(uri: Uri): String? = null

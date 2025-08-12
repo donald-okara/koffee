@@ -15,8 +15,23 @@ import android.database.Cursor
 import android.net.Uri
 import ke.don.koffee.domain.Koffee
 
+/**
+ * A [ContentProvider] that initializes Koffee when the application starts.
+ *
+ * This provider is automatically discovered by the Android system and its [onCreate] method is called
+ * during application startup. This ensures that Koffee is initialized early in the application lifecycle.
+ *
+ * The other methods of [ContentProvider] are overridden but not used, as this provider's sole
+ * purpose is to initialize Koffee.
+ */
 class KoffeeInitProvider : ContentProvider() {
 
+    /**
+     * Initializes the Koffee library when the application starts.
+     * This method is called by the Android system during application startup.
+     *
+     * @return `true` to indicate that the provider was successfully loaded.
+     */
     override fun onCreate(): Boolean {
         // Initialize Koffee with default config
         Koffee.init {}

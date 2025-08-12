@@ -1,5 +1,15 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.core_lint.rules
 
+import com.android.tools.lint.detector.api.*
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Implementation
@@ -8,18 +18,11 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import org.jetbrains.uast.*
 import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
-import org.jetbrains.uast.getParentOfType
-
-
-import com.android.tools.lint.detector.api.*
-import com.intellij.psi.PsiMethod
-import org.jetbrains.uast.*
-import com.android.tools.lint.detector.api.*
-import org.jetbrains.uast.*
 class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
 
     companion object {
@@ -32,8 +35,8 @@ class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
             severity = Severity.ERROR,
             implementation = Implementation(
                 ExperimentalApiUsageDetector::class.java,
-                Scope.JAVA_FILE_SCOPE
-            )
+                Scope.JAVA_FILE_SCOPE,
+            ),
         )
     }
 
@@ -42,12 +45,11 @@ class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
         return listOf(UAnnotation::class.java)
     }
 
-
     override fun visitAnnotationUsage(
         context: JavaContext,
         element: UElement,
         annotationInfo: AnnotationInfo,
-        usageInfo: AnnotationUsageInfo
+        usageInfo: AnnotationUsageInfo,
     ) {
         val qualifiedName = annotationInfo.qualifiedName
         if (qualifiedName != "ke.don.experimental_annotations.ExperimentalKoffeeApi") return
@@ -84,11 +86,10 @@ class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
                 element,
                 context.getLocation(element),
                 "Calling experimental API requires opt-in using @OptIn(ExperimentalKoffeeApi::class)",
-                fix
+                fix,
             )
         }
     }
-
 
     private fun findOptInAnnotation(element: UElement?, annotationFqName: String): Boolean {
         if (element == null) return false

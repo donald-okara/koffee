@@ -18,7 +18,6 @@ tasks.jar {
     }
 }
 
-
 dependencies {
     compileOnly(libs.lint.api) // match your AGP's lint version
     compileOnly(project(":experimental-annotations"))

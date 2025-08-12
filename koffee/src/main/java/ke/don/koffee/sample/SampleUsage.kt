@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
  * Consumers can refer to this file for quick integration guidance.
  */
 
-
 object SampleUsage {
 
     /**

@@ -27,4 +27,7 @@ data class KoffeeConfig(
     val layout: @Composable (ToastData) -> Unit,
     val dismissible: Boolean,
     val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) },
+    val maxVisibleToasts: Int,
+    val position: ToastPosition,
+    val animationStyle: ToastAnimation
 )

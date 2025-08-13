@@ -37,7 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.ToastHostState
+import ke.don.koffee.helpers.toAlignment
+import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastData
+import ke.don.koffee.model.ToastPosition
 
 /**
  * Composable function that displays toasts managed by a [ToastHostState].
@@ -61,16 +64,10 @@ internal fun ToastHost(
     toast: @Composable (ToastData) -> Unit,
     modifier: Modifier = Modifier,
     dismissible: Boolean = true,
-    alignment: Alignment = Alignment.BottomCenter,
+    animationStyle: ToastAnimation,
+    alignment: ToastPosition,
 ) {
-    val fromBottom = when (alignment) {
-        Alignment.BottomStart,
-        Alignment.BottomCenter,
-        Alignment.BottomEnd,
-        -> true
-
-        else -> false
-    }
+    val fromBottom = animationStyle == ToastAnimation.SlideUp
 
     val toasts = if (fromBottom) {
         hostState.toasts
@@ -82,7 +79,7 @@ internal fun ToastHost(
         modifier = modifier
             .fillMaxSize()
             .padding(bottom = 64.dp),
-        contentAlignment = alignment,
+        contentAlignment = alignment.toAlignment(),
     ) {
         LookaheadScope {
             Column(

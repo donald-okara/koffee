@@ -11,8 +11,11 @@ package ke.don.koffee.domain
 
 import androidx.compose.runtime.Composable
 import ke.don.koffee.model.KoffeeConfig
+import ke.don.koffee.model.KoffeeDefaults
+import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
+import ke.don.koffee.model.ToastPosition
 import ke.don.koffee.model.defaultDurationResolver
 import ke.don.koffee.ui.DefaultToast
 
@@ -61,10 +64,11 @@ import ke.don.koffee.ui.DefaultToast
  * to apply the custom settings globally for all subsequent Koffee toasts.
  */
 class KoffeeConfigBuilder {
-    private var layout: @Composable (ToastData) -> Unit = { DefaultToast(it) }
-    private var dismissible: Boolean = true
-    private var durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) }
+    private var config: KoffeeConfig = KoffeeDefaults.config
 
+    private fun updateConfig(transform: (KoffeeConfig) -> KoffeeConfig){
+        config = transform(config)
+    }
     /**
      * Sets the custom toast layout to be used by Koffee.
      *
@@ -81,7 +85,11 @@ class KoffeeConfigBuilder {
      * @param content The composable lambda representing the toast UI.
      */
     fun layout(content: @Composable (ToastData) -> Unit) {
-        layout = content
+        updateConfig {
+            it.copy(
+                layout = content
+            )
+        }
     }
 
     /**
@@ -92,7 +100,9 @@ class KoffeeConfigBuilder {
      * @param value `true` if the toast can be dismissed, `false` otherwise.
      */
     fun dismissible(value: Boolean) {
-        dismissible = value
+        updateConfig {
+            it.copy(dismissible = value)
+        }
     }
 
     /**
@@ -114,17 +124,51 @@ class KoffeeConfigBuilder {
      * @param resolver Lambda that receives a [ToastDuration] and returns a duration in milliseconds.
      */
     fun durationResolver(resolver: (ToastDuration) -> Long?) {
-        durationResolver = resolver
+        updateConfig {
+            it.copy(durationResolver = resolver)
+        }
     }
+
+
+    /**
+     * Sets the maximum number of toasts that can be visible simultaneously.
+     *
+     * If more toasts are added beyond this number, the oldest toast will be automatically dismissed
+     * to make room for the new one.
+     *
+     * @param number Maximum visible toasts. Must be greater than 0.
+     */
+    fun maxVisibleToasts(number: Int){
+        updateConfig { it.copy(maxVisibleToasts = number) }
+    }
+
+    /**
+     * Sets the screen position of the KoffeeBar where toasts will appear.
+     *
+     * Options include top, bottom, center, or corners depending on [ToastPosition].
+     *
+     * @param position Desired toast position on the screen.
+     */
+    fun position(position: ToastPosition) {
+        updateConfig { it.copy(position = position) }
+    }
+
+    /**
+     * Sets the animation style for toast entry and exit.
+     *
+     * Options include fade, slide up/down, defined in [ToastAnimation].
+     *
+     * @param animation The animation style to use for toasts.
+     */
+    fun animationStyle(animation: ToastAnimation) {
+        updateConfig { it.copy(animationStyle = animation) }
+    }
+
 
     /**
      * Builds the [KoffeeConfig] instance with the current configuration settings.
      *
      * @return The configured [KoffeeConfig] instance.
      */
-    fun build(): KoffeeConfig = KoffeeConfig(
-        layout = layout,
-        dismissible = dismissible,
-        durationResolver = durationResolver,
-    )
+    fun build(): KoffeeConfig = config
 }

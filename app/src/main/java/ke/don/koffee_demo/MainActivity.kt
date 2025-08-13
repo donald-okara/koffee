@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import ke.don.experimental_annotations.ExperimentalKoffeeApi
 import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
+import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
@@ -57,6 +58,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
 }
 
 @Composable

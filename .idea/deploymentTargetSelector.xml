@@ -30,9 +30,6 @@
       <SelectionState runConfigName="secondaryButtonDismissesToast()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="primaryButtonDoesntDismissesToastWhenDismissAfterIsFalse()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="secondaryButtonDoesntDismissesToastWhenDismissAfterIsFalse()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

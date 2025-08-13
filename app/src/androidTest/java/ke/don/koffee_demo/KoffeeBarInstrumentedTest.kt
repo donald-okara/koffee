@@ -46,7 +46,7 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { 1000L },
+                durationResolver = { 500L },
             )
 
             KoffeeBar(
@@ -70,7 +70,7 @@ class KoffeeBarInstrumentedTest {
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
         // Wait for auto-dismiss
-        composeTestRule.waitUntil(timeoutMillis = 1001) {
+        composeTestRule.waitUntil(timeoutMillis = 500) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }
     }

@@ -27,6 +27,7 @@ import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
+import ke.don.koffee.ui.toasts_suite.GlowingToast
 import ke.don.koffee_demo.ui.theme.KoffeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
                     // Override the current default configuration
                     val mySimpleConfig = KoffeeDefaults.config.copy(
-                        layout = { DefaultToast(it) },
+                        layout = { GlowingToast(it) },
                         dismissible = true,
                         maxVisibleToasts = 3,
                         position = ToastPosition.BottomCenter,

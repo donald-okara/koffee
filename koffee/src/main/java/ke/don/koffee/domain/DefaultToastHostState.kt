@@ -106,19 +106,20 @@ internal class DefaultToastHostState internal constructor(
             id = toastId,
         )
 
-        // Ensure toast count does not exceed the max allowed
-        if (_toasts.size >= maxVisibleToasts) {
-            _toasts.firstOrNull()?.let { dismiss(it.id) }
-        }
+        scope.launch{// Ensure toast count does not exceed the max allowed
+            if (_toasts.size >= maxVisibleToasts) {
+                _toasts.firstOrNull()?.let { dismiss(it.id) }
+            }
 
-        _toasts.add(toast)
+            _toasts.add(toast)
 
-        // Auto-dismiss if duration is specified
-        val millis = durationResolver(duration)
-        if (millis != null) {
-            jobs[toast.id] = scope.launch {
-                delay(millis)
-                dismiss(toast.id)
+            // Auto-dismiss if duration is specified
+            val millis = durationResolver(duration)
+            if (millis != null) {
+                jobs[toast.id] = scope.launch {
+                    delay(millis)
+                    dismiss(toast.id)
+                }
             }
         }
     }
@@ -132,8 +133,10 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissToastFromHostState]
      */
     override fun dismiss(id: String) {
-        jobs.remove(id)?.cancel()
-        _toasts.removeAll { it.id == id }
+        scope.launch{
+            jobs.remove(id)?.cancel()
+            _toasts.removeAll { it.id == id }
+        }
     }
 
     /**
@@ -142,9 +145,11 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissAllFromHostState]
      */
     override fun dismissAll() {
-        jobs.values.forEach { it.cancel() }
-        jobs.clear()
-        _toasts.clear()
+        scope.launch{
+            jobs.values.forEach { it.cancel() }
+            jobs.clear()
+            _toasts.clear()
+        }
     }
 }
 

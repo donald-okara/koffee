@@ -227,7 +227,7 @@ class KoffeeInstrumentedTest {
      * Tests that the primary button or action does not dismiss the toast when [ToastAction.dismissAfter] is false.
      */
     @Test
-    fun primaryButtonDoesntDismissesToastWhenDismissAfterIsFalse() {
+    fun primaryButtonDoesntDismissToastWhenDismissAfterIsFalse() {
         composeTestRule.setContent {
             Koffee.init {
                 layout { DefaultToast(it) } // or custom

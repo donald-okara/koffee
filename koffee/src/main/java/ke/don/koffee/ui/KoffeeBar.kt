@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee.ui
 
 import androidx.compose.foundation.layout.Box
@@ -29,13 +38,13 @@ fun KoffeeBar(
     config: KoffeeConfig = KoffeeDefaults.config,
     hostState: ToastHostState = rememberToastHostState(
         maxVisibleToasts = config.maxVisibleToasts,
-        durationResolver = config.durationResolver
+        durationResolver = config.durationResolver,
     ),
-    content: @Composable () -> Unit
-){
+    content: @Composable () -> Unit,
+) {
     Koffee.attachHostState(hostState)
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         content() // This will render the passed composable content
 
@@ -44,7 +53,7 @@ fun KoffeeBar(
             toast = config.layout,
             dismissible = config.dismissible,
             alignment = config.position,
-            animationStyle = config.animationStyle
+            animationStyle = config.animationStyle,
         )
     }
 }

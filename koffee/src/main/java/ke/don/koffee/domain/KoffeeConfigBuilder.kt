@@ -66,9 +66,10 @@ import ke.don.koffee.ui.DefaultToast
 class KoffeeConfigBuilder {
     private var config: KoffeeConfig = KoffeeDefaults.config
 
-    private fun updateConfig(transform: (KoffeeConfig) -> KoffeeConfig){
+    private fun updateConfig(transform: (KoffeeConfig) -> KoffeeConfig) {
         config = transform(config)
     }
+
     /**
      * Sets the custom toast layout to be used by Koffee.
      *
@@ -87,7 +88,7 @@ class KoffeeConfigBuilder {
     fun layout(content: @Composable (ToastData) -> Unit) {
         updateConfig {
             it.copy(
-                layout = content
+                layout = content,
             )
         }
     }
@@ -129,7 +130,6 @@ class KoffeeConfigBuilder {
         }
     }
 
-
     /**
      * Sets the maximum number of toasts that can be visible simultaneously.
      *
@@ -138,7 +138,7 @@ class KoffeeConfigBuilder {
      *
      * @param number Maximum visible toasts. Must be greater than 0.
      */
-    fun maxVisibleToasts(number: Int){
+    fun maxVisibleToasts(number: Int) {
         updateConfig { it.copy(maxVisibleToasts = number) }
     }
 
@@ -163,7 +163,6 @@ class KoffeeConfigBuilder {
     fun animationStyle(animation: ToastAnimation) {
         updateConfig { it.copy(animationStyle = animation) }
     }
-
 
     /**
      * Builds the [KoffeeConfig] instance with the current configuration settings.

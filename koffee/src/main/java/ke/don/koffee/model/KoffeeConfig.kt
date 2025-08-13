@@ -29,5 +29,5 @@ data class KoffeeConfig(
     val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) },
     val maxVisibleToasts: Int,
     val position: ToastPosition,
-    val animationStyle: ToastAnimation
+    val animationStyle: ToastAnimation,
 )

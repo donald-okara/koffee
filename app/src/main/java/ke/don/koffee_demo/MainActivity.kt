@@ -13,21 +13,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ke.don.experimental_annotations.ExperimentalKoffeeApi
-import ke.don.koffee.domain.Koffee
-import ke.don.koffee.domain.KoffeeConfigBuilder
 import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
-import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
@@ -42,20 +37,19 @@ class MainActivity : ComponentActivity() {
             KoffeeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    //Override the current default configuration
+                    // Override the current default configuration
                     val mySimpleConfig = KoffeeDefaults.config.copy(
                         layout = { DefaultToast(it) },
                         dismissible = true,
                         maxVisibleToasts = 3,
                         position = ToastPosition.BottomCenter,
                         animationStyle = ToastAnimation.SlideUp,
-                        durationResolver = { customDurationResolver(it) }
+                        durationResolver = { customDurationResolver(it) },
                     )
-
 
                     KoffeeBar(
                         modifier = Modifier.padding(innerPadding),
-                        config = mySimpleConfig
+                        config = mySimpleConfig,
                     ) {
                         TestToasts()
                     }

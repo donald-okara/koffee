@@ -18,7 +18,6 @@ import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
-import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.ToastHost
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,6 +85,7 @@ object Koffee {
      * and dismiss behavior.
      */
     private var config: KoffeeConfig = KoffeeDefaults.config
+
     /**
      * Initializes Koffee with custom configuration values.
      *
@@ -110,9 +110,10 @@ object Koffee {
      * @param alignment Position of the toast container on screen (e.g. bottom-center).
      */
 
-    internal fun attachHostState(hostState: ToastHostState){
+    internal fun attachHostState(hostState: ToastHostState) {
         toastHostState = hostState
     }
+
     @Composable
     fun Setup(
         modifier: Modifier = Modifier,
@@ -127,7 +128,7 @@ object Koffee {
             toast = config.layout,
             dismissible = config.dismissible,
             alignment = alignment?.toToastPosition() ?: config.position,
-            animationStyle = config.animationStyle
+            animationStyle = config.animationStyle,
         )
     }
 

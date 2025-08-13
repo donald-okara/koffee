@@ -65,7 +65,7 @@ class KoffeeInstrumentedTest {
         // Assert toast appears
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
-         //Wait for auto-dismiss
+        // Wait for auto-dismiss
         composeTestRule.waitUntil(timeoutMillis = 1001) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }

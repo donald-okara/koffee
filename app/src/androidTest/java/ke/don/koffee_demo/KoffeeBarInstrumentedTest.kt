@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee_demo
 
 import androidx.activity.ComponentActivity
@@ -37,11 +46,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { 1000L }
+                durationResolver = { 1000L },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -52,9 +61,7 @@ class KoffeeBarInstrumentedTest {
                     Text("Show Toast")
                 }
             }
-            }
-
-
+        }
 
         // Tap to trigger toast
         composeTestRule.onNodeWithText("Show Toast").performClick()
@@ -62,7 +69,7 @@ class KoffeeBarInstrumentedTest {
         // Assert toast appears
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
-        //Wait for auto-dismiss
+        // Wait for auto-dismiss
         composeTestRule.waitUntil(timeoutMillis = 1001) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }
@@ -82,11 +89,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -112,7 +119,6 @@ class KoffeeBarInstrumentedTest {
         Assert.assertTrue(clicked)
     }
 
-
     /**
      * Tests that the primary action button on a toast executes its onClick callback.
      */
@@ -127,11 +133,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -145,8 +151,6 @@ class KoffeeBarInstrumentedTest {
                     Text("Trigger Toast")
                 }
             }
-
-
         }
 
         // Show toast
@@ -171,11 +175,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -213,11 +217,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -229,7 +233,6 @@ class KoffeeBarInstrumentedTest {
                     Text("Launch")
                 }
             }
-
         }
 
         composeTestRule.onNodeWithText("Launch").performClick()
@@ -256,11 +259,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -272,8 +275,6 @@ class KoffeeBarInstrumentedTest {
                     Text("Launch")
                 }
             }
-
-
         }
 
         composeTestRule.onNodeWithText("Launch").performClick()
@@ -288,7 +289,6 @@ class KoffeeBarInstrumentedTest {
         }
     }
 
-
     /**
      * Tests that the secondary button or action does not dismiss the toast when [ToastAction.dismissAfter] is false.
      */
@@ -301,11 +301,11 @@ class KoffeeBarInstrumentedTest {
                 maxVisibleToasts = 3,
                 position = ToastPosition.BottomCenter,
                 animationStyle = ToastAnimation.SlideUp,
-                durationResolver = { null }
+                durationResolver = { null },
             )
 
             KoffeeBar(
-                config = testConfig
+                config = testConfig,
             ) {
                 Button(onClick = {
                     Koffee.show(
@@ -330,5 +330,4 @@ class KoffeeBarInstrumentedTest {
             composeTestRule.onAllNodesWithText("Dismiss Me").fetchSemanticsNodes().isNotEmpty()
         }
     }
-
 }

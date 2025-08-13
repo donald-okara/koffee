@@ -44,7 +44,7 @@ class KoffeeInstrumentedTest {
             Koffee.init {
                 layout { DefaultToast(it) }
                 dismissible(true)
-                durationResolver { 500L }
+                durationResolver { 1000L }
             }
 
             Koffee.Setup()
@@ -65,8 +65,8 @@ class KoffeeInstrumentedTest {
         // Assert toast appears
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
-        // Wait for auto-dismiss
-        composeTestRule.waitUntil(timeoutMillis = 501) {
+         //Wait for auto-dismiss
+        composeTestRule.waitUntil(timeoutMillis = 1001) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }
     }

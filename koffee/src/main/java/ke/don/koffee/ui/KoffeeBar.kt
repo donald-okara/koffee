@@ -8,7 +8,6 @@ import ke.don.experimental_annotations.ExperimentalKoffeeApi
 import ke.don.koffee.domain.Koffee
 import ke.don.koffee.domain.ToastHostState
 import ke.don.koffee.domain.rememberToastHostState
-import ke.don.koffee.helpers.toToastPosition
 import ke.don.koffee.model.KoffeeConfig
 import ke.don.koffee.model.KoffeeDefaults
 

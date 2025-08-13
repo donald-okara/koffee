@@ -25,9 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import ke.don.experimental_annotations.ExperimentalKoffeeApi
 import ke.don.koffee.domain.Koffee
 import ke.don.koffee.domain.KoffeeConfigBuilder
+import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
+import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
 import ke.don.koffee_demo.ui.theme.KoffeeTheme
 
@@ -39,29 +41,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             KoffeeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val myKoffeeConfig = KoffeeConfigBuilder().apply {
-                        // Make toast dismissible
-                        dismissible(true)
 
-                        // Set max visible toasts
-                        maxVisibleToasts(3)
-
-                        // Set toast position
-                        position(ToastPosition.TopCenter)
-
-                        // Set animation style
-                        animationStyle(ToastAnimation.SlideDown)
-
-                        // Set duration resolver
-                        durationResolver { duration ->
-                            customDurationResolver(duration)
-                        }
-                    }.build()
+                    //Override the current default configuration
+                    val mySimpleConfig = KoffeeDefaults.config.copy(
+                        layout = { DefaultToast(it) },
+                        dismissible = true,
+                        maxVisibleToasts = 3,
+                        position = ToastPosition.BottomCenter,
+                        animationStyle = ToastAnimation.SlideUp,
+                        durationResolver = { customDurationResolver(it) }
+                    )
 
 
                     KoffeeBar(
                         modifier = Modifier.padding(innerPadding),
-                        config = myKoffeeConfig
+                        config = mySimpleConfig
                     ) {
                         TestToasts()
                     }

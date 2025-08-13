@@ -24,11 +24,11 @@ class KoffeeDemoApplication : Application() {
             durationResolver { customDurationResolver(it) }
         }
     }
+}
 
-    private fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
-        ToastDuration.Short -> 5000L
-        ToastDuration.Medium -> 7000L
-        ToastDuration.Long -> 10000L
-        ToastDuration.Indefinite -> null
-    }
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
 }

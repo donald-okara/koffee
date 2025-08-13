@@ -34,7 +34,10 @@ fun KoffeeBar(
     ),
     content: @Composable () -> Unit
 ){
-    Box(modifier = modifier.fillMaxSize()) {
+    Koffee.attachHostState(hostState)
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         content() // This will render the passed composable content
 
         ToastHost(

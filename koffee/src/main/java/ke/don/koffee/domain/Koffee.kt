@@ -110,6 +110,9 @@ object Koffee {
      * @param alignment Position of the toast container on screen (e.g. bottom-center).
      */
 
+    internal fun attachHostState(hostState: ToastHostState){
+        toastHostState = hostState
+    }
     @Composable
     fun Setup(
         modifier: Modifier = Modifier,
@@ -117,7 +120,7 @@ object Koffee {
         hostState: ToastHostState = rememberToastHostState(maxVisibleToasts ?: config.maxVisibleToasts, config.durationResolver),
         alignment: Alignment? = null,
     ) {
-        toastHostState = hostState
+        attachHostState(hostState)
         ToastHost(
             modifier = modifier,
             hostState = hostState,

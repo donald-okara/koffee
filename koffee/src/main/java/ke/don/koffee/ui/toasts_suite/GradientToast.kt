@@ -68,17 +68,17 @@ fun GradientSurfaceBox(
 ) {
     val shape = RoundedCornerShape(cornerRadius)
     Surface(
-            shape = shape,
-            tonalElevation = 0.dp,
-            color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
-            shadowElevation = 0.dp,
-            modifier = modifier
-                .shadow(
-                    elevation = glowRadius,
-                    shape = shape,
-                    spotColor = hueColor.copy(alpha = 0.5f),
-                ),
-        ) {
+        shape = shape,
+        tonalElevation = 0.dp,
+        color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
+        shadowElevation = 0.dp,
+        modifier = modifier
+            .shadow(
+                elevation = glowRadius,
+                shape = shape,
+                spotColor = hueColor.copy(alpha = 0.5f),
+            ),
+    ) {
         // Use Box to draw the gradient inside Surface
         Box(
             modifier = Modifier

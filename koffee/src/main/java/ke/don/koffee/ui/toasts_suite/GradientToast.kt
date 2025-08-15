@@ -66,18 +66,19 @@ fun GradientSurfaceBox(
     hueColor: Color = MaterialTheme.colorScheme.primary,
     content: @Composable () -> Unit = {},
 ) {
+    val shape = RoundedCornerShape(cornerRadius)
     Surface(
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
-        shadowElevation = 8.dp, // Compose 1.4+ explicit shadow
-        modifier = modifier
-            .shadow(
-                elevation = glowRadius,
-                shape = RoundedCornerShape(cornerRadius),
-                spotColor = hueColor.copy(alpha = 0.5f),
-            ),
-    ) {
+            shape = shape,
+            tonalElevation = 0.dp,
+            color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
+            shadowElevation = 0.dp,
+            modifier = modifier
+                .shadow(
+                    elevation = glowRadius,
+                    shape = shape,
+                    spotColor = hueColor.copy(alpha = 0.5f),
+                ),
+        ) {
         // Use Box to draw the gradient inside Surface
         Box(
             modifier = Modifier
@@ -92,7 +93,7 @@ fun GradientSurfaceBox(
                         start = Offset(0f, 0f),
                         end = Offset(300f, 0f), // adjust or make dynamic
                     ),
-                    shape = MaterialTheme.shapes.medium,
+                    shape = shape,
                 ),
         ) {
             content()

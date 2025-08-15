@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ke.don.experimental_annotations.ExperimentalKoffeeApi
@@ -38,15 +39,17 @@ class MainActivity : ComponentActivity() {
             KoffeeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    // Override the current default configuration
-                    val mySimpleConfig = KoffeeDefaults.config.copy(
-                        layout = { GlowingToast(it) },
-                        dismissible = true,
-                        maxVisibleToasts = 3,
-                        position = ToastPosition.BottomCenter,
-                        animationStyle = ToastAnimation.SlideUp,
-                        durationResolver = { customDurationResolver(it) },
-                    )
+                    // Override the current default configuration (stable across recompositions)
+                    val mySimpleConfig = remember {
+                        KoffeeDefaults.config.copy(
+                            layout = { GlowingToast(it) },
+                            dismissible = true,
+                            maxVisibleToasts = 3,
+                            position = ToastPosition.BottomCenter,
+                            animationStyle = ToastAnimation.SlideUp,
+                            durationResolver = ::customDurationResolver,
+                        )
+                    }
 
                     KoffeeBar(
                         modifier = Modifier.padding(innerPadding),

@@ -53,7 +53,7 @@ internal fun ToastHost(
     alignment: ToastPosition,
 ) {
     val fromBottom = animationStyle == ToastAnimation.SlideUp
-    val toasts = if (fromBottom) hostState.toasts else hostState.toasts.asReversed()
+    val toasts = hostState.toasts
 
     Box(
         modifier = modifier
@@ -129,7 +129,6 @@ private fun ToastItem(
             enableDismissFromStartToEnd = dismissible,
             enableDismissFromEndToStart = dismissible,
             backgroundContent = {},
-            modifier = Modifier.animateEnterExit(),
             content = { toast(data) },
         )
     }

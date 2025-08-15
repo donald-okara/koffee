@@ -223,5 +223,10 @@ object Koffee {
      *
      * Use this when navigating away from a screen or resetting UI state.
      */
-    fun dismissAll() = toastHostState.dismissAll()
+    fun dismissAll() {
+        if (!::toastHostState.isInitialized) {
+            throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before dismissing toasts")
+        }
+        toastHostState.dismissAll()
+    }
 }

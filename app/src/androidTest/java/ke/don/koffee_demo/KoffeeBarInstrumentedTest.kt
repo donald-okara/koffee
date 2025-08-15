@@ -63,6 +63,8 @@ class KoffeeBarInstrumentedTest {
             }
         }
 
+        // Ensure KoffeeBar's LaunchedEffect has run
+        composeTestRule.waitForIdle()
         // Tap to trigger toast
         composeTestRule.onNodeWithText("Show Toast").performClick()
 
@@ -109,6 +111,8 @@ class KoffeeBarInstrumentedTest {
             }
         }
 
+        // Ensure KoffeeBar's LaunchedEffect has run
+        composeTestRule.waitForIdle()
         // Show toast
         composeTestRule.onNodeWithText("Trigger Toast").performClick()
 

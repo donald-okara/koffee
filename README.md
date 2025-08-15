@@ -111,6 +111,7 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
 
 ```kotlin
+@OptIn(ExperimentalKoffeeApi::class)
 val myConfig = remember {
     KoffeeDefaults.config.copy(
         layout = { GlowingToast(it) },
@@ -138,6 +139,7 @@ KoffeeBar(
 ```
 
 The old method is not deprecated yet. See it below.
+
 ---
 
 <details>

@@ -106,7 +106,44 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 ## 🚀 Getting Started
 
 ### Step 1: Initialize Koffee
+> As of Koffee v0.1.0, we have a new way to initialize Koffee. 
 
+Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
+
+```kotlin
+@OptIn(ExperimentalKoffeeApi::class)
+val myConfig = remember {
+    KoffeeDefaults.config.copy(
+        layout = { GlowingToast(it) },
+        dismissible = true,
+        maxVisibleToasts = 3,
+        position = ToastPosition.BottomCenter,
+        animationStyle = ToastAnimation.SlideUp,
+        durationResolver = ::customDurationResolver,
+    )
+}
+
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
+}
+
+KoffeeBar(
+    modifier = Modifier.fillMaxSize(),
+    config = myConfig,
+) {
+    NavHost()
+}
+```
+
+The old method is not deprecated yet. See it below.
+
+---
+
+<details>
+<summary>Koffee.Setup and Koffee.init{} (Legacy)</summary>
 > This goes in your application class or MainActivity onCreate
 
 ```kotlin  
@@ -150,9 +187,11 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 }
 ```  
 
-### Step 3: Show toast
+</details>
 
-> You can call Koffee.show from anywhere as long as the dependency was installed.
+### Step 2: Show toast
+
+> You can call Koffee.show from anywhere as long as a host is attached (via KoffeeBar or Koffee.Setup).
 
 ```kotlin
 Button(  
@@ -180,15 +219,6 @@ You can pass your own Composable to style the toast as long as its signature mat
 @Composable (ToastData) -> Unit
 ```  
 
-
----  
-
-## 📦 License
-
-```  
-MIT License  
-```  
-  
 ---  
 
 ## 🙏 Credits
@@ -202,4 +232,5 @@ Made by [@donald-okara](https://github.com/donald-okara)
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
 
+---
 🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)

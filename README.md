@@ -106,7 +106,7 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 ## 🚀 Getting Started
 
 ### Step 1: Initialize Koffee
-> As of Koffee v0.1.0, we have a new (Experimental) way to initialize Koffee. 
+> As of Koffee v0.1.0, we have a new way to initialize Koffee. 
 
 Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
 

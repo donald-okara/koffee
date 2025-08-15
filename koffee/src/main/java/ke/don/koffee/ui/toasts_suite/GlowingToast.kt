@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ke.don.koffee.domain.style
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastType
@@ -33,13 +34,8 @@ import ke.don.koffee.model.ToastType
 fun GlowingToast(
     data: ToastData,
 ){
-    val (icon, tint) = when (data.type) {
-        ToastType.Neutral -> Pair(Icons.Default.Info, Color(0xFF6E6E6E))
-        ToastType.Info -> Pair(Icons.Default.Notifications, Color(0xFF2962FF))
-        ToastType.Success -> Pair(Icons.Default.CheckCircle, Color(0xFF2E7D32))
-        ToastType.Warning -> Pair(Icons.Default.Warning, Color(0xFFFFA000))
-        ToastType.Error -> Pair(Icons.Default.Error, Color(0xFFC62828))
-    }
+    val (icon, tint) = data.type.style
+
 
     GlowingSurfaceBox(
         glowColor = tint,

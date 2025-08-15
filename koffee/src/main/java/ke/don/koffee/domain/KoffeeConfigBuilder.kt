@@ -139,6 +139,7 @@ class KoffeeConfigBuilder {
      * @param number Maximum visible toasts. Must be greater than 0.
      */
     fun maxVisibleToasts(number: Int) {
+        require(number > 0) { "maxVisibleToasts must be greater than 0" }
         updateConfig { it.copy(maxVisibleToasts = number) }
     }
 

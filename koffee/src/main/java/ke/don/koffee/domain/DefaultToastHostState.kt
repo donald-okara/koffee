@@ -26,6 +26,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 
 /**
@@ -56,6 +58,7 @@ internal class DefaultToastHostState internal constructor(
     override val toasts: List<ToastData> get() = _toasts
 
     private val jobs = mutableMapOf<String, Job>()
+    private val mutex = Mutex()
 
     /**
      * Displays a new toast message with the given parameters.
@@ -107,11 +110,13 @@ internal class DefaultToastHostState internal constructor(
         )
 
         scope.launch{// Ensure toast count does not exceed the max allowed
-            if (_toasts.size >= maxVisibleToasts) {
-                _toasts.firstOrNull()?.let { dismiss(it.id) }
-            }
+            mutex.withLock {
+                if (_toasts.size >= maxVisibleToasts) {
+                    _toasts.firstOrNull()?.let { dismiss(it.id) }
+                }
 
-            _toasts.add(toast)
+                _toasts.add(toast)
+            }
 
             // Auto-dismiss if duration is specified
             val millis = durationResolver(duration)
@@ -134,8 +139,10 @@ internal class DefaultToastHostState internal constructor(
      */
     override fun dismiss(id: String) {
         scope.launch{
-            jobs.remove(id)?.cancel()
-            _toasts.removeAll { it.id == id }
+            mutex.withLock {
+                jobs.remove(id)?.cancel()
+                _toasts.removeAll { it.id == id }
+            }
         }
     }
 
@@ -146,9 +153,11 @@ internal class DefaultToastHostState internal constructor(
      */
     override fun dismissAll() {
         scope.launch{
-            jobs.values.forEach { it.cancel() }
-            jobs.clear()
-            _toasts.clear()
+            mutex.withLock {
+                jobs.values.forEach { it.cancel() }
+                jobs.clear()
+                _toasts.clear()
+            }
         }
     }
 }

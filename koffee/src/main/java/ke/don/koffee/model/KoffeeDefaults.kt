@@ -15,9 +15,14 @@ import ke.don.koffee.ui.DefaultToast
 object KoffeeDefaults {
     private val layout: @Composable (ToastData) -> Unit = { DefaultToast(it) }
     private val dismissible: Boolean = true
-    private val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) }
+    private val durationResolver: (ToastDuration) -> Long? = ::defaultDurationResolver
     private val maxVisibleToasts: Int = 1
     private val position: ToastPosition = ToastPosition.BottomCenter
+
+    private fun defaultAnimationFor(position: ToastPosition): ToastAnimation = when (position) {
+        ToastPosition.BottomStart, ToastPosition.BottomCenter, ToastPosition.BottomEnd -> ToastAnimation.SlideUp
+        else -> ToastAnimation.SlideDown
+    }
 
     val config = KoffeeConfig(
         layout = layout,
@@ -25,13 +30,6 @@ object KoffeeDefaults {
         durationResolver = durationResolver,
         maxVisibleToasts = maxVisibleToasts,
         position = position,
-        animationStyle = when (position) {
-            ToastPosition.BottomStart,
-            ToastPosition.BottomCenter,
-            ToastPosition.BottomEnd,
-            -> ToastAnimation.SlideUp
-
-            else -> ToastAnimation.SlideDown
-        },
+        animationStyle = defaultAnimationFor(position)
     )
 }

@@ -75,6 +75,19 @@ internal fun ToastHost(
         hostState.toasts.asReversed()
     }
 
+    // determine slide direction based on animationStyle
+    val enterSlide = if (fromBottom) {
+        slideInVertically(animationSpec = tween(300)) { it }    // from bottom
+    } else {
+        slideInVertically(animationSpec = tween(300)) { -it }   // from top
+    }
+    val exitSlide = if (fromBottom) {
+        slideOutVertically(animationSpec = tween(200)) { it }   // to bottom
+    } else {
+        slideOutVertically(animationSpec = tween(200)) { -it }  // to top
+    }
+
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -95,10 +108,11 @@ internal fun ToastHost(
                             visible = true
                         }
 
+
                         AnimatedVisibility(
                             visible = visible,
-                            enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { it },
-                            exit = fadeOut(tween(200)) + slideOutVertically(tween(200)) { it },
+                            enter = fadeIn(tween(300)) + enterSlide,
+                            exit = fadeOut(tween(200)) + exitSlide,
                         ) {
                             val dismissState = rememberSwipeToDismissBoxState(
                                 confirmValueChange = {

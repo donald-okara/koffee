@@ -168,6 +168,11 @@ object Koffee {
     ) {
         if (!isAppVisible) return
 
+
+        if (!::toastHostState.isInitialized) {
+            throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before showing toasts")
+        }
+
         coroutineScope.launch {
             toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
         }
@@ -199,6 +204,10 @@ object Koffee {
         isAppVisible: Boolean = true,
     ) {
         if (!isAppVisible) return
+
+        if (!::toastHostState.isInitialized) {
+            throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before showing toasts")
+        }
 
         toastHostState.show(
             title,

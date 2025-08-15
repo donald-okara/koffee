@@ -12,6 +12,7 @@ package ke.don.koffee.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import ke.don.experimental_annotations.ExperimentalKoffeeApi
 import ke.don.koffee.domain.Koffee
@@ -42,7 +43,9 @@ fun KoffeeBar(
     ),
     content: @Composable () -> Unit,
 ) {
-    Koffee.attachHostState(hostState)
+    LaunchedEffect(hostState) {
+        Koffee.attachHostState(hostState)
+    }
     Box(
         modifier = modifier.fillMaxSize(),
     ) {

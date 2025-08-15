@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
                         layout = { GlowingToast(it) },
                         dismissible = true,
                         maxVisibleToasts = 3,
-                        position = ToastPosition.TopStart,
-                        animationStyle = ToastAnimation.SlideDown,
+                        position = ToastPosition.BottomCenter,
+                        animationStyle = ToastAnimation.SlideUp,
                         durationResolver = { customDurationResolver(it) },
                     )
 

@@ -1,6 +1,6 @@
 <!-- Banner -->  
 <p align="center">
-  <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
+  <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="80%" />
 </p>
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
@@ -217,15 +217,6 @@ You can pass your own Composable to style the toast as long as its signature mat
 @Composable (ToastData) -> Unit
 ```  
 
-
----  
-
-## 📦 License
-
-```  
-Apache 2.0 License  
-```  
-  
 ---  
 
 ## 🙏 Credits
@@ -239,4 +230,10 @@ Made by [@donald-okara](https://github.com/donald-okara)
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
 
+
+
+
+
+
+---
 🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)

@@ -1,6 +1,6 @@
 <!-- Banner -->  
 <p align="center">
-  <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="80%" />
+  <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)

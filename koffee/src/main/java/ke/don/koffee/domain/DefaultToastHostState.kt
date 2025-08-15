@@ -10,17 +10,24 @@
 package ke.don.koffee.domain
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 
 /**
@@ -51,6 +58,7 @@ internal class DefaultToastHostState internal constructor(
     override val toasts: List<ToastData> get() = _toasts
 
     private val jobs = mutableMapOf<String, Job>()
+    private val mutex = Mutex()
 
     /**
      * Displays a new toast message with the given parameters.
@@ -101,19 +109,22 @@ internal class DefaultToastHostState internal constructor(
             id = toastId,
         )
 
-        // Ensure toast count does not exceed the max allowed
-        if (_toasts.size >= maxVisibleToasts) {
-            _toasts.firstOrNull()?.let { dismiss(it.id) }
-        }
+        scope.launch { // Ensure toast count does not exceed the max allowed
+            mutex.withLock {
+                if (_toasts.size >= maxVisibleToasts) {
+                    _toasts.firstOrNull()?.let { dismiss(it.id) }
+                }
 
-        _toasts.add(toast)
+                _toasts.add(toast)
+            }
 
-        // Auto-dismiss if duration is specified
-        val millis = durationResolver(duration)
-        if (millis != null) {
-            jobs[toast.id] = scope.launch {
-                delay(millis)
-                dismiss(toast.id)
+            // Auto-dismiss if duration is specified
+            val millis = durationResolver(duration)
+            if (millis != null) {
+                jobs[toast.id] = scope.launch {
+                    delay(millis)
+                    dismiss(toast.id)
+                }
             }
         }
     }
@@ -127,8 +138,12 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissToastFromHostState]
      */
     override fun dismiss(id: String) {
-        jobs.remove(id)?.cancel()
-        _toasts.removeAll { it.id == id }
+        scope.launch {
+            mutex.withLock {
+                jobs.remove(id)?.cancel()
+                _toasts.removeAll { it.id == id }
+            }
+        }
     }
 
     /**
@@ -137,18 +152,25 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissAllFromHostState]
      */
     override fun dismissAll() {
-        jobs.values.forEach { it.cancel() }
-        jobs.clear()
-        _toasts.clear()
+        scope.launch {
+            mutex.withLock {
+                jobs.values.forEach { it.cancel() }
+                jobs.clear()
+                _toasts.clear()
+            }
+        }
     }
 }
 
 /**
- * Remembers and provides a [ToastHostState] instance, scoped to the current composition.
+ * Remembers and provides a [ToastHostState] instance, scoped to the current composition
+ * and lifecycle.
  *
  * This utility function simplifies the creation and management of a [ToastHostState]
  * within a `@Composable` scope. The returned state is remembered across recompositions
- * and can be used to control the display of toasts.
+ * and its coroutine scope is tied to the lifecycle of the [LocalLifecycleOwner],
+ * ensuring that any ongoing toast operations are cancelled when the composable is destroyed
+ * to prevent leaks.
  *
  * It's typically used when setting up a custom toast host UI, allowing that component
  * to interact with and display toasts managed by this state.
@@ -162,7 +184,9 @@ internal class DefaultToastHostState internal constructor(
  *                         will remain visible until it is manually dismissed.
  *
  * @return A [ToastHostState] instance that can be used to show, dismiss, or query
- *         the current toasts.
+ *         the current toasts. The underlying [CoroutineScope] of this state is
+ *         automatically cancelled when the composable leaves the composition or its
+ *         lifecycle is destroyed.
  *
  */
 @Composable
@@ -170,9 +194,30 @@ fun rememberToastHostState(
     maxVisibleToasts: Int = 3,
     durationResolver: (ToastDuration) -> Long?,
 ): ToastHostState {
-    val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    return remember(scope, maxVisibleToasts) {
-        DefaultToastHostState(scope, durationResolver, maxVisibleToasts)
+    // Create a CoroutineScope tied to Lifecycle
+    val lifecycleScope = remember(lifecycleOwner) {
+        val job = Job()
+        CoroutineScope(Dispatchers.Main + job)
+    }
+
+    // Cancel scope when lifecycle is destroyed to avoid leaks
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                lifecycleScope.cancel()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            lifecycleScope.cancel()
+        }
+    }
+
+    return remember(lifecycleScope, maxVisibleToasts) {
+        DefaultToastHostState(lifecycleScope, durationResolver, maxVisibleToasts)
     }
 }

@@ -22,9 +22,17 @@ import androidx.compose.runtime.Composable
  * [ToastDuration] object as a parameter and returns the duration in milliseconds. If null is
  * returned, the toast will be displayed indefinitely until dismissed by the user. The default
  * duration resolver uses the [defaultDurationResolver] function.
+ * @property maxVisibleToasts The maximum number of toasts shown concurrently. Older toasts are
+ * evicted when the limit is exceeded.
+ * @property position The screen position where toasts will be displayed (e.g., BottomCenter).
+ * @property animationStyle The enter/exit animation direction for toasts (e.g., SlideUp/SlideDown).
+ *
  */
 data class KoffeeConfig(
     val layout: @Composable (ToastData) -> Unit,
     val dismissible: Boolean,
     val durationResolver: (ToastDuration) -> Long? = { defaultDurationResolver(it) },
+    val maxVisibleToasts: Int,
+    val position: ToastPosition,
+    val animationStyle: ToastAnimation,
 )

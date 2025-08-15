@@ -13,41 +13,61 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ke.don.koffee.domain.Koffee
+import ke.don.experimental_annotations.ExperimentalKoffeeApi
+import ke.don.koffee.model.KoffeeDefaults
+import ke.don.koffee.model.ToastAnimation
+import ke.don.koffee.model.ToastDuration
+import ke.don.koffee.model.ToastPosition
+import ke.don.koffee.ui.KoffeeBar
+import ke.don.koffee.ui.toasts_suite.GlowingToast
 import ke.don.koffee_demo.ui.theme.KoffeeTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalKoffeeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             KoffeeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(innerPadding),
-                    ) {
-                        // 1. Your app UI
-                        TestToasts()
 
-                        // 2. Render Koffee
-                        Koffee.Setup(
-                            maxVisibleToasts = 2,
+                    // Override the current default configuration (stable across recompositions)
+                    val mySimpleConfig = remember {
+                        KoffeeDefaults.config.copy(
+                            layout = { GlowingToast(it) },
+                            dismissible = true,
+                            maxVisibleToasts = 3,
+                            position = ToastPosition.BottomCenter,
+                            animationStyle = ToastAnimation.SlideUp,
+                            durationResolver = ::customDurationResolver,
                         )
+                    }
+
+                    KoffeeBar(
+                        modifier = Modifier.padding(innerPadding),
+                        config = mySimpleConfig,
+                    ) {
+                        TestToasts()
                     }
                 }
             }
         }
     }
+}
+
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
 }
 
 @Composable

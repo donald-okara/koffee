@@ -11,7 +11,6 @@ package ke.don.koffee.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.animateBounds
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,9 +18,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -37,23 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.ToastHostState
+import ke.don.koffee.helpers.toAlignment
+import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastData
+import ke.don.koffee.model.ToastPosition
 
-/**
- * Composable function that displays toasts managed by a [ToastHostState].
- *
- * Toasts are displayed in a [Column] within a [Box] that fills the maximum size.
- * Each toast can be dismissed by swiping if [dismissible] is true.
- * Toasts have enter and exit animations.
- *
- * @param hostState The [ToastHostState] that manages the toasts to be displayed.
- * @param toast A composable lambda that defines how each [ToastData] should be rendered.
- * @param modifier Optional [Modifier] to be applied to the toast host container.
- * @param dismissible A boolean indicating whether toasts can be dismissed by swiping. Defaults to true.
- * @param alignment The [Alignment] of the toasts within the host. Defaults to [Alignment.BottomCenter].
- *                  Toasts will appear from the bottom if alignment is `BottomStart`, `BottomCenter`, or `BottomEnd`.
- *                  Otherwise, they will appear from the top.
- */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ToastHost(
@@ -61,72 +49,87 @@ internal fun ToastHost(
     toast: @Composable (ToastData) -> Unit,
     modifier: Modifier = Modifier,
     dismissible: Boolean = true,
-    alignment: Alignment = Alignment.BottomCenter,
+    animationStyle: ToastAnimation,
+    alignment: ToastPosition,
 ) {
-    val fromBottom = when (alignment) {
-        Alignment.BottomStart,
-        Alignment.BottomCenter,
-        Alignment.BottomEnd,
-        -> true
-
-        else -> false
-    }
-
-    val toasts = if (fromBottom) {
-        hostState.toasts
-    } else {
-        hostState.toasts.asReversed()
-    }
+    val fromBottom = animationStyle == ToastAnimation.SlideUp
+    val toasts = hostState.toasts
 
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(bottom = 64.dp),
-        contentAlignment = alignment,
+        contentAlignment = alignment.toAlignment(),
     ) {
         LookaheadScope {
-            Column(
+            LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                reverseLayout = !fromBottom,
             ) {
-                toasts.forEach { data ->
-                    key(data.id) {
-                        var visible by remember(data.id) { mutableStateOf(false) }
-
-                        // Trigger enter animation after composition
-                        LaunchedEffect(Unit) {
-                            visible = true
-                        }
-
-                        AnimatedVisibility(
-                            visible = visible,
-                            enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { it },
-                            exit = fadeOut(tween(200)) + slideOutVertically(tween(200)) { it },
-                        ) {
-                            val dismissState = rememberSwipeToDismissBoxState(
-                                confirmValueChange = {
-                                    if (it == SwipeToDismissBoxValue.StartToEnd || it == SwipeToDismissBoxValue.EndToStart) {
-                                        visible = false
-                                        hostState.dismiss(data.id)
-                                    }
-                                    true
-                                },
-                            )
-
-                            SwipeToDismissBox(
-                                state = dismissState,
-                                enableDismissFromStartToEnd = dismissible,
-                                enableDismissFromEndToStart = dismissible,
-                                backgroundContent = {},
-                                modifier = Modifier.animateBounds(this@LookaheadScope), // ✅ apply here
-                                content = {
-                                    toast(data)
-                                },
-                            )
-                        }
-                    }
+                items(
+                    items = toasts,
+                    key = { it.id },
+                ) { data ->
+                    ToastItem(
+                        data = data,
+                        toast = toast,
+                        hostState = hostState,
+                        dismissible = dismissible,
+                        fromBottom = fromBottom,
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ToastItem(
+    data: ToastData,
+    toast: @Composable (ToastData) -> Unit,
+    hostState: ToastHostState,
+    dismissible: Boolean,
+    fromBottom: Boolean,
+) {
+    var visible by remember(data.id) { mutableStateOf(false) }
+
+    // Trigger enter animation
+    LaunchedEffect(Unit) { visible = true }
+
+    // Slide direction
+    val enterSlide = if (fromBottom) {
+        slideInVertically(animationSpec = tween(300)) { it }
+    } else {
+        slideInVertically(animationSpec = tween(300)) { -it }
+    }
+    val exitSlide = if (fromBottom) {
+        slideOutVertically(animationSpec = tween(200)) { it }
+    } else {
+        slideOutVertically(animationSpec = tween(200)) { -it }
+    }
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(300)) + enterSlide,
+        exit = fadeOut(tween(200)) + exitSlide,
+    ) {
+        val dismissState = rememberSwipeToDismissBoxState(
+            confirmValueChange = {
+                if (it == SwipeToDismissBoxValue.StartToEnd || it == SwipeToDismissBoxValue.EndToStart) {
+                    visible = false
+                    hostState.dismiss(data.id)
+                }
+                true
+            },
+        )
+
+        SwipeToDismissBox(
+            state = dismissState,
+            enableDismissFromStartToEnd = dismissible,
+            enableDismissFromEndToStart = dismissible,
+            backgroundContent = {},
+            content = { toast(data) },
+        )
     }
 }

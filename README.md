@@ -122,6 +122,13 @@ val myConfig = remember {
     )
 }
 
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
+}
+
 KoffeeBar(
     modifier = Modifier.padding(innerPadding),
     config = myConfig,

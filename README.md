@@ -130,14 +130,14 @@ fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
 }
 
 KoffeeBar(
-    modifier = Modifier.padding(innerPadding),
+    modifier = Modifier.fillMaxSize(),
     config = myConfig,
 ) {
     NavHost()
 }
 ```
 
-The old method is not deprecated yet. See it below
+The old method is not deprecated yet. See it below.
 ---
 
 <details>
@@ -189,7 +189,7 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
 ### Step 2: Show toast
 
-> You can call Koffee.show from anywhere as long as the dependency was installed.
+> You can call Koffee.show from anywhere as long as a host is attached (via KoffeeBar or Koffee.Setup).
 
 ```kotlin
 Button(  
@@ -229,11 +229,6 @@ Made by [@donald-okara](https://github.com/donald-okara)
 ## 📜 License
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
-
-
-
-
-
 
 ---
 🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)

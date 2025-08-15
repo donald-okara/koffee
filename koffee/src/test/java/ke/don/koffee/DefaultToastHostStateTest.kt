@@ -15,6 +15,8 @@ import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -38,7 +40,10 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun toastIsAddedToList() = runTest {
-        val state = DefaultToastHostState(this, durationResolver)
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
+        val state = DefaultToastHostState(testScope, durationResolver)
         state.show("Title", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
         assertEquals(1, state.toasts.size)
@@ -50,7 +55,10 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun toastAutoDismissesAfterDuration() = runTest {
-        val state = DefaultToastHostState(this, durationResolver)
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
+        val state = DefaultToastHostState(testScope, durationResolver)
         state.show("AutoDismiss", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
         assertEquals(1, state.toasts.size)
@@ -64,7 +72,10 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun oldestToastIsRemovedWhenMaxExceeded() = runTest {
-        val state = DefaultToastHostState(this, durationResolver, maxVisibleToasts = 1)
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
+        val state = DefaultToastHostState(testScope, durationResolver, maxVisibleToasts = 1)
         state.show("Toast1", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
         state.show("Toast2", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
@@ -78,11 +89,14 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun actionTriggersAndDismissesToast() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
         var clicked = false
 
         val action = ToastAction("Click", { clicked = true }, dismissAfter = true)
 
-        val state = DefaultToastHostState(this, durationResolver)
+        val state = DefaultToastHostState(testScope, durationResolver)
         state.show("ActionToast", "Desc", ToastDuration.Short, ToastType.Neutral, primaryAction = action, secondaryAction = null)
 
         val toast = state.toasts.first()
@@ -98,11 +112,14 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun actionTriggersAndDoesntDismissToastWhenDismissAfterIsFalse() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
         var clicked = false
 
         val action = ToastAction("Click", { clicked = true }, dismissAfter = false)
 
-        val state = DefaultToastHostState(this, durationResolver)
+        val state = DefaultToastHostState(testScope, durationResolver)
         state.show("ActionToast", "Desc", ToastDuration.Short, ToastType.Neutral, primaryAction = action, secondaryAction = null)
 
         val toast = state.toasts.first()
@@ -117,7 +134,10 @@ class DefaultToastHostStateTest {
      */
     @Test
     fun dismissAllClearsEverything() = runTest {
-        val state = DefaultToastHostState(this, durationResolver)
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        val testScope = TestScope(testDispatcher)
+
+        val state = DefaultToastHostState(testScope, durationResolver)
         state.show("One", "Toast", ToastDuration.Short, ToastType.Neutral, null, null)
         state.show("Two", "Toast", ToastDuration.Short, ToastType.Neutral, null, null)
 

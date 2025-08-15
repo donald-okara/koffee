@@ -7,8 +7,9 @@
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  */
-package ke.don.koffee_demo
+package ke.don.koffee.model
 
-import android.app.Application
-
-class KoffeeDemoApplication : Application()
+enum class ToastAnimation {
+    SlideUp,
+    SlideDown,
+}

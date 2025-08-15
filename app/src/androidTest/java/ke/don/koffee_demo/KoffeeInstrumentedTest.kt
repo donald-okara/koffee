@@ -66,7 +66,7 @@ class KoffeeInstrumentedTest {
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
         // Wait for auto-dismiss
-        composeTestRule.waitUntil(timeoutMillis = 501) {
+        composeTestRule.waitUntil(timeoutMillis = 500) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }
     }
@@ -227,7 +227,7 @@ class KoffeeInstrumentedTest {
      * Tests that the primary button or action does not dismiss the toast when [ToastAction.dismissAfter] is false.
      */
     @Test
-    fun primaryButtonDoesntDismissesToastWhenDismissAfterIsFalse() {
+    fun primaryButtonDoesntDismissToastWhenDismissAfterIsFalse() {
         composeTestRule.setContent {
             Koffee.init {
                 layout { DefaultToast(it) } // or custom

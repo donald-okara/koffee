@@ -12,11 +12,12 @@ package ke.don.koffee.domain
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ke.don.koffee.helpers.toToastPosition
 import ke.don.koffee.model.KoffeeConfig
+import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
-import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.ToastHost
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,10 +84,7 @@ object Koffee {
      * Holds the active toast configuration including layout composable, duration logic,
      * and dismiss behavior.
      */
-    private var config: KoffeeConfig = KoffeeConfig(
-        layout = { DefaultToast(it) },
-        dismissible = true,
-    )
+    private var config: KoffeeConfig = KoffeeDefaults.config
 
     /**
      * Initializes Koffee with custom configuration values.
@@ -112,20 +110,25 @@ object Koffee {
      * @param alignment Position of the toast container on screen (e.g. bottom-center).
      */
 
+    internal fun attachHostState(hostState: ToastHostState) {
+        toastHostState = hostState
+    }
+
     @Composable
     fun Setup(
         modifier: Modifier = Modifier,
-        maxVisibleToasts: Int = 1,
-        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts, config.durationResolver),
-        alignment: Alignment = Alignment.BottomCenter,
+        maxVisibleToasts: Int? = null,
+        hostState: ToastHostState = rememberToastHostState(maxVisibleToasts ?: config.maxVisibleToasts, config.durationResolver),
+        alignment: Alignment? = null,
     ) {
-        toastHostState = hostState
+        attachHostState(hostState)
         ToastHost(
             modifier = modifier,
             hostState = hostState,
             toast = config.layout,
             dismissible = config.dismissible,
-            alignment = alignment,
+            alignment = alignment?.toToastPosition() ?: config.position,
+            animationStyle = config.animationStyle,
         )
     }
 
@@ -165,6 +168,10 @@ object Koffee {
     ) {
         if (!isAppVisible) return
 
+        if (!::toastHostState.isInitialized) {
+            throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before showing toasts")
+        }
+
         coroutineScope.launch {
             toastHostState.show(title, description, duration, type, primaryAction, secondaryAction)
         }
@@ -196,6 +203,10 @@ object Koffee {
         isAppVisible: Boolean = true,
     ) {
         if (!isAppVisible) return
+
+        if (!::toastHostState.isInitialized) {
+            throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before showing toasts")
+        }
 
         toastHostState.show(
             title,

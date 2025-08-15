@@ -25,7 +25,6 @@ import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
-import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
 import ke.don.koffee.ui.toasts_suite.GlowingToast
 import ke.don.koffee_demo.ui.theme.KoffeeTheme

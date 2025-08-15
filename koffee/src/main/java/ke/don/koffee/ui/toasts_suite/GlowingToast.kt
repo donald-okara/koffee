@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee.ui.toasts_suite
 
 import androidx.compose.foundation.background
@@ -9,11 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,9 +39,8 @@ import ke.don.koffee.model.ToastType
 @Composable
 fun GlowingToast(
     data: ToastData,
-){
+) {
     val (icon, tint) = data.type.style
-
 
     GlowingSurfaceBox(
         glowColor = tint,
@@ -43,16 +48,14 @@ fun GlowingToast(
         glowRadius = 16.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         ToastContent(
             icon = icon,
             tint = tint,
-            data = data
+            data = data,
         )
     }
-
-
 }
 
 @Composable
@@ -61,35 +64,34 @@ fun GlowingSurfaceBox(
     glowColor: Color = MaterialTheme.colorScheme.primary,
     cornerRadius: Dp = 12.dp,
     glowRadius: Dp = 16.dp,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .shadow(
                 elevation = glowRadius,
                 shape = RoundedCornerShape(cornerRadius),
-                spotColor = glowColor.copy(alpha = 0.5f)
+                spotColor = glowColor.copy(alpha = 0.5f),
             )
             .background(
                 color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(cornerRadius)
+                shape = RoundedCornerShape(cornerRadius),
             )
             .border(
                 width = 2.dp,
                 color = glowColor.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(cornerRadius)
-            )
+                shape = RoundedCornerShape(cornerRadius),
+            ),
     ) {
         content()
     }
 }
 
-
 @Preview
 @Composable
 fun GlowingSurfaceBoxPreview() {
     MaterialTheme {
-        GlowingSurfaceBox{
+        GlowingSurfaceBox {
             Text(text = "This is some text")
         }
     }
@@ -158,5 +160,4 @@ fun GlowingToastPreview() {
             )
         }
     }
-
 }

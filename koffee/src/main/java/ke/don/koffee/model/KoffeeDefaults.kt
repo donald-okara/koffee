@@ -30,6 +30,6 @@ object KoffeeDefaults {
         durationResolver = durationResolver,
         maxVisibleToasts = maxVisibleToasts,
         position = position,
-        animationStyle = defaultAnimationFor(position)
+        animationStyle = defaultAnimationFor(position),
     )
 }

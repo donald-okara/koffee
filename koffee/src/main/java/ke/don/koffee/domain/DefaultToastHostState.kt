@@ -109,7 +109,7 @@ internal class DefaultToastHostState internal constructor(
             id = toastId,
         )
 
-        scope.launch{// Ensure toast count does not exceed the max allowed
+        scope.launch { // Ensure toast count does not exceed the max allowed
             mutex.withLock {
                 if (_toasts.size >= maxVisibleToasts) {
                     _toasts.firstOrNull()?.let { dismiss(it.id) }
@@ -138,7 +138,7 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissToastFromHostState]
      */
     override fun dismiss(id: String) {
-        scope.launch{
+        scope.launch {
             mutex.withLock {
                 jobs.remove(id)?.cancel()
                 _toasts.removeAll { it.id == id }
@@ -152,7 +152,7 @@ internal class DefaultToastHostState internal constructor(
      * @sample [ke.don.koffee.sample.SampleUsage.dismissAllFromHostState]
      */
     override fun dismissAll() {
-        scope.launch{
+        scope.launch {
             mutex.withLock {
                 jobs.values.forEach { it.cancel() }
                 jobs.clear()

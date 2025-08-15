@@ -168,7 +168,6 @@ object Koffee {
     ) {
         if (!isAppVisible) return
 
-
         if (!::toastHostState.isInitialized) {
             throw IllegalStateException("Koffee.Setup() or KoffeeBar must be called before showing toasts")
         }

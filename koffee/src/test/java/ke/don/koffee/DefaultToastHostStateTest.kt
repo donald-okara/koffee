@@ -14,13 +14,10 @@ import ke.don.koffee.domain.DefaultToastHostState
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -48,7 +45,6 @@ class DefaultToastHostStateTest {
 
         val state = DefaultToastHostState(testScope, durationResolver)
         state.show("Title", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
-
 
         assertEquals(1, state.toasts.size)
         assertEquals("Title", state.toasts.first().title)

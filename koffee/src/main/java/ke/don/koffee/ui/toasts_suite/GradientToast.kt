@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee.ui.toasts_suite
 
 import androidx.compose.foundation.background
@@ -8,11 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,12 +48,12 @@ fun GradientToast(
         hueColor = tint,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         ToastContent(
             icon = icon,
             tint = tint,
-            data = data
+            data = data,
         )
     }
 }
@@ -58,18 +64,18 @@ fun GradientSurfaceBox(
     cornerRadius: Dp = 12.dp,
     glowRadius: Dp = 16.dp,
     hueColor: Color = MaterialTheme.colorScheme.primary,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) {
     Surface(
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 8.dp,
         color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
-        shadowElevation = 8.dp,    // Compose 1.4+ explicit shadow
+        shadowElevation = 8.dp, // Compose 1.4+ explicit shadow
         modifier = modifier
             .shadow(
                 elevation = glowRadius,
                 shape = RoundedCornerShape(cornerRadius),
-                spotColor = hueColor.copy(alpha = 0.5f)
+                spotColor = hueColor.copy(alpha = 0.5f),
             ),
     ) {
         // Use Box to draw the gradient inside Surface
@@ -81,25 +87,24 @@ fun GradientSurfaceBox(
                             hueColor.copy(alpha = 0.3f),
                             hueColor.copy(alpha = 0.2f),
                             hueColor.copy(alpha = 0.1f),
-                            hueColor.copy(alpha = 0f)
+                            hueColor.copy(alpha = 0f),
                         ),
                         start = Offset(0f, 0f),
-                        end = Offset(300f, 0f) // adjust or make dynamic
+                        end = Offset(300f, 0f), // adjust or make dynamic
                     ),
-                    shape = MaterialTheme.shapes.medium
-                )
+                    shape = MaterialTheme.shapes.medium,
+                ),
         ) {
             content()
         }
     }
 }
 
-
 @Preview
 @Composable
 fun GradientSurfaceBoxPreview() {
     MaterialTheme {
-        GradientSurfaceBox{
+        GradientSurfaceBox {
             Text(text = "This is some text")
         }
     }
@@ -168,5 +173,4 @@ fun GradientToastPreview() {
             )
         }
     }
-
 }

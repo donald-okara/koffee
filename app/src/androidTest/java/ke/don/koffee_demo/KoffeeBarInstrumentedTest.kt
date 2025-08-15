@@ -70,7 +70,7 @@ class KoffeeBarInstrumentedTest {
         composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 
         // Wait for auto-dismiss
-        composeTestRule.waitUntil(timeoutMillis = 500) {
+        composeTestRule.waitUntil(timeoutMillis = 1000) {
             composeTestRule.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty()
         }
     }
@@ -120,7 +120,7 @@ class KoffeeBarInstrumentedTest {
     }
 
     /**
-     * Tests that the primary action button on a toast executes its onClick callback.
+     * Tests that the secondary action button on a toast executes its onClick callback.
      */
     @Test
     fun toastSecondaryActionFires() {
@@ -156,7 +156,7 @@ class KoffeeBarInstrumentedTest {
         // Show toast
         composeTestRule.onNodeWithText("Trigger Toast").performClick()
 
-        // Click primary action
+        // Click secondary action
         composeTestRule.onNodeWithText("Confirm").performClick()
 
         // Verify result

@@ -11,7 +11,6 @@ package ke.don.koffee.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.animateBounds
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,7 +18,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,7 +42,6 @@ import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastPosition
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ToastHost(
@@ -68,23 +65,22 @@ internal fun ToastHost(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                reverseLayout = !fromBottom
+                reverseLayout = !fromBottom,
             ) {
                 items(
                     items = toasts,
-                    key = { it.id }
+                    key = { it.id },
                 ) { data ->
                     ToastItem(
                         data = data,
                         toast = toast,
                         hostState = hostState,
                         dismissible = dismissible,
-                        fromBottom = fromBottom
+                        fromBottom = fromBottom,
                     )
                 }
             }
         }
-
     }
 }
 
@@ -94,7 +90,7 @@ private fun ToastItem(
     toast: @Composable (ToastData) -> Unit,
     hostState: ToastHostState,
     dismissible: Boolean,
-    fromBottom: Boolean
+    fromBottom: Boolean,
 ) {
     var visible by remember(data.id) { mutableStateOf(false) }
 
@@ -125,7 +121,7 @@ private fun ToastItem(
                     hostState.dismiss(data.id)
                 }
                 true
-            }
+            },
         )
 
         SwipeToDismissBox(
@@ -134,9 +130,7 @@ private fun ToastItem(
             enableDismissFromEndToStart = dismissible,
             backgroundContent = {},
             modifier = Modifier.animateEnterExit(),
-            content = { toast(data) }
+            content = { toast(data) },
         )
     }
 }
-
-

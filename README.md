@@ -106,7 +106,35 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 ## 🚀 Getting Started
 
 ### Step 1: Initialize Koffee
+> As of Koffee v0.1.0, we have a new (Experimental) way to initialize Koffee. 
 
+Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
+
+```kotlin
+val myConfig = remember {
+    KoffeeDefaults.config.copy(
+        layout = { GlowingToast(it) },
+        dismissible = true,
+        maxVisibleToasts = 3,
+        position = ToastPosition.BottomCenter,
+        animationStyle = ToastAnimation.SlideUp,
+        durationResolver = ::customDurationResolver,
+    )
+}
+
+KoffeeBar(
+    modifier = Modifier.padding(innerPadding),
+    config = myConfig,
+) {
+    NavHost()
+}
+```
+
+The old method is not deprecated yet. See it below
+---
+
+<details>
+<summary>Koffee.Setup and Koffee.init{} (Legacy)</summary>
 > This goes in your application class or MainActivity onCreate
 
 ```kotlin  
@@ -150,7 +178,9 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 }
 ```  
 
-### Step 3: Show toast
+</details>
+
+### Step 2: Show toast
 
 > You can call Koffee.show from anywhere as long as the dependency was installed.
 
@@ -186,7 +216,7 @@ You can pass your own Composable to style the toast as long as its signature mat
 ## 📦 License
 
 ```  
-MIT License  
+Apache 2.0 License  
 ```  
   
 ---  

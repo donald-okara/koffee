@@ -110,6 +110,20 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 
 Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
 
+#### Easy setup
+
+```kotlin
+KoffeeBar(
+    modifier = Modifier.fillMaxSize(),
+    config = myConfig,
+) {
+    NavHost()
+}
+
+```
+
+#### For nerds
+
 ```kotlin
 @OptIn(ExperimentalKoffeeApi::class)
 val myConfig = remember {
@@ -192,22 +206,73 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 ### Step 2: Show toast
 
 > You can call Koffee.show from anywhere as long as a host is attached (via KoffeeBar or Koffee.Setup).
+### Minimal Setup
+
+Wrap your screen content with `KoffeeBar` using defaults:
 
 ```kotlin
-Button(  
-    onClick = {  
-        Koffee.show(  
-            title = "Success toast",  
-            description = "This is a green notification",  
-            type = ToastType.Success,  
-            primaryAction = ToastAction("Share", { println("Viewing info details") }),  
-            secondaryAction = ToastAction("Copy", { println("Copied!") }),  
-        )  
-    },  
-    modifier = Modifier.fillMaxWidth(),  
-) {  
-    Text("Show Success")  
+KoffeeBar {
+    MyScreenContent()
 }
+```
+
+Show a simple toast anywhere within a screen attached to a `ToastHostState`:
+
+```kotlin
+Button(
+    onClick = {
+        // Koffee.show can be called from ViewModels, Repositories, anywhere your screen has a ToastHostState
+        Koffee.show(
+            title = "Success toast",
+            description = "This is a green notification"
+        )
+    }
+) {
+    Text("Hello fam")
+}
+```
+
+---
+
+### Optional Advanced Toast Control
+
+Customize layout, animation, position, duration, and other properties:
+
+```kotlin
+val mySimpleConfig = remember {  
+    KoffeeDefaults.config.copy(  
+        layout = { GlowingToast(it) },  // Pass your preferred toast composable here: @Composable (ToastData) -> Unit
+        dismissible = true,  
+        maxVisibleToasts = 3,  
+        position = ToastPosition.BottomCenter,  
+        animationStyle = ToastAnimation.SlideUp,  
+        durationResolver = ::customDurationResolver,  
+    )  
+}
+
+KoffeeBar {
+    MyScreenContent()
+}
+```
+
+Use a toast with actions:
+
+```kotlin
+Koffee.show(
+    title = "Success toast",
+    description = "With actions",
+    type = ToastType.Success,
+    primaryAction = ToastAction(
+        label = "Share",
+        onClick = { println("Viewing info details") },
+        dismissAfter = true
+    ),
+    secondaryAction = ToastAction(
+        label = "Copy",
+        onClick = { println("Copied!") },
+        dismissAfter = true
+    )
+)
 ```
 ---  
 

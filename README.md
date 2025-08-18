@@ -13,6 +13,7 @@
 </p>  
 
 > 🙌 Want to contribute? Check out our [Contribution Guidelines](CONTRIBUTIONS.md).
+
 > 💬 Have feedback? Share it on [Featurebase](https://koffee.featurebase.app).
 
 ---  

@@ -25,7 +25,7 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
     private val EXP_ANNOTATION_FQNS = setOf(
-        "ke.don.koffee.annotations.ExperimentalKoffeeApi"
+        "ke.don.koffee.annotations.ExperimentalKoffeeApi",
     )
 
     companion object {

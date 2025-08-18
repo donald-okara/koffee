@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ke.don.experimental_annotations.ExperimentalKoffeeApi
+import ke.don.koffee.annotations.ExperimentalKoffeeApi
 import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastDuration

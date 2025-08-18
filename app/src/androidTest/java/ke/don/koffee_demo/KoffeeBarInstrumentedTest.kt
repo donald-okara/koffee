@@ -17,7 +17,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import ke.don.experimental_annotations.ExperimentalKoffeeApi
+import ke.don.koffee.annotations.ExperimentalKoffeeApi
 import ke.don.koffee.domain.Koffee
 import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAction

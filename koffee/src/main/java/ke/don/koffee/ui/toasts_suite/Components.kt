@@ -96,7 +96,7 @@ fun ToastContent(
             ToastActionRow(
                 secondaryAction = data.secondaryAction,
                 primaryAction = data.primaryAction,
-                tint = MaterialTheme.colorScheme.onSurface,
+                color = textColor ?: MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -109,14 +109,14 @@ fun ToastContent(
  *
  * @param secondaryAction The [ToastAction] for the secondary button. Can be null.
  * @param primaryAction The [ToastAction] for the primary button. Can be null.
- * @param tint The [Color] used to style the buttons.
+ * @param color The [Color] used to style the buttons.
  */
 @Composable
 fun ToastActionRow(
     modifier: Modifier = Modifier,
     secondaryAction: ToastAction?,
     primaryAction: ToastAction?,
-    tint: Color,
+    color: Color,
 ) {
     if (secondaryAction == null && primaryAction == null) return
 
@@ -131,9 +131,9 @@ fun ToastActionRow(
         secondaryAction?.let { action ->
             OutlinedButton(
                 onClick = action.onClick,
-                border = BorderStroke(1.dp, tint.copy(alpha = 0.4f)),
+                border = BorderStroke(1.dp, color.copy(alpha = 0.4f)),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = tint,
+                    contentColor = color,
                 ),
                 shape = shape,
                 modifier = Modifier
@@ -154,8 +154,8 @@ fun ToastActionRow(
             Button(
                 onClick = action.onClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = tint.copy(alpha = 0.15f),
-                    contentColor = tint,
+                    containerColor = color.copy(alpha = 0.15f),
+                    contentColor = color,
                 ),
                 shape = shape,
                 modifier = Modifier

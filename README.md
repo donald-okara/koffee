@@ -13,6 +13,8 @@
 </p>  
 
 > 🙌 Want to contribute? Check out our [Contribution Guidelines](CONTRIBUTIONS.md).
+> 💬 Have feedback? Share it on [Featurebase](https://koffee.featurebase.app).
+
 ---  
 
 ## ✨ Features
@@ -31,7 +33,7 @@
 This is a demo of how Koffee works. The toasts are swipeable.
 
 <p align="center">
-  <img src="docs-assets/koffee.gif" alt="Koffee demo" width="300"/>
+  <img src="docs-assets/default_toast.gif" alt="Koffee demo" width="300"/>
 </p>
 
 
@@ -106,7 +108,58 @@ You can plug in your own toast layouts, define duration policies, and limit how 
 ## 🚀 Getting Started
 
 ### Step 1: Initialize Koffee
+> As of Koffee v0.1.0, we have a new way to initialize Koffee. 
 
+Wrap your root (or target) layout to configure Koffee in one place — stable across recompositions.
+
+#### Easy setup
+
+```kotlin
+KoffeeBar(
+    modifier = Modifier.fillMaxSize(),
+    config = myConfig,
+) {
+    NavHost()
+}
+
+```
+
+#### For nerds
+
+```kotlin
+@OptIn(ExperimentalKoffeeApi::class)
+val myConfig = remember {
+    KoffeeDefaults.config.copy(
+        layout = { GlowingToast(it) },
+        dismissible = true,
+        maxVisibleToasts = 3,
+        position = ToastPosition.BottomCenter,
+        animationStyle = ToastAnimation.SlideUp,
+        durationResolver = ::customDurationResolver,
+    )
+}
+
+fun customDurationResolver(duration: ToastDuration): Long? = when (duration) {
+    ToastDuration.Short -> 5000L
+    ToastDuration.Medium -> 7000L
+    ToastDuration.Long -> 10000L
+    ToastDuration.Indefinite -> null
+}
+
+KoffeeBar(
+    modifier = Modifier.fillMaxSize(),
+    config = myConfig,
+) {
+    NavHost()
+}
+```
+
+The old method is not deprecated yet. See it below.
+
+---
+
+<details>
+<summary>Koffee.Setup and Koffee.init{} (Legacy)</summary>
 > This goes in your application class or MainActivity onCreate
 
 ```kotlin  
@@ -150,25 +203,78 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 }
 ```  
 
-### Step 3: Show toast
+</details>
 
-> You can call Koffee.show from anywhere as long as the dependency was installed.
+### Step 2: Show toast
+
+> You can call Koffee.show from anywhere as long as a host is attached (via KoffeeBar or Koffee.Setup).
+### Minimal Setup
+
+Wrap your screen content with `KoffeeBar` using defaults:
 
 ```kotlin
-Button(  
-    onClick = {  
-        Koffee.show(  
-            title = "Success toast",  
-            description = "This is a green notification",  
-            type = ToastType.Success,  
-            primaryAction = ToastAction("Share", { println("Viewing info details") }),  
-            secondaryAction = ToastAction("Copy", { println("Copied!") }),  
-        )  
-    },  
-    modifier = Modifier.fillMaxWidth(),  
-) {  
-    Text("Show Success")  
+KoffeeBar {
+    MyScreenContent()
 }
+```
+
+Show a simple toast anywhere within a screen attached to a `ToastHostState`:
+
+```kotlin
+Button(
+    onClick = {
+        // Koffee.show can be called from ViewModels, Repositories, anywhere your screen has a ToastHostState
+        Koffee.show(
+            title = "Success toast",
+            description = "This is a green notification"
+        )
+    }
+) {
+    Text("Hello fam")
+}
+```
+
+---
+
+### Optional Advanced Toast Control
+
+Customize layout, animation, position, duration, and other properties:
+
+```kotlin
+val mySimpleConfig = remember {  
+    KoffeeDefaults.config.copy(  
+        layout = { GlowingToast(it) },  // Pass your preferred toast composable here: @Composable (ToastData) -> Unit
+        dismissible = true,  
+        maxVisibleToasts = 3,  
+        position = ToastPosition.BottomCenter,  
+        animationStyle = ToastAnimation.SlideUp,  
+        durationResolver = ::customDurationResolver,  
+    )  
+}
+
+KoffeeBar {
+    MyScreenContent()
+}
+```
+
+Use a toast with actions:
+
+```kotlin
+Koffee.show(
+    title = "Success toast",
+    description = "With actions",
+    type = ToastType.Success,
+    primaryAction = ToastAction(
+        label = "Share",
+        onClick = { println("Viewing info details") },
+        dismissAfter = true
+    ),
+    secondaryAction = ToastAction(
+        label = "Copy",
+        onClick = { println("Copied!") },
+        dismissAfter = true
+    )
+)
 ```
 ---  
 
@@ -180,15 +286,6 @@ You can pass your own Composable to style the toast as long as its signature mat
 @Composable (ToastData) -> Unit
 ```  
 
-
----  
-
-## 📦 License
-
-```  
-MIT License  
-```  
-  
 ---  
 
 ## 🙏 Credits
@@ -202,4 +299,5 @@ Made by [@donald-okara](https://github.com/donald-okara)
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
 
+---
 🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)

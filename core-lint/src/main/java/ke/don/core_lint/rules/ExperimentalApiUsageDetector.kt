@@ -24,6 +24,9 @@ import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
+    private val EXP_ANNOTATION_FQNS = setOf(
+        "ke.don.koffee.annotations.ExperimentalKoffeeApi"
+    )
 
     companion object {
         val ISSUE = Issue.create(
@@ -52,9 +55,11 @@ class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
         usageInfo: AnnotationUsageInfo,
     ) {
         val qualifiedName = annotationInfo.qualifiedName
-        if (qualifiedName != "ke.don.experimental_annotations.ExperimentalKoffeeApi") return
+        if (qualifiedName !in EXP_ANNOTATION_FQNS) return
 
-        val hasOptIn = findOptInAnnotation(element, "ke.don.experimental_annotations.ExperimentalKoffeeApi")
+        val hasOptIn = EXP_ANNOTATION_FQNS.any { fqcn ->
+            findOptInAnnotation(element, fqcn)
+        }
 
         if (!hasOptIn) {
             val target = findEnclosingMethodOrClass(element) ?: element
@@ -69,17 +74,18 @@ class ExperimentalApiUsageDetector : Detector(), SourceCodeScanner {
                 .autoFix()
                 .build()
 
+            // Prefer importing the new FQCN
             val addImport = LintFix.create()
                 .name("Import ExperimentalKoffeeApi")
                 .replace()
                 .pattern("^(package[\\s\\S]*?\\n)")
-                .with("$1import ke.don.experimental_annotations.ExperimentalKoffeeApi\n")
+                .with("$1import ke.don.koffee.annotations.ExperimentalKoffeeApi\n")
                 .autoFix()
                 .build()
 
             val fix = LintFix.create()
                 .name("Opt-in to Experimental API")
-                .composite(addImport, addOptInAnnotation) // no .build() here
+                .composite(addImport, addOptInAnnotation)
 
             context.report(
                 ISSUE,

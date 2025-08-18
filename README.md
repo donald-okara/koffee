@@ -13,6 +13,8 @@
 </p>  
 
 > 🙌 Want to contribute? Check out our [Contribution Guidelines](CONTRIBUTIONS.md).
+> 💬 Have feedback? Share it on [Featurebase](https://koffee.featurebase.app).
+
 ---  
 
 ## ✨ Features
@@ -31,7 +33,7 @@
 This is a demo of how Koffee works. The toasts are swipeable.
 
 <p align="center">
-  <img src="docs-assets/koffee.gif" alt="Koffee demo" width="300"/>
+  <img src="docs-assets/default_toast.gif" alt="Koffee demo" width="300"/>
 </p>
 
 

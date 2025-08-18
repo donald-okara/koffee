@@ -67,7 +67,7 @@ fun DefaultToast(
             icon = icon,
             tint = tint,
             data = data,
-            textColor = Color.Black
+            textColor = Color.Black,
         )
     }
 }

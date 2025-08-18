@@ -74,7 +74,6 @@ dependencies {
     implementation(libs.androidx.material3)
 
     lintChecks(project(":core-lint"))
-    api(project(":experimental-annotations"))
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

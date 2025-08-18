@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import ke.don.experimental_annotations.ExperimentalKoffeeApi
+import ke.don.koffee.annotations.ExperimentalKoffeeApi
 import ke.don.koffee.domain.Koffee
 import ke.don.koffee.domain.ToastHostState
 import ke.don.koffee.domain.rememberToastHostState

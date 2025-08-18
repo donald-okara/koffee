@@ -7,9 +7,7 @@
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  */
-package ke.don.experimental_annotations
-
-import kotlin.RequiresOptIn
+package ke.don.koffee.annotations
 
 /**
  * Marks declarations that are part of the experimental Koffee API.

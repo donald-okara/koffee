@@ -44,6 +44,7 @@ fun ToastContent(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     tint: Color,
+    textColor: Color? = null,
     data: ToastData,
 ) {
     Column(
@@ -75,7 +76,7 @@ fun ToastContent(
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = textColor ?: MaterialTheme.colorScheme.onSurface,
                     ),
                 )
                 Text(
@@ -83,7 +84,7 @@ fun ToastContent(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = textColor?.copy(alpha = 0.8f) ?: MaterialTheme.colorScheme.onSurfaceVariant,
                     ),
                 )
             }

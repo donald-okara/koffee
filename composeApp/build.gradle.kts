@@ -1,48 +1,27 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.composeMultiplatform)
-    id("com.vanniktech.maven.publish") version "0.34.0"
-    id("org.jetbrains.dokka") version "2.0.0"
-}
-
-group = "io.github.donald-okara"
-version = project.findProperty("version") ?: throw GradleException("Version property is required. Pass it with -Pversion=<version>")
-
-tasks.dokkaHtml.configure {
-    doFirst {
-        delete(rootProject.layout.projectDirectory.dir("docs"))
-    }
-    moduleName.set("Koffee - $gitTagVersion")
-
-    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
-}
-
-tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
-    dokkaSourceSets.configureEach {
-        // 👇 include sample usage file(s)
-        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
-
-        // (Optional) Suppress deprecated or undocumented elements
-        suppress.set(false)
-        skipEmptyPackages.set(true)
-    }
 }
 
 android {
-    namespace = "ke.don.koffee"
+    namespace = "ke.don.koffee_demo"
     compileSdk = 36
 
     defaultConfig {
+        applicationId = "ke.don.koffee_demo"
         minSdk = 26
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -63,7 +42,6 @@ android {
     }
 }
 
-
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -78,21 +56,19 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "KoffeeLib"
+            baseName = "ComposeApp"
             isStatic = true
         }
     }
+
     jvm()
 
     sourceSets {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.components.resources)
                 // Add KMP dependencies here
                 implementation(compose.runtime)
-                implementation(compose.materialIconsExtended)
-
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.ui)
@@ -100,7 +76,7 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
-                //implementation(project(":koffee"))
+                implementation(project(":koffee"))
             }
         }
 
@@ -130,11 +106,6 @@ kotlin {
             }
         }
 
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
-        }
-
         iosMain {
             dependencies {
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
@@ -144,11 +115,12 @@ kotlin {
                 // KMP dependencies declared in commonMain.
             }
         }
+
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+        }
     }
-
-
-
-
 }
 
 dependencies {
@@ -158,60 +130,14 @@ dependencies {
 }
 
 
-dependencies {
-    lintChecks(project(":core-lint"))
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-}
+compose.desktop {
+    application {
+        mainClass = "ke.don.koffee_demo.MainKt"
 
-mavenPublishing {
-    publishToMavenCentral() // or publishToMavenCentral(automaticRelease = true)
-    signAllPublications()
-
-    coordinates(group as String, "koffee", version as String)
-
-    pom {
-        name.set("Koffee Library")
-        description.set("A toast library for jetpack compose.")
-        inceptionYear.set("2025")
-        url.set("https://github.com/donald-okara/koffee/")
-        licenses {
-            license {
-                name.set("The Apache License, Version 2.0")
-                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                distribution.set("repo")
-            }
-        }
-        developers {
-            developer {
-                id.set("donald-okara")
-                name.set("Donald Okara")
-                url.set("https://github.com/donald-okara/")
-            }
-        }
-        scm {
-            url.set("https://github.com/donald-okara/deploy-exampl/")
-            connection.set("scm:git:git://github.com/donald-okara/koffe.git")
-            developerConnection.set("scm:git:ssh://git@github.com/donald-okara/koffee.git")
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "ke.don.koffee_demo"
+            packageVersion = "1.0.0"
         }
     }
 }
-
-// ─── Dynamically infer tag version ─────────────────────────────────────────────
-
-val gitTagVersion: String by lazy {
-    try {
-        "git describe --tags --abbrev=0".runCommand() ?: "untagged"
-    } catch (e: Exception) {
-        "untagged"
-    }
-}
-
-fun String.runCommand(): String =
-    ProcessBuilder(*split(" ").toTypedArray())
-        .directory(rootDir)
-        .redirectErrorStream(true)
-        .start()
-        .inputStream
-        .bufferedReader()
-        .readText()

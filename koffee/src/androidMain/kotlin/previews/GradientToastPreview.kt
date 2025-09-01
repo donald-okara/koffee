@@ -19,7 +19,7 @@ import ke.don.koffee.ui.toasts_suite.GradientToast
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
-@Preview
+@DevicePreviews
 @Composable
 fun GradientSurfaceBoxPreview() {
     MaterialTheme {
@@ -29,7 +29,7 @@ fun GradientSurfaceBoxPreview() {
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 fun GradientToastPreview() {
     MaterialTheme {

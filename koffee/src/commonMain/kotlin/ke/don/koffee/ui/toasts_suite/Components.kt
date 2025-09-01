@@ -74,7 +74,7 @@ fun ToastContent(
                     text = data.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = textColor ?: MaterialTheme.colorScheme.onSurface,
                     ),
@@ -83,7 +83,7 @@ fun ToastContent(
                     text = data.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.labelMedium.copy(
                         color = textColor?.copy(alpha = 0.8f) ?: MaterialTheme.colorScheme.onSurfaceVariant,
                     ),
                 )

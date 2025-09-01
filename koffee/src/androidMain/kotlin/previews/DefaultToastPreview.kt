@@ -15,7 +15,7 @@ import ke.don.koffee.model.ToastType
 import ke.don.koffee.ui.DefaultToast
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Preview
+@DevicePreviews
 @Composable
 fun DefaultToastPreview() {
     Column(

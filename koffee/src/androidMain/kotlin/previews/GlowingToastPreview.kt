@@ -18,7 +18,7 @@ import ke.don.koffee.ui.toasts_suite.GlowingSurfaceBox
 import ke.don.koffee.ui.toasts_suite.GlowingToast
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Preview
+@DevicePreviews
 @Composable
 fun GlowingSurfaceBoxPreview() {
     MaterialTheme {
@@ -28,7 +28,7 @@ fun GlowingSurfaceBoxPreview() {
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 fun GlowingToastPreview() {
     MaterialTheme {

@@ -67,6 +67,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(compose.components.resources)
+
                 // Add KMP dependencies here
                 implementation(compose.runtime)
                 implementation(compose.foundation)

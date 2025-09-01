@@ -11,6 +11,7 @@ package ke.don.koffee.ui.toasts_suite
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.style
+import ke.don.koffee.helpers.COMPACT_BREAK_POINT
+import ke.don.koffee.helpers.sizeMod
 import ke.don.koffee.model.ToastData
 
 @Composable
@@ -36,7 +39,6 @@ fun GradientToast(
     GradientSurfaceBox(
         hueColor = tint,
         modifier = Modifier
-            .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
         ToastContent(
@@ -56,36 +58,43 @@ fun GradientSurfaceBox(
     content: @Composable () -> Unit = {},
 ) {
     val shape = RoundedCornerShape(cornerRadius)
-    Surface(
-        shape = shape,
-        tonalElevation = 0.dp,
-        color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
-        shadowElevation = 0.dp,
-        modifier = modifier
-            .shadow(
-                elevation = glowRadius,
-                shape = shape,
-                spotColor = hueColor.copy(alpha = 0.5f),
-            ),
-    ) {
-        // Use Box to draw the gradient inside Surface
-        Box(
-            modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            hueColor.copy(alpha = 0.3f),
-                            hueColor.copy(alpha = 0.2f),
-                            hueColor.copy(alpha = 0.1f),
-                            hueColor.copy(alpha = 0f),
-                        ),
-                        start = Offset(0f, 0f),
-                        end = Offset(300f, 0f), // adjust or make dynamic
-                    ),
+    BoxWithConstraints(modifier = modifier) { // no fill here; respect parent alignment
+        val isCompact = maxWidth < COMPACT_BREAK_POINT
+
+        val sizeMod = sizeMod(isCompact)
+
+        Surface(
+            shape = shape,
+            tonalElevation = 0.dp,
+            color = MaterialTheme.colorScheme.surface, // important: allow gradient to show
+            shadowElevation = 0.dp,
+            modifier = sizeMod
+                .shadow(
+                    elevation = glowRadius,
                     shape = shape,
+                    spotColor = hueColor.copy(alpha = 0.5f),
                 ),
         ) {
-            content()
+            // Use Box to draw the gradient inside Surface
+            Box(
+                modifier = Modifier
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                hueColor.copy(alpha = 0.3f),
+                                hueColor.copy(alpha = 0.2f),
+                                hueColor.copy(alpha = 0.1f),
+                                hueColor.copy(alpha = 0f),
+                            ),
+                            start = Offset(0f, 0f),
+                            end = Offset(300f, 0f), // adjust or make dynamic
+                        ),
+                        shape = shape,
+                    ),
+            ) {
+                content()
+            }
         }
     }
+
 }

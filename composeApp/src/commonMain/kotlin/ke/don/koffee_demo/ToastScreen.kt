@@ -10,10 +10,15 @@
 package ke.don.koffee_demo
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.Koffee
+import ke.don.koffee.helpers.COMPACT_BREAK_POINT
+import ke.don.koffee.helpers.MAX_NON_COMPACT_WIDTH
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
@@ -34,12 +41,13 @@ fun TestToasts(
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(
             onClick = {
                 Koffee.dismissAll()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Dismiss all")
         }
@@ -52,7 +60,7 @@ fun TestToasts(
                     type = ToastType.Neutral,
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Show Neutral")
         }
@@ -63,10 +71,10 @@ fun TestToasts(
                     title = "Info toast",
                     description = "This is a secondary notification",
                     type = ToastType.Info,
-                    primaryAction = ToastAction("Details", { println("Viewing info details") }),
+                    primaryAction = ToastAction("Details", { println("Viewing info details") }, true),
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Show Info")
         }
@@ -81,7 +89,7 @@ fun TestToasts(
                     secondaryAction = ToastAction("Copy", { println("Copied!") }),
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Show Success")
         }
@@ -95,7 +103,7 @@ fun TestToasts(
                     secondaryAction = ToastAction("Ignore", { println("Warning ignored") }),
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Show Warning")
         }
@@ -108,10 +116,10 @@ fun TestToasts(
                     type = ToastType.Error,
                     duration = ToastDuration.Indefinite,
                     primaryAction = ToastAction("Retry", { println("Retrying operation...") }),
-                    secondaryAction = ToastAction("Report", { println("Reported error") }),
+                    secondaryAction = ToastAction("Report", { println("Reported error") }, true),
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width( 600.dp)
         ) {
             Text("Show Error")
         }

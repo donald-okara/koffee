@@ -13,21 +13,24 @@ import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
 import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
+import ke.don.koffee.ui.toasts_suite.GlowingToast
 import ke.don.koffee_demo.ui.theme.KoffeeTheme
 
 @OptIn(ExperimentalKoffeeApi::class)
 @Composable
 fun App(){
-    KoffeeTheme {
+    KoffeeTheme(
+        darkTheme = true
+    ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
             // Override the current default configuration (stable across recompositions)
             val mySimpleConfig = remember {
                 KoffeeDefaults.config.copy(
-                    layout = { DefaultToast(it) },
+                    layout = { GlowingToast(it) },
                     dismissible = true,
                     maxVisibleToasts = 3,
-                    position = ToastPosition.BottomCenter,
+                    position = ToastPosition.BottomEnd,
                     animationStyle = ToastAnimation.SlideUp,
                     durationResolver = ::customDurationResolver,
                 )

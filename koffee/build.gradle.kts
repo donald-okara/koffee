@@ -15,7 +15,6 @@ plugins {
 group = "io.github.donald-okara"
 version = project.findProperty("version") ?: throw GradleException("Version property is required. Pass it with -Pversion=<version>")
 
-
 tasks.named<DokkaTask>("dokkaHtml").configure {
     moduleName.set("Koffee - $gitTagVersion")
 
@@ -38,17 +37,16 @@ tasks.named<DokkaTask>("dokkaHtml").configure {
     }
 }
 
-
-//tasks.dokkaHtml.configure {
+// tasks.dokkaHtml.configure {
 //    doFirst {
 //        delete(rootProject.layout.projectDirectory.dir("docs"))
 //    }
 //    moduleName.set("Koffee - $gitTagVersion")
 //
 //    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
-//}
+// }
 //
-//tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+// tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
 //    dokkaSourceSets.configureEach {
 //        // 👇 include sample usage file(s)
 //        samples.from(file("koffee/src/commonMain/kotlin/ke/don/koffee/sample/SampleUsage.kt"))
@@ -57,7 +55,7 @@ tasks.named<DokkaTask>("dokkaHtml").configure {
 //        suppress.set(false)
 //        skipEmptyPackages.set(true)
 //    }
-//}
+// }
 
 android {
     namespace = "ke.don.koffee"

@@ -94,6 +94,11 @@ object Koffee {
      *
      * @param builder A builder block that provides a DSL to define custom toast behavior.
      */
+
+    @Deprecated(
+        message = "No longer requires Setup() and init{} to display toasts. Use the  KoffeeBar{} instead.",
+        level = DeprecationLevel.ERROR,
+    )
     fun init(builder: KoffeeConfigBuilder.() -> Unit) {
         config = KoffeeConfigBuilder().apply(builder).build()
     }
@@ -114,6 +119,10 @@ object Koffee {
         toastHostState = hostState
     }
 
+    @Deprecated(
+        message = "No longer requires Setup() and init{} to display toasts. Use the  KoffeeBar{} instead.",
+        level = DeprecationLevel.ERROR,
+    )
     @Composable
     fun Setup(
         modifier: Modifier = Modifier,

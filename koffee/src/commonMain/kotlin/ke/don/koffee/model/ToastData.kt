@@ -12,7 +12,6 @@ package ke.don.koffee.model
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-
 /**
  * Represents the data required to display a toast message.
  *
@@ -27,7 +26,9 @@ import kotlin.uuid.Uuid
  * @property secondaryAction An optional secondary action that the user can take.
  *                           This is typically displayed alongside the primary action. Defaults to `null`.
  */
-data class ToastData @OptIn(ExperimentalUuidApi::class) constructor(
+data class ToastData
+@OptIn(ExperimentalUuidApi::class)
+constructor(
     val title: String,
     val description: String,
     val type: ToastType = ToastType.Neutral,

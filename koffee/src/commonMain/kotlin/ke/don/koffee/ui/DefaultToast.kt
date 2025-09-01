@@ -60,7 +60,7 @@ fun DefaultToast(
             color = background,
             tonalElevation = 32.dp,
             modifier = sizeMod
-                .padding(horizontal = 16.dp, vertical = 8.dp) // inner padding
+                .padding(horizontal = 16.dp, vertical = 8.dp), // inner padding
         ) {
             ToastContent(
                 icon = icon,
@@ -71,7 +71,3 @@ fun DefaultToast(
         }
     }
 }
-
-
-
-

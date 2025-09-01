@@ -9,7 +9,6 @@
  */
 package ke.don.koffee_demo.ui.theme
 
-
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
@@ -25,14 +24,14 @@ val bodyFontFamily: FontFamily
     get() = FontFamily(
         Font(Res.font.roboto_mono_regular, FontWeight.Normal),
 
-        )
+    )
 
 val displayFontFamily: FontFamily
     @Composable
     get() = FontFamily(
         Font(Res.font.roboto_mono_semi_bold, FontWeight.Bold),
 
-        )
+    )
 
 // Default Material 3 typography values
 val baseline = Typography()

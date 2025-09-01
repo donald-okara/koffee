@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package previews
 
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +25,6 @@ import ke.don.koffee.model.ToastData
 import ke.don.koffee.model.ToastType
 import ke.don.koffee.ui.toasts_suite.GradientSurfaceBox
 import ke.don.koffee.ui.toasts_suite.GradientToast
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 @DevicePreviews
 @Composable

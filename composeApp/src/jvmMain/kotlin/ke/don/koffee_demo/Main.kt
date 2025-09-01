@@ -7,6 +7,16 @@
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  */
-package ke.don.shared
+package ke.don.koffee_demo
 
-actual fun platform() = "iOS"
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+
+fun main() = application {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "KoffeeDemo",
+    ) {
+        App()
+    }
+}

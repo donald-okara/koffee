@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee_demo
 
 import androidx.compose.material3.Button
@@ -12,13 +21,13 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalKoffeeApi::class)
-class KoffeeBarTest {
+class KoffeeBarInstrumentedTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun toastRendersAndDismisses() = runComposeUiTest {
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -54,7 +63,7 @@ class KoffeeBarTest {
         var clicked = false
 
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -86,9 +95,8 @@ class KoffeeBarTest {
     fun toastSecondaryActionFires() = runComposeUiTest {
         var clicked = false
 
-
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -115,12 +123,11 @@ class KoffeeBarTest {
         assertTrue(clicked)
     }
 
-
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun primaryButtonDismissesToast() = runComposeUiTest {
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -135,14 +142,11 @@ class KoffeeBarTest {
                                 "This should go away",
                                 primaryAction = ToastAction("Dismiss", {}, dismissAfter = true),
                             )
-                        }
-                    )
-                    {
+                        },
+                    ) {
                         Text("Launch")
                     }
                 }
-
-
             }
         }
 
@@ -151,14 +155,13 @@ class KoffeeBarTest {
 
         onNodeWithText("Dismiss").performClick()
         onNodeWithText("Dismiss Me").assertDoesNotExist()
-
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun secondaryButtonDismissesToast() = runComposeUiTest {
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -173,14 +176,11 @@ class KoffeeBarTest {
                                 "This should go away",
                                 secondaryAction = ToastAction("Dismiss", {}, dismissAfter = true),
                             )
-                        }
-                    )
-                    {
+                        },
+                    ) {
                         Text("Launch")
                     }
                 }
-
-
             }
         }
 
@@ -189,15 +189,13 @@ class KoffeeBarTest {
 
         onNodeWithText("Dismiss").performClick()
         onNodeWithText("Dismiss Me").assertDoesNotExist()
-
     }
-
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun primaryButtonDoesntDismissToastWhenDismissAfterIsFalse() = runComposeUiTest {
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -212,14 +210,11 @@ class KoffeeBarTest {
                                 "This should go away",
                                 primaryAction = ToastAction("Dismiss", {}, dismissAfter = false),
                             )
-                        }
-                    )
-                    {
+                        },
+                    ) {
                         Text("Launch")
                     }
                 }
-
-
             }
         }
 
@@ -231,15 +226,13 @@ class KoffeeBarTest {
         waitUntil(timeoutMillis = 500) {
             onAllNodesWithText("Dismiss Me").fetchSemanticsNodes().isNotEmpty()
         }
-
     }
-
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun secondaryButtonDoesntDismissToastWhenDismissAfterIsFalse() = runComposeUiTest {
         setContent {
-            WithTestLifecycle{
+            WithTestLifecycle {
                 val testConfig = KoffeeDefaults.config.copy(
                     layout = { DefaultToast(it) },
                     dismissible = true,
@@ -254,14 +247,11 @@ class KoffeeBarTest {
                                 "This should go away",
                                 secondaryAction = ToastAction("Dismiss", {}, dismissAfter = false),
                             )
-                        }
-                    )
-                    {
+                        },
+                    ) {
                         Text("Launch")
                     }
                 }
-
-
             }
         }
 
@@ -273,8 +263,5 @@ class KoffeeBarTest {
         waitUntil(timeoutMillis = 500) {
             onAllNodesWithText("Dismiss Me").fetchSemanticsNodes().isNotEmpty()
         }
-
     }
-
-
 }

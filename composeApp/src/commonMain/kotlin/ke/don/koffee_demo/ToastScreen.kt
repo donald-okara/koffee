@@ -10,15 +10,10 @@
 package ke.don.koffee_demo
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,8 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ke.don.koffee.domain.Koffee
-import ke.don.koffee.helpers.COMPACT_BREAK_POINT
-import ke.don.koffee.helpers.MAX_NON_COMPACT_WIDTH
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastType
@@ -47,7 +40,7 @@ fun TestToasts(
             onClick = {
                 Koffee.dismissAll()
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Dismiss all")
         }
@@ -60,7 +53,7 @@ fun TestToasts(
                     type = ToastType.Neutral,
                 )
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Show Neutral")
         }
@@ -74,7 +67,7 @@ fun TestToasts(
                     primaryAction = ToastAction("Details", { println("Viewing info details") }, true),
                 )
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Show Info")
         }
@@ -89,7 +82,7 @@ fun TestToasts(
                     secondaryAction = ToastAction("Copy", { println("Copied!") }),
                 )
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Show Success")
         }
@@ -103,7 +96,7 @@ fun TestToasts(
                     secondaryAction = ToastAction("Ignore", { println("Warning ignored") }),
                 )
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Show Warning")
         }
@@ -119,7 +112,7 @@ fun TestToasts(
                     secondaryAction = ToastAction("Report", { println("Reported error") }, true),
                 )
             },
-            modifier = Modifier.width( 600.dp)
+            modifier = Modifier.width(600.dp),
         ) {
             Text("Show Error")
         }

@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2025 Donald O. Isoe (isoedonald@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ke.don.koffee_demo
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,16 +20,15 @@ import ke.don.koffee.model.KoffeeDefaults
 import ke.don.koffee.model.ToastAnimation
 import ke.don.koffee.model.ToastDuration
 import ke.don.koffee.model.ToastPosition
-import ke.don.koffee.ui.DefaultToast
 import ke.don.koffee.ui.KoffeeBar
 import ke.don.koffee.ui.toasts_suite.GlowingToast
 import ke.don.koffee_demo.ui.theme.KoffeeTheme
 
 @OptIn(ExperimentalKoffeeApi::class)
 @Composable
-fun App(){
+fun App() {
     KoffeeTheme(
-        darkTheme = true
+        darkTheme = true,
     ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 

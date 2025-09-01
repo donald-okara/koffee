@@ -1,3 +1,4 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -14,25 +15,49 @@ plugins {
 group = "io.github.donald-okara"
 version = project.findProperty("version") ?: throw GradleException("Version property is required. Pass it with -Pversion=<version>")
 
-tasks.dokkaHtml.configure {
-    doFirst {
-        delete(rootProject.layout.projectDirectory.dir("docs"))
-    }
+
+tasks.named<DokkaTask>("dokkaHtml").configure {
     moduleName.set("Koffee - $gitTagVersion")
 
-    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
-}
-
-tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
     dokkaSourceSets.configureEach {
-        // 👇 include sample usage file(s)
-        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
-
-        // (Optional) Suppress deprecated or undocumented elements
+        samples.from("koffee/src/commonMain/kotlin/ke/don/koffee/sample/SampleUsage.kt")
         suppress.set(false)
         skipEmptyPackages.set(true)
     }
 }
+
+tasks.register<Copy>("publishDocs") {
+    dependsOn("dokkaHtml")
+    from(layout.buildDirectory.dir("dokka/html"))
+    into(layout.projectDirectory.dir("docs"))
+}
+
+tasks.named<DokkaTask>("dokkaHtml").configure {
+    doFirst {
+        delete(rootProject.layout.projectDirectory.dir("docs"))
+    }
+}
+
+
+//tasks.dokkaHtml.configure {
+//    doFirst {
+//        delete(rootProject.layout.projectDirectory.dir("docs"))
+//    }
+//    moduleName.set("Koffee - $gitTagVersion")
+//
+//    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
+//}
+//
+//tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
+//    dokkaSourceSets.configureEach {
+//        // 👇 include sample usage file(s)
+//        samples.from(file("koffee/src/commonMain/kotlin/ke/don/koffee/sample/SampleUsage.kt"))
+//
+//        // (Optional) Suppress deprecated or undocumented elements
+//        suppress.set(false)
+//        skipEmptyPackages.set(true)
+//    }
+//}
 
 android {
     namespace = "ke.don.koffee"
@@ -63,7 +88,6 @@ android {
     }
 }
 
-
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -75,7 +99,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "KoffeeLib"
@@ -100,7 +124,7 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
-                //implementation(project(":koffee"))
+                // implementation(project(":koffee"))
             }
         }
 
@@ -109,7 +133,6 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.junit)
                 implementation(libs.kotlinx.coroutines.test)
-
             }
         }
 
@@ -146,10 +169,6 @@ kotlin {
             }
         }
     }
-
-
-
-
 }
 
 dependencies {
@@ -157,7 +176,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
-
 
 dependencies {
     lintChecks(project(":core-lint"))
@@ -202,7 +220,7 @@ mavenPublishing {
 
 val gitTagVersion: String by lazy {
     try {
-        "git describe --tags --abbrev=0".runCommand() ?: "untagged"
+        "git describe --tags --abbrev=0".runCommand()
     } catch (e: Exception) {
         "untagged"
     }

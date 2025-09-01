@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalComposeLibrary::class)
+
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -86,7 +89,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.junit)
-
+                implementation(compose.uiTest) // multiplatform compose-ui-test
             }
         }
 
@@ -127,6 +130,10 @@ kotlin {
 
 dependencies {
 
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.junit)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

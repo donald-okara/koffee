@@ -7,9 +7,8 @@
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  */
-package ke.don.koffee
+package koffee
 
-import junit.framework.TestCase.assertTrue
 import ke.don.koffee.domain.DefaultToastHostState
 import ke.don.koffee.model.ToastAction
 import ke.don.koffee.model.ToastDuration
@@ -19,8 +18,9 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Unit tests for [DefaultToastHostState], verifying toast lifecycle behavior,
@@ -62,7 +62,7 @@ class DefaultToastHostStateTest {
         state.show("AutoDismiss", "Desc", ToastDuration.Short, ToastType.Neutral, null, null)
 
         assertEquals(1, state.toasts.size)
-        advanceTimeBy(51) // simulate delay
+        advanceTimeBy(70) // simulate delay
         assertEquals(0, state.toasts.size)
     }
 

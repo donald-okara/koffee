@@ -7,7 +7,7 @@
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  */
-package ke.don.koffee
+package koffee
 
 import org.junit.Assert.*
 import org.junit.Test
@@ -18,8 +18,8 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    @Test
+    @org.junit.Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        org.junit.Assert.assertEquals(4, 2 + 2)
     }
 }

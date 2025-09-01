@@ -23,6 +23,7 @@ composeHotReload = "1.0.0-beta04"
 composeMultiplatform = "1.8.2"
 androidx-lifecycle = "2.9.1"
 kotlinx-coroutines = "1.10.2"
+uiTestJunit4Android = "1.9.0"
 
 
 [libraries]
@@ -53,6 +54,7 @@ androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 
 [plugins]

@@ -112,19 +112,24 @@ internal class DefaultToastHostState internal constructor(
         )
 
         val millis = durationResolver(duration)
-        val timerJob = millis?.let { d -> scope.launch { delay(d); dismiss(toast.id) } }
+        val timerJob = millis?.let { d ->
+            scope.launch {
+                delay(d)
+                dismiss(toast.id)
+            }
+        }
         scope.launch {
             mutex.withLock {
                 if (_toasts.size >= maxVisibleToasts) {
                     _toasts.firstOrNull()?.let { evicted ->
                         jobs.remove(evicted.id)?.cancel()
                         _toasts.removeAt(0)
-                        }
                     }
+                }
                 _toasts.add(toast)
                 if (timerJob != null) jobs[toast.id] = timerJob
-                }
             }
+        }
     }
 
     /**

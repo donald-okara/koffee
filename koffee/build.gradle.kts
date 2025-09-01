@@ -1,7 +1,13 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.composeMultiplatform)
     id("com.vanniktech.maven.publish") version "0.34.0"
     id("org.jetbrains.dokka") version "2.0.0"
 }
@@ -9,23 +15,25 @@ plugins {
 group = "io.github.donald-okara"
 version = project.findProperty("version") ?: throw GradleException("Version property is required. Pass it with -Pversion=<version>")
 
-tasks.dokkaHtml.configure {
-    doFirst {
-        delete(rootProject.layout.projectDirectory.dir("docs"))
-    }
+tasks.named<DokkaTask>("dokkaHtml").configure {
     moduleName.set("Koffee - $gitTagVersion")
 
-    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
-}
-
-tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
     dokkaSourceSets.configureEach {
-        // 👇 include sample usage file(s)
-        samples.from(file("koffee/src/main/java/ke/don/koffee/sample/SampleUsage.kt"))
-
-        // (Optional) Suppress deprecated or undocumented elements
+        samples.from("koffee/src/commonMain/kotlin/ke/don/koffee/sample/SampleUsage.kt")
         suppress.set(false)
         skipEmptyPackages.set(true)
+    }
+}
+
+tasks.register<Copy>("publishDocs") {
+    dependsOn("dokkaHtml")
+    from(layout.buildDirectory.dir("dokka/html"))
+    into(layout.projectDirectory.dir("docs"))
+}
+
+tasks.named<DokkaTask>("dokkaHtml").configure {
+    doFirst {
+        delete(rootProject.layout.projectDirectory.dir("docs"))
     }
 }
 
@@ -53,35 +61,99 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
     }
 }
 
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "KoffeeLib"
+            isStatic = true
+        }
+    }
+    jvm()
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(libs.kotlin.stdlib)
+                implementation(compose.components.resources)
+                // Add KMP dependencies here
+                implementation(compose.runtime)
+                implementation(compose.materialIconsExtended)
+
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+                // implementation(project(":koffee"))
+            }
+        }
+
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.activity.compose)
+                // Add Android-specific dependencies here. Note that this source set depends on
+                // commonMain by default and will correctly pull the Android artifacts of any KMP
+                // dependencies declared in commonMain.
+            }
+        }
+
+        getByName("androidInstrumentedTest") {
+            dependencies {
+                implementation(libs.androidx.runner)
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.junit)
+            }
+        }
+
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+        }
+
+        iosMain {
+            dependencies {
+                // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
+                // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
+                // part of KMP’s default source set hierarchy. Note that this source set depends
+                // on common by default and will correctly pull the iOS artifacts of any
+                // KMP dependencies declared in commonMain.
+            }
+        }
+    }
+}
+
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+}
 
+dependencies {
     lintChecks(project(":core-lint"))
-
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
@@ -123,7 +195,7 @@ mavenPublishing {
 
 val gitTagVersion: String by lazy {
     try {
-        "git describe --tags --abbrev=0".runCommand() ?: "untagged"
+        "git describe --tags --abbrev=0".runCommand()
     } catch (e: Exception) {
         "untagged"
     }

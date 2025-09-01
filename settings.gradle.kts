@@ -21,7 +21,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Koffee"
-include(":app")
+include(":composeApp")
 include(":koffee")
 include(":core-lint")
 include(":experimental-annotations")
+include(":shared")

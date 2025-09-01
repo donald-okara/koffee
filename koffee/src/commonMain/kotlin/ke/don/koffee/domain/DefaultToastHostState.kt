@@ -111,24 +111,20 @@ internal class DefaultToastHostState internal constructor(
             id = toastId,
         )
 
-        scope.launch { // Ensure toast count does not exceed the max allowed
+        val millis = durationResolver(duration)
+        val timerJob = millis?.let { d -> scope.launch { delay(d); dismiss(toast.id) } }
+        scope.launch {
             mutex.withLock {
                 if (_toasts.size >= maxVisibleToasts) {
-                    _toasts.firstOrNull()?.let { dismiss(it.id) }
-                }
-
+                    _toasts.firstOrNull()?.let { evicted ->
+                        jobs.remove(evicted.id)?.cancel()
+                        _toasts.removeAt(0)
+                        }
+                    }
                 _toasts.add(toast)
-            }
-
-            // Auto-dismiss if duration is specified
-            val millis = durationResolver(duration)
-            if (millis != null) {
-                jobs[toast.id] = scope.launch {
-                    delay(millis)
-                    dismiss(toast.id)
+                if (timerJob != null) jobs[toast.id] = timerJob
                 }
             }
-        }
     }
 
     /**

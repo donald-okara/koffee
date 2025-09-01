@@ -37,26 +37,6 @@ tasks.named<DokkaTask>("dokkaHtml").configure {
     }
 }
 
-// tasks.dokkaHtml.configure {
-//    doFirst {
-//        delete(rootProject.layout.projectDirectory.dir("docs"))
-//    }
-//    moduleName.set("Koffee - $gitTagVersion")
-//
-//    outputDirectory.set(rootProject.layout.projectDirectory.dir("docs"))
-// }
-//
-// tasks.named<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml").configure {
-//    dokkaSourceSets.configureEach {
-//        // 👇 include sample usage file(s)
-//        samples.from(file("koffee/src/commonMain/kotlin/ke/don/koffee/sample/SampleUsage.kt"))
-//
-//        // (Optional) Suppress deprecated or undocumented elements
-//        suppress.set(false)
-//        skipEmptyPackages.set(true)
-//    }
-// }
-
 android {
     namespace = "ke.don.koffee"
     compileSdk = 36

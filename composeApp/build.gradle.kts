@@ -40,6 +40,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    dependencies {
+        debugImplementation(compose.uiTooling)
+    }
     buildFeatures {
         compose = true
     }
@@ -89,7 +92,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.junit)
-                implementation(compose.uiTest) // multiplatform compose-ui-test
+                implementation(compose.uiTest)
             }
         }
 
@@ -103,13 +106,6 @@ kotlin {
             }
         }
 
-        getByName("androidInstrumentedTest") {
-            dependencies {
-                implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
-                implementation(libs.androidx.junit)
-            }
-        }
 
         iosMain {
             dependencies {
@@ -124,6 +120,14 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+        }
+        jvmTest{
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(kotlin("test-junit"))
+                implementation(libs.junit)
+            }
         }
     }
 }

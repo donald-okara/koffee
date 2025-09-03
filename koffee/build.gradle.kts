@@ -23,17 +23,22 @@ tasks.named<DokkaTask>("dokkaHtml").configure {
         suppress.set(false)
         skipEmptyPackages.set(true)
     }
+
+    doFirst {
+        delete(rootProject.layout.projectDirectory.dir("docs"))
+    }
 }
 
 tasks.register<Copy>("publishDocs") {
     dependsOn("dokkaHtml")
     from(layout.buildDirectory.dir("dokka/html"))
     into(layout.projectDirectory.dir("docs"))
-}
 
-tasks.named<DokkaTask>("dokkaHtml").configure {
-    doFirst {
-        delete(rootProject.layout.projectDirectory.dir("docs"))
+    // Ensure .nojekyll is created
+    doLast {
+        val nojekyll = layout.projectDirectory.file("docs/.nojekyll").asFile
+        nojekyll.parentFile.mkdirs()
+        nojekyll.writeText("")
     }
 }
 

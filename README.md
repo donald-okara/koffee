@@ -3,8 +3,7 @@
   <img src="docs-assets/Koffee_cropped.webp" alt="Koffee Banner" width="100%" />
 </p>
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
-
+![Now in KMP](https://img.shields.io/badge/Now_in-KMP-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)  [![Maven Central](https://img.shields.io/maven-central/v/io.github.donald-okara/koffee.svg?logo=apachemaven&logoColor=white&style=for-the-badge&colorA=6f4e37&colorB=cfa16d)](https://search.maven.org/artifact/io.github.donald-okara/koffee)
 <h1 align="center">☕ Koffee</h1>  
 
 <p align="center">  

@@ -189,7 +189,7 @@ mavenPublishing {
             }
         }
         scm {
-            url.set("https://github.com/donald-okara/deploy-exampl/")
+            url.set("https://github.com/donald-okara/koffee/")
             connection.set("scm:git:git://github.com/donald-okara/koffe.git")
             developerConnection.set("scm:git:ssh://git@github.com/donald-okara/koffee.git")
         }

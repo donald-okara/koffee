@@ -19,6 +19,8 @@
 
 ## ✨ Features
 
+> ⚠️ Koffee is currently unavailable for iOS. Please feel free to submit a PR for this
+
 - 🍞 Simple toast host & state management
 - 🪄 Animated entrance/exit with layout awareness
 - 🧊 Supports multiple types of toasts: Info, Success, Error, etc.
@@ -298,6 +300,3 @@ Made by [@donald-okara](https://github.com/donald-okara)
 ## 📜 License
 
 Koffee is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You’re free to use, modify, and distribute it under the conditions specified.
-
----
-🧾 Full documentation available at 👉 [https://donald-okara.github.io/koffee/](https://donald-okara.github.io/koffee/)
